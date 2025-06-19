@@ -13,6 +13,7 @@ export const loginSchemae = z.object({
   email: z.string().email("Invalid email"),
   password: z.string().min(1, "Password is required"),
 });
+
 export const loginSchema = z.object({
   name: z
     .string()

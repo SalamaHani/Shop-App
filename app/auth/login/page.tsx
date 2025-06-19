@@ -1,13 +1,12 @@
-
 import React from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
 import { SubmitButton } from "@/components/form/Buttons";
 import FormContainer from "@/components/form/FormContener";
 import { loginUser } from "@/utils/actions";
+import Link from "next/link";
 
 function page() {
-
   return (
     <div>
       <FormContainer action={loginUser}>
@@ -42,18 +41,21 @@ function page() {
             </div>
             <div className="flex flex-col gap-3">
               <Label htmlFor="email">Your email address</Label>
-              <Input placeholder="m@example.com" type="email" />
+              <Input name="email" placeholder="m@example.com" type="email" />
             </div>
             <div className="flex flex-col gap-3">
               <Label htmlFor="email">Your Password</Label>
-              <Input type="password" />
+              <Input name="password" type="password" />
             </div>
           </div>
           <div
             data-slot="card-footer"
-            className="flex items-center px-6 [.border-t]:pt-6"
+            className="flex items-center justify-between px-6 [.border-t]:pt-6"
           >
             <SubmitButton text="Log in" className="mt-8" />
+            <Link href="register" className="capitalize mt-8 ">
+              Register
+            </Link>
           </div>
         </div>
       </FormContainer>

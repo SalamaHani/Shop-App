@@ -1,11 +1,13 @@
 "use server";
 import axios from "axios";
 import db from "./db";
-import { hashPassword, verifyPassword } from "@/app/auth/hash";
-import { generateToken } from "@/app/auth/Token";
+import { hashPassword, verifyPassword } from "@/lib/hash";
+import { generateToken } from "@/lib/Token";
 import { registerSchema, loginSchemae, FormState } from "./schema";
-const productionUrl = "https://shop.motorscloud.net/api";
+import { encrypt } from "@/lib/Auth";
 import { cookies } from "next/headers";
+const productionUrl = "https://shop.motorscloud.net/api";
+import { redirect } from "next/navigation";
 
 export const customFetch = axios.create({
   baseURL: productionUrl,
@@ -51,7 +53,7 @@ export const fatchFutrerProduct = async () => {
   const product = await db.product.findMany();
   return product;
 };
-
+//regestier user function auth
 export const RegesterUser = async (
   prevState: FormState,
   formData: FormData
@@ -63,8 +65,11 @@ export const RegesterUser = async (
     const name = formData.get("name") as string;
     const resultvaled = registerSchema.safeParse({ email, password, name });
     if (!resultvaled.success) {
+      // return {
+      //   errors: resultvaled.error.flatten().fieldErrors,
+      // };
       const errors = resultvaled.error.errors.map((error) => error.message);
-      throw new Error(errors.join("&"));
+      throw new Error(errors.join("*"));
     }
 
     const existingUser = await db.user.findUnique({ where: { email } });
@@ -81,13 +86,13 @@ export const RegesterUser = async (
         token: Token,
       },
     });
-    return { message: "Sucsseflly Regester" };
+    redirect("/login");
   } catch (error) {
     console.log(error);
     return renderError(error);
   }
 };
-//log in user
+//log in user funcrion auth
 export const loginUser = async (prevState: FormState, formData: FormData) => {
   try {
     const email = formData.get("email") as string;
@@ -95,16 +100,30 @@ export const loginUser = async (prevState: FormState, formData: FormData) => {
     const resultvaled = loginSchemae.safeParse({ email, password });
     if (!resultvaled.success) {
       const errors = resultvaled.error.errors.map((error) => error.message);
-      throw new Error(errors.join("&"));
+      throw new Error(errors.join("*"));
     }
     const user = await db.user.findUnique({ where: { email } });
     if (!user || !(await verifyPassword(password, user.password))) {
       throw new Error("Invalid email or password");
     }
-    const cooceisues = await cookies();
-    cooceisues.set("token", user.id, { path: "/", httpOnly: true });
-    return { message: "Sucsseflly Log in" };
+    const expires = new Date(Date.now() + 10 * 1000);
+    const session = await encrypt({ email });
+    // Save the session in a cookie
+    (
+      await // Save the session in a cookie
+      cookies()
+    ).set("session", session, { expires, httpOnly: true });
+    redirect("/");
   } catch (error) {
     return renderError(error);
   }
+};
+//log out functhin Auth
+export const logout = async () => {
+  // Destroy the session
+  (
+    await // Destroy the session
+    cookies()
+  ).set("session", "", { expires: new Date(0) });
+  redirect("/");
 };

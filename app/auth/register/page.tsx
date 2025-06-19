@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+// import React, { useActionState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
 import { SubmitButton } from "@/components/form/Buttons";
@@ -7,6 +7,7 @@ import FormContainer from "@/components/form/FormContener";
 import { RegesterUser } from "@/utils/actions";
 
 function Registerpage() {
+  // const [state] = useActionState(RegesterUser, initialState);
   return (
     <div>
       <FormContainer action={RegesterUser}>
@@ -41,15 +42,15 @@ function Registerpage() {
             </div>
             <div className="flex flex-col gap-3">
               <Label htmlFor="name">Your Name </Label>
-              <Input type="text" />
+              <Input name="name" type="text" />
             </div>
             <div className="flex flex-col gap-3">
               <Label htmlFor="email">Your email address</Label>
-              <Input placeholder="m@example.com" type="email" />
+              <Input name="email" placeholder="m@example.com" type="email" />
             </div>
             <div className="flex flex-col gap-3">
               <Label htmlFor="email">Your Password</Label>
-              <Input type="password" />
+              <Input name="password" type="password" />
             </div>
           </div>
           <div
