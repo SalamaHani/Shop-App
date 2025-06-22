@@ -4,6 +4,7 @@ import db from "./db";
 import { hashPassword, verifyPassword } from "@/lib/hash";
 import { registerSchema, loginSchemae, FormState } from "./schema";
 import { createSession, encrypt, removeUserFromSession } from "@/lib/Auth";
+import { revalidatePath } from "next/cache";
 
 const productionUrl = "https://shop.motorscloud.net/api";
 import { cookies } from "next/headers";
@@ -54,14 +55,39 @@ export const fatchFutrerProduct = async () => {
   return product;
 };
 
-export const addToCartAction = async () => {};
-export const toggleFavoriteAction = async (prevState: FormState, formData: FormData) => {
-  const productId = formData.get('productId') as string
-  const 
-  try{
-    
-  }catch(error){
-    return renderError(error)
+export const addToCartAction = async (
+  prevState: FormState,
+  formData: FormData
+) => {
+  const productId = formData.get("productId") as string;
+  const amount = Number(formData.get("amount"));
+};
+export const toggleFavoriteAction = async (
+  prevState: FormState,
+  formData: FormData
+) => {
+  const productId = formData.get("productId") as string;
+  const favoriteId = formData.get("favoriteId") as string;
+  const pathname = formData.get("pathname") as string;
+  try {
+    if (favoriteId) {
+      await db.favorite.delete({
+        where: {
+          id: favoriteId,
+        },
+      });
+    } else {
+      await db.favorite.create({
+        data: {
+          productId,
+          token: productId,
+        },
+      });
+    }
+    revalidatePath(pathname);
+    return { message: favoriteId ? "removed from faves" : "added to faves" };
+  } catch (error) {
+    return renderError(error);
   }
 };
 export const fetchFavoriteId = async ({ productId }: { productId: string }) => {
