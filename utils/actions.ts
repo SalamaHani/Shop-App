@@ -53,6 +53,31 @@ export const fatchFutrerProduct = async () => {
   const product = await db.product.findMany();
   return product;
 };
+
+export const addToCartAction = async () => {};
+export const toggleFavoriteAction = async (prevState: FormState, formData: FormData) => {
+  const productId = formData.get('productId') as string
+  const 
+  try{
+    
+  }catch(error){
+    return renderError(error)
+  }
+};
+export const fetchFavoriteId = async ({ productId }: { productId: string }) => {
+  const favoreit = await db.favorite.findFirst({
+    where: {
+      productId,
+    },
+    select: {
+      id: true,
+    },
+  });
+  return favoreit?.id || null;
+};
+
+//Authntcation Users
+
 //regestier user function auth
 export const RegesterUser = async (
   prevState: FormState,

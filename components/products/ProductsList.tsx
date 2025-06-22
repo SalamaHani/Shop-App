@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import { Product } from "@prisma/client";
+import FavoriteToggleButton from "./FavaretToggel";
 function ProductsList({ products }: { products: Product[] }) {
   return (
     <div className="mt-12 grid gap-y-8">
@@ -36,7 +37,7 @@ function ProductsList({ products }: { products: Product[] }) {
               </Card>
             </Link>
             <div className="absolute bottom-8 right-8 z-5">
-              {/* <FavoriteToggleButton productId={productId} /> */}
+              <FavoriteToggleButton productId={productId} />
             </div>
           </article>
         );
