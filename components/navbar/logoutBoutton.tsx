@@ -1,28 +1,20 @@
+"use server";
 import React from "react";
-import { Button } from "../ui/button";
 import Link from "next/link";
-import { toast } from "sonner";
 import { logout } from "@/utils/actions";
-import { getSession } from "@/lib/Auth";
-function logoutBoutton() {
-  const handleLogout = () => {
-    logout();
-    toast("logout sucssfulu");
-  };
-  const auth = getSession();
-  if (auth == null) {
-    return null;
-  }
-
+import { getUserFromSession } from "@/lib/Auth";
+import { DropdownMenuItem } from "../ui/dropdown-menu";
+import { cookies } from "next/headers";
+async function LogoutBoutton() {
+  const user = await getUserFromSession(await cookies());
+  if (user == null) return null;
   return (
-    <div>
-      <Button>
-        <Link href="/" className="w-full text-left" onClick={handleLogout}>
-          Logout
-        </Link>
-      </Button>
-    </div>
+    <DropdownMenuItem>
+      <Link href="/" className="w-full text-left" onClick={logout}>
+        Logout
+      </Link>
+    </DropdownMenuItem>
   );
 }
 
-export default logoutBoutton;
+export default LogoutBoutton;

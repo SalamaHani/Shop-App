@@ -1,21 +1,19 @@
-"use client";
+"use server";
 import React from "react";
-import { Button } from "../ui/button";
 import Link from "next/link";
-import { getSession } from "@/lib/Auth";
-
-function loginBouttn() {
-  const auth = getSession();
-  if (auth == null) return null;
+import { getUserFromSession } from "@/lib/Auth";
+import { DropdownMenuItem } from "../ui/dropdown-menu";
+import { cookies } from "next/headers";
+async function LoginBouttn() {
+  const user = await getUserFromSession(await cookies());
+  if (user != null) return null;
   return (
-    <div>
-      <Button>
-        <Link href="/login" className="w-full text-left">
-          Login
-        </Link>
-      </Button>
-    </div>
+    <DropdownMenuItem>
+      <Link href="/auth/login" className="w-full text-left">
+        Login
+      </Link>
+    </DropdownMenuItem>
   );
 }
 
-export default loginBouttn;
+export default LoginBouttn;

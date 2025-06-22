@@ -2,11 +2,11 @@
 import axios from "axios";
 import db from "./db";
 import { hashPassword, verifyPassword } from "@/lib/hash";
-import { generateToken } from "@/lib/Token";
 import { registerSchema, loginSchemae, FormState } from "./schema";
-import { encrypt } from "@/lib/Auth";
-import { cookies } from "next/headers";
+import { createSession, encrypt, removeUserFromSession } from "@/lib/Auth";
+
 const productionUrl = "https://shop.motorscloud.net/api";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export const customFetch = axios.create({
@@ -72,13 +72,13 @@ export const RegesterUser = async (
       throw new Error(errors.join("*"));
     }
 
-    const existingUser = await db.user.findUnique({ where: { email } });
+    const existingUser = await db.users.findUnique({ where: { email } });
     if (existingUser) {
       throw new Error("User already exists");
     }
     const hashedPassword = await hashPassword(password);
-    const Token = generateToken({ email: email });
-    await db.user.create({
+    const Token = await encrypt({ email: email });
+    const user = await db.users.create({
       data: {
         email: email,
         name: name,
@@ -86,7 +86,8 @@ export const RegesterUser = async (
         token: Token,
       },
     });
-    redirect("/login");
+    await createSession(user, await cookies());
+    return { message: "Login suacssfly" };
   } catch (error) {
     console.log(error);
     return renderError(error);
@@ -102,28 +103,18 @@ export const loginUser = async (prevState: FormState, formData: FormData) => {
       const errors = resultvaled.error.errors.map((error) => error.message);
       throw new Error(errors.join("*"));
     }
-    const user = await db.user.findUnique({ where: { email } });
+    const user = await db.users.findUnique({ where: { email } });
     if (!user || !(await verifyPassword(password, user.password))) {
       throw new Error("Invalid email or password");
     }
-    const expires = new Date(Date.now() + 10 * 1000);
-    const session = await encrypt({ email });
-    // Save the session in a cookie
-    (
-      await // Save the session in a cookie
-      cookies()
-    ).set("session", session, { expires, httpOnly: true });
-    redirect("/");
+    await createSession(user, await cookies());
+    return { message: "Login suacssfly" };
   } catch (error) {
     return renderError(error);
   }
 };
 //log out functhin Auth
-export const logout = async () => {
-  // Destroy the session
-  (
-    await // Destroy the session
-    cookies()
-  ).set("session", "", { expires: new Date(0) });
+export async function logout() {
+  await removeUserFromSession(await cookies());
   redirect("/");
-};
+}

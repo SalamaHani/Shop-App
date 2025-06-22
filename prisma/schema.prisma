@@ -23,7 +23,7 @@ model Product {
   reviews Review []
   cartItems CartItem[]
 }
-model User {
+model Users {
   id       String   @id @default(uuid())
   email    String   @unique
   name     String?

@@ -9,7 +9,8 @@ import { LuAlignLeft } from "react-icons/lu";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { links } from "@/utils/links";
-
+import LoginBouttn from "./LoginBouttn";
+import LogoutBoutton from "./LogoutBoutton";
 function LinksDropdown() {
   return (
     <DropdownMenu>
@@ -19,10 +20,7 @@ function LinksDropdown() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-40" align="start" sideOffset={10}>
-        <DropdownMenuItem></DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem></DropdownMenuItem>
-
         {links.map((link) => {
           return (
             <DropdownMenuItem key={link.href}>
@@ -33,7 +31,8 @@ function LinksDropdown() {
           );
         })}
         <DropdownMenuSeparator />
-        <DropdownMenuItem></DropdownMenuItem>
+        <LoginBouttn />
+        <LogoutBoutton />
       </DropdownMenuContent>
     </DropdownMenu>
   );
