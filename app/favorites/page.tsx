@@ -5,10 +5,10 @@ import React from "react";
 
 async function page() {
   const favorites = await fetchUserFavorites();
+  if (favorites.length == 0)
+    return <TitelSection text="You have no favorites yet." />;
   return (
     <div>
-      if (favorites.length === 0) return{" "}
-      <TitelSection text="You have no favorites yet." />; return (
       <div>
         <TitelSection text="Favorites" />
         <ProductsGrid
