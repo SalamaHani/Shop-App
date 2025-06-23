@@ -3,12 +3,18 @@ import axios from "axios";
 import db from "./db";
 import { hashPassword, verifyPassword } from "@/lib/hash";
 import { registerSchema, loginSchemae, FormState } from "./schema";
-import { createSession, encrypt, removeUserFromSession } from "@/lib/Auth";
+import {
+  createSession,
+  encrypt,
+  getUserFromSession,
+  removeUserFromSession,
+} from "@/lib/Auth";
 import { revalidatePath } from "next/cache";
-
+import { redirect } from "next/navigation";
 const productionUrl = "https://shop.motorscloud.net/api";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { Cart } from "@prisma/client";
+import { ReceiptPoundSterling } from "lucide-react";
 
 export const customFetch = axios.create({
   baseURL: productionUrl,
@@ -54,18 +60,242 @@ export const fatchFutrerProduct = async () => {
   const product = await db.product.findMany();
   return product;
 };
+const fetchProduct = async (productId: string) => {
+  const product = await db.product.findUnique({
+    where: {
+      id: productId,
+    },
+  });
+  if (!product) {
+    throw new Error("Product not found");
+  }
+  return product;
+};
 
+const includeProductClause = {
+  cartItems: {
+    include: {
+      product: true,
+    },
+  },
+};
+export const fetchOrCreateCart = async ({
+  userID,
+  errorOnFailure = false,
+}: {
+  userID: string;
+  errorOnFailure?: boolean;
+}) => {
+  let cart = await db.cart.findFirst({
+    where: {
+      userId: userID,
+    },
+    include: includeProductClause,
+  });
+  if (!cart && errorOnFailure) {
+    throw new Error("Cart not found");
+  }
+  if (!cart) {
+    cart = await db.cart.create({
+      data: {
+        userId: userID,
+      },
+      include: includeProductClause,
+    });
+  }
+  return cart;
+};
+const updateOrCreateCartItem = async ({
+  productId,
+  cartId,
+  amount,
+}: {
+  productId: string;
+  cartId: string;
+  amount: number;
+}) => {
+  let cartItem = await db.cartItem.findFirst({
+    where: {
+      productId,
+      cartId,
+    },
+  });
+  console.log(cartItem);
+  if (cartItem != null) {
+    cartItem = await db.cartItem.update({
+      where: {
+        id: cartItem.id,
+      },
+      data: {
+        amount: cartItem.amount + amount,
+      },
+    });
+  } else {
+    cartItem = await db.cartItem.create({
+      data: { amount, productId, cartId },
+    });
+  }
+};
+export const updateCart = async (cart: Cart) => {
+  const cartItems = await db.cartItem.findMany({
+    where: {
+      cartId: cart.id,
+    },
+    include: {
+      product: true,
+    },
+    orderBy: {
+      createdAt: "asc",
+    },
+  });
+  let numItemsInCart = 0;
+  let cartTotal = 0;
+
+  for (const item of cartItems) {
+    numItemsInCart += item.amount;
+    cartTotal += item.amount * item.product.price;
+  }
+  const tax = cart.taxRate * cartTotal;
+  const shipping = cartTotal ? cart.shipping : 0;
+  const orderTotal = cartTotal + tax + shipping;
+  const currentCart = await db.cart.update({
+    where: {
+      id: cart.id,
+    },
+    data: {
+      numItemsInCart,
+      cartTotal,
+      tax,
+      orderTotal,
+    },
+  });
+  return { cartItems, currentCart };
+};
 export const addToCartAction = async (
   prevState: FormState,
   formData: FormData
 ) => {
+  const user = await getUserFromSession(await cookies());
   const productId = formData.get("productId") as string;
   const amount = Number(formData.get("amount"));
+  const pathname = formData.get("pathname") as string;
+  try {
+    const products = await fetchProduct(productId);
+    console.log(products);
+    const cart = await fetchOrCreateCart({ userID: user.id });
+    await updateOrCreateCartItem({ productId, cartId: cart.id, amount });
+    await updateCart(cart);
+    revalidatePath(pathname);
+    return { message: "added to cart" };
+  } catch (error) {
+    console.log(error);
+    return renderError(error);
+  }
 };
+export const removeCartItemAction = async (
+  prevState: FormState,
+  formData: FormData
+) => {
+  const user = await getUserFromSession(await cookies());
+  try {
+    const cartItemId = formData.get("id") as string;
+    const cart = await fetchOrCreateCart({
+      userID: user.id,
+      errorOnFailure: true,
+    });
+    await db.cartItem.delete({
+      where: {
+        id: cartItemId,
+        cartId: cart.id,
+      },
+    });
+    await updateCart(cart);
+    revalidatePath("/cart");
+    return { message: "cart Delete" };
+  } catch (error) {
+    return renderError(error);
+  }
+};
+export const updateCartItemAction = async ({
+  amount,
+  cartItemId,
+}: {
+  amount: number;
+  cartItemId: string;
+}) => {
+  const user = await getUserFromSession(await cookies());
+  try {
+    const cart = await fetchOrCreateCart({ userID: user.id });
+    await db.cartItem.update({
+      where: {
+        id: cartItemId,
+        cartId: cart.id,
+      },
+      data: {
+        amount,
+      },
+    });
+    await updateCart(cart);
+    revalidatePath("/cart");
+    return { message: "cart updated" };
+  } catch (error) {
+    return renderError(error);
+  }
+};
+export const fetchCartItems = async () => {
+  const user = await getUserFromSession(await cookies());
+  const cart = await db.cart.findFirst({
+    where: {
+      userId: user.id ?? "",
+    },
+    select: {
+      numItemsInCart: true,
+    },
+  });
+  return cart?.numItemsInCart || 0;
+};
+export const createOrderAction = async (
+  prevState: FormState,
+  formData: FormData
+) => {
+  let orderId: null | string = null;
+  let cartId: null | string = null;
+  const user = await getUserFromSession(await cookies());
+  try {
+    const cart = await fetchOrCreateCart({
+      userID: user.id,
+      errorOnFailure: true,
+    });
+    cartId = cart.id;
+    await db.order.deleteMany({
+      where: {
+        userId: user.id,
+        isPaid: false,
+      },
+    });
+    const order = await db.order.create({
+      data: {
+        userId: user.id,
+        products: cart.numItemsInCart,
+        orderTotal: cart.orderTotal,
+        tax: cart.tax,
+        shipping: cart.shipping,
+        email: user.emailAddresses[0].emailAddress,
+      },
+    });
+    orderId = order.id;
+  } catch (error) {
+    return renderError(error);
+  }
+  redirect(`/checkout?orderId=${orderId}&cartId=${cartId}`);
+};
+
+///Favorite PRODUCTS Action
 export const toggleFavoriteAction = async (
   prevState: FormState,
   formData: FormData
 ) => {
+  const user = await getUserFromSession(await cookies());
   const productId = formData.get("productId") as string;
   const favoriteId = formData.get("favoriteId") as string;
   const pathname = formData.get("pathname") as string;
@@ -80,7 +310,7 @@ export const toggleFavoriteAction = async (
       await db.favorite.create({
         data: {
           productId,
-          token: productId,
+          userId: user.id,
         },
       });
     }
@@ -91,15 +321,29 @@ export const toggleFavoriteAction = async (
   }
 };
 export const fetchFavoriteId = async ({ productId }: { productId: string }) => {
+  const user = await getUserFromSession(await cookies());
   const favoreit = await db.favorite.findFirst({
     where: {
       productId,
+      userId: user.id,
     },
     select: {
       id: true,
     },
   });
   return favoreit?.id || null;
+};
+export const fetchUserFavorites = async () => {
+  const user = await getUserFromSession(await cookies());
+  const faveretproduct = await db.favorite.findMany({
+    where: {
+      userId: user.id,
+    },
+    include: {
+      product: true,
+    },
+  });
+  return faveretproduct;
 };
 
 //Authntcation Users
@@ -138,6 +382,7 @@ export const RegesterUser = async (
       },
     });
     await createSession(user, await cookies());
+    revalidatePath("/auth/login");
     return { message: "Login suacssfly" };
   } catch (error) {
     console.log(error);
@@ -159,6 +404,7 @@ export const loginUser = async (prevState: FormState, formData: FormData) => {
       throw new Error("Invalid email or password");
     }
     await createSession(user, await cookies());
+    revalidatePath("/");
     return { message: "Login suacssfly" };
   } catch (error) {
     return renderError(error);
@@ -167,5 +413,5 @@ export const loginUser = async (prevState: FormState, formData: FormData) => {
 //log out functhin Auth
 export async function logout() {
   await removeUserFromSession(await cookies());
-  redirect("/");
+  revalidatePath("/");
 }

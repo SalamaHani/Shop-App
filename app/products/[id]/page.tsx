@@ -1,10 +1,10 @@
-
 import { fetchSingleProduct } from "@/utils/actions";
 import React from "react";
 import Image from "next/image";
 import { formatCurrency } from "@/utils/format";
 import AddToCart from "@/components/singel-product/AddToCart";
 import Titelproduct from "@/components/singel-product/Titelproduct";
+import FavoriteToggleButton from "@/components/products/FavaretToggel";
 interface ProductPageProps {
   params: {
     id: string;
@@ -34,8 +34,8 @@ async function SingleProductPage({ params }: ProductPageProps) {
           <div className="flex gap-x-8 items-center">
             <h1 className="capitalize text-3xl font-bold">{name} </h1>
             <div className="flex items-center gap-x-2">
-              {/* <FavoriteToggleButton productId={params.id} />
-              <ShareButton name={product.name} productId={params.id} /> */}
+              <FavoriteToggleButton productId={params.id} />
+              {/* <ShareButton name={product.name} productId={params.id} /> */}
             </div>
           </div>
           {/* <ProductRating productId={params.id} /> */}
