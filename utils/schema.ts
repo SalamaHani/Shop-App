@@ -1,5 +1,5 @@
 // lib/zod/userSchema.ts
-import { z } from "zod";
+import { z, ZodSchema } from "zod";
 
 export const registerSchema = z.object({
   name: z.string().min(2, { message: "Name is required" }),
@@ -29,6 +29,37 @@ export const loginSchema = z.object({
       message: "Contain at least one special character.",
     })
     .trim(),
+});
+export function validateWithZodSchema<T>(
+  schema: ZodSchema<T>,
+  data: unknown
+): T {
+  const result = schema.safeParse(data);
+  if (!result.success) {
+    const errors = result.error.errors.map((error) => error.message);
+    throw new Error(errors.join(","));
+  }
+  return result.data;
+}
+export const reviewSchema = z.object({
+  productId: z.string().refine((value) => value !== "", {
+    message: "Product ID cannot be empty",
+  }),
+  authorName: z.string().refine((value) => value !== "", {
+    message: "Author name cannot be empty",
+  }),
+  authorImageUrl: z.string().refine((value) => value !== "", {
+    message: "Author image URL cannot be empty",
+  }),
+  rating: z.coerce
+    .number()
+    .int()
+    .min(1, { message: "Rating must be at least 1" })
+    .max(5, { message: "Rating must be at most 5" }),
+  comment: z
+    .string()
+    .min(10, { message: "Comment must be at least 10 characters long" })
+    .max(1000, { message: "Comment must be at most 1000 characters long" }),
 });
 
 // Optional: used internally (e.g. returning user data)

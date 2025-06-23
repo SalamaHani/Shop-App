@@ -5,6 +5,10 @@ import { formatCurrency } from "@/utils/format";
 import AddToCart from "@/components/singel-product/AddToCart";
 import Titelproduct from "@/components/singel-product/Titelproduct";
 import FavoriteToggleButton from "@/components/products/FavaretToggel";
+import ShareButton from "@/components/singel-product/ShareButton";
+import ProductRating from "@/components/singel-product/ProductRating";
+import ProductReviews from "@/components/reviews/ProductReviews";
+import SubmitReview from "@/components/reviews/SubmitReview";
 interface ProductPageProps {
   params: {
     id: string;
@@ -15,7 +19,6 @@ async function SingleProductPage({ params }: ProductPageProps) {
   const { name, image, company, description, price } = product;
   return (
     <section>
-      {/* <BreadCrumbs name={product.name} /> */}
       <Titelproduct name={name} />
       <div className="mt-6 grid gap-y-8 lg:grid-cols-2 lg:gap-x-16">
         {/* IMAGE FIRST COL */}
@@ -35,10 +38,10 @@ async function SingleProductPage({ params }: ProductPageProps) {
             <h1 className="capitalize text-3xl font-bold">{name} </h1>
             <div className="flex items-center gap-x-2">
               <FavoriteToggleButton productId={params.id} />
-              {/* <ShareButton name={product.name} productId={params.id} /> */}
+              <ShareButton name={name} productId={params.id} />
             </div>
           </div>
-          {/* <ProductRating productId={params.id} /> */}
+          <ProductRating productId={params.id} />
           <h4 className="text-xl mt-2">{company}</h4>
           <p className="mt-3 text-md bg-muted inline-block p-2 rounded">
             {formatCurrency(price)}
@@ -47,9 +50,8 @@ async function SingleProductPage({ params }: ProductPageProps) {
           <AddToCart productId={params.id} />
         </div>
       </div>
-      {/* <ProductReviews productId={params.id} /> */}
-      {/* 
-      {reviewDoesNotExist && <SubmitReview productId={params.id} />} */}
+      <ProductReviews productId={params.id} />
+      <SubmitReview productId={params.id} />
     </section>
   );
 }

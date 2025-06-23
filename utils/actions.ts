@@ -2,7 +2,13 @@
 import axios from "axios";
 import db from "./db";
 import { hashPassword, verifyPassword } from "@/lib/hash";
-import { registerSchema, loginSchemae, FormState } from "./schema";
+import {
+  registerSchema,
+  loginSchemae,
+  FormState,
+  validateWithZodSchema,
+  reviewSchema,
+} from "./schema";
 import {
   createSession,
   encrypt,
@@ -14,7 +20,6 @@ import { redirect } from "next/navigation";
 const productionUrl = "https://shop.motorscloud.net/api";
 import { cookies } from "next/headers";
 import { Cart } from "@prisma/client";
-import { ReceiptPoundSterling } from "lucide-react";
 
 export const customFetch = axios.create({
   baseURL: productionUrl,
@@ -344,6 +349,59 @@ export const fetchUserFavorites = async () => {
     },
   });
   return faveretproduct;
+};
+
+///Product Rating
+export const fetchProductRating = async (productId: string) => {
+  const result = await db.review.groupBy({
+    by: ["productId"],
+    _avg: {
+      rating: true,
+    },
+    _count: {
+      rating: true,
+    },
+    where: { productId },
+  });
+  return {
+    rating: result[0]?._avg.rating?.toFixed(1) ?? 0,
+    count: result[0]?._count.rating ?? 0,
+  };
+};
+
+///Product Reviews
+export const fetchProductReviews = async (productId: string) => {
+  const reviews = await db.review.findMany({
+    where: {
+      productId,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return reviews;
+};
+
+export const createReviewAction = async (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  prevState: any,
+  formData: FormData
+) => {
+  const user = await getUserFromSession(await cookies());
+  try {
+    const rawData = Object.fromEntries(formData);
+    const validatedFields = validateWithZodSchema(reviewSchema, rawData);
+    await db.review.create({
+      data: {
+        ...validatedFields,
+        userId: user.id,
+      },
+    });
+    revalidatePath(`/products/${validatedFields.productId}`);
+    return { message: "review submitted successfully" };
+  } catch (error) {
+    return renderError(error);
+  }
 };
 
 //Authntcation Users
