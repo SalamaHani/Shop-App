@@ -8,6 +8,7 @@ import FavoriteToggleButton from "@/components/products/FavaretToggel";
 import ShareButton from "@/components/singel-product/ShareButton";
 import ProductRating from "@/components/singel-product/ProductRating";
 import ProductReviews from "@/components/reviews/ProductReviews";
+import { ReviewDiloge } from "@/components/reviews/ReviewDiloge";
 import SubmitReview from "@/components/reviews/SubmitReview";
 interface ProductPageProps {
   params: {

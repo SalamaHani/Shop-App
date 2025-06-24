@@ -4,20 +4,26 @@ import FormContainer from "../form/FormContener";
 import { createReviewAction } from "@/utils/actions";
 import RatingInput from "./RatingInput";
 import TextAreaInput from "../form/TextAreaInput";
+import { getUserFromSession } from "@/lib/Auth";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-function SubmitReview({ productId }: { productId: string }) {
+async function SubmitReview({ productId }: { productId: string }) {
+  const user = await getUserFromSession(await cookies());
+  if (user == null) return redirect("/auth/login");
   return (
     <div>
       <Card className="p-8 mt-8">
         <FormContainer action={createReviewAction}>
           <input type="hidden" name="productId" value={productId} />
+          <input type="hidden" name="authorName" value={user?.name || "user"} />
           <RatingInput name="rating" />
           <TextAreaInput
             name="comment"
             labelText="feedback"
             defaultValue="Outstanding product!!!"
           />
-          <SubmitButton className="mt-4" />
+          <SubmitButton text="Send Review" className="mt-4" />
         </FormContainer>
       </Card>
     </div>

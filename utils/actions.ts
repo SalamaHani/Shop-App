@@ -259,6 +259,7 @@ export const fetchCartItems = async () => {
   });
   return cart?.numItemsInCart || 0;
 };
+
 export const createOrderAction = async (
   prevState: FormState,
   formData: FormData
@@ -398,7 +399,7 @@ export const createReviewAction = async (
       },
     });
     revalidatePath(`/products/${validatedFields.productId}`);
-    return { message: "review submitted successfully" };
+    return { message: 'review submitted successfully' };
   } catch (error) {
     return renderError(error);
   }

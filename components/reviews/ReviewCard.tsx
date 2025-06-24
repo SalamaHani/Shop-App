@@ -2,13 +2,12 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Image from "next/image";
 import Rating from "./Rating";
 import Comment from "./Comment";
-
+import imgepro from "../../public/imges/Untitled-6.jpg";
 type ReviewCardProps = {
   reviewInfo: {
     comment: string;
     rating: number;
     name: string;
-    image: string;
   };
   children?: React.ReactNode;
 };
@@ -19,7 +18,7 @@ function ReviewCard({ reviewInfo, children }: ReviewCardProps) {
       <CardHeader>
         <div className="flex items-center">
           <Image
-            src={reviewInfo.image}
+            src={imgepro}
             alt={reviewInfo.name}
             width={48}
             height={48}
