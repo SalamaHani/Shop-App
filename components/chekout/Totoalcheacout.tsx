@@ -1,15 +1,15 @@
 import React from "react";
-import { Card, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { Card, CardTitle } from "../ui/card";
 import { formatCurrency } from "@/utils/format";
+import { Separator } from "@/components/ui/separator";
+import FormContainer from "../form/FormContener";
+import { SubmitButton } from "../form/Buttons";
+import { createOrderAction } from "@/utils/actions";
 import { Cart } from "@prisma/client";
-import Link from "next/link";
-import { Button } from "../ui/button";
-
-function CartToals({ cart }: { cart: Cart }) {
+function Totoalcheacout({ cart }: { cart: Cart }) {
   const { cartTotal, shipping, tax, orderTotal } = cart;
   return (
-    <div>
+    <>
       <Card className="p-8">
         <CartTotalRow label="Subtotal" amount={cartTotal} />
         <CartTotalRow label="Shipping" amount={shipping} />
@@ -17,20 +17,11 @@ function CartToals({ cart }: { cart: Cart }) {
         <CardTitle className="mt-8">
           <CartTotalRow label="Order Total" amount={orderTotal} lastRow />
         </CardTitle>
-        <Button className="capitalize">
-          <Link
-            href="/checkout"
-            className="w-full flex justify-center  text-left"
-          >
-            Checkout
-          </Link>
-        </Button>
       </Card>
-
-      {/* <FormContainer action={createOrderAction}>
+      <FormContainer action={createOrderAction}>
         <SubmitButton text="Place Order" className="w-full mt-8" />
-      </FormContainer> */}
-    </div>
+      </FormContainer>
+    </>
   );
 }
 function CartTotalRow({
@@ -53,4 +44,4 @@ function CartTotalRow({
   );
 }
 
-export default CartToals;
+export default Totoalcheacout;

@@ -251,7 +251,7 @@ export const fetchCartItems = async () => {
   const user = await getUserFromSession(await cookies());
   const cart = await db.cart.findFirst({
     where: {
-      userId: user.id ?? "",
+      userId: user?.id ?? "",
     },
     select: {
       numItemsInCart: true,
@@ -259,7 +259,7 @@ export const fetchCartItems = async () => {
   });
   return cart?.numItemsInCart || 0;
 };
-
+/// User Oreder products
 export const createOrderAction = async (
   prevState: FormState,
   formData: FormData
@@ -294,6 +294,19 @@ export const createOrderAction = async (
     return renderError(error);
   }
   redirect(`/checkout?orderId=${orderId}&cartId=${cartId}`);
+};
+export const fetchOrderUser = async () => {
+  const user = await getUserFromSession(await cookies());
+  const order = await db.order.findMany({
+    where: {
+      userId: user.id,
+      isPaid: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return order;
 };
 
 ///Favorite PRODUCTS Action
@@ -331,7 +344,7 @@ export const fetchFavoriteId = async ({ productId }: { productId: string }) => {
   const favoreit = await db.favorite.findFirst({
     where: {
       productId,
-      userId: user.id,
+      userId: user?.id ?? "",
     },
     select: {
       id: true,
@@ -382,7 +395,6 @@ export const fetchProductReviews = async (productId: string) => {
   });
   return reviews;
 };
-
 export const createReviewAction = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   prevState: any,
@@ -399,7 +411,46 @@ export const createReviewAction = async (
       },
     });
     revalidatePath(`/products/${validatedFields.productId}`);
-    return { message: 'review submitted successfully' };
+    return { message: "review submitted successfully" };
+  } catch (error) {
+    return renderError(error);
+  }
+};
+export const fetchProductReviewsByUser = async () => {
+  const user = await getUserFromSession(await cookies());
+  const reviews = await db.review.findMany({
+    where: {
+      userId: user.id,
+    },
+    select: {
+      id: true,
+      rating: true,
+      comment: true,
+      product: {
+        select: {
+          image: true,
+          name: true,
+        },
+      },
+    },
+  });
+  return reviews;
+};
+export const deleteReview = async (
+  prevState: FormState,
+  formData: FormData
+) => {
+  const reviewId = formData.get("reviewId") as string;
+  const user = await getUserFromSession(await cookies());
+  try {
+    await db.review.delete({
+      where: {
+        id: reviewId,
+        userId: user.id,
+      },
+    });
+    revalidatePath("/reviews");
+    return { message: "review deleted successfully" };
   } catch (error) {
     return renderError(error);
   }
@@ -441,7 +492,7 @@ export const RegesterUser = async (
       },
     });
     await createSession(user, await cookies());
-    revalidatePath("/auth/login");
+    revalidatePath("/cart");
     return { message: "Login suacssfly" };
   } catch (error) {
     console.log(error);
@@ -463,7 +514,7 @@ export const loginUser = async (prevState: FormState, formData: FormData) => {
       throw new Error("Invalid email or password");
     }
     await createSession(user, await cookies());
-    revalidatePath("/");
+    revalidatePath("/cart");
     return { message: "Login suacssfly" };
   } catch (error) {
     return renderError(error);
@@ -472,5 +523,4 @@ export const loginUser = async (prevState: FormState, formData: FormData) => {
 //log out functhin Auth
 export async function logout() {
   await removeUserFromSession(await cookies());
-  revalidatePath("/");
 }

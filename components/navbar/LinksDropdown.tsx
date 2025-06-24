@@ -11,12 +11,14 @@ import { Button } from "../ui/button";
 import { links } from "@/utils/links";
 import LoginBouttn from "./LoginBouttn";
 import LogoutBoutton from "./LogoutBoutton";
+import UserIcon from "./UserIcon";
 function LinksDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="flex gap-4 max-w-[100px]">
           <LuAlignLeft className="w-6 h-6" />
+          <UserIcon />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-40" align="start" sideOffset={10}>
