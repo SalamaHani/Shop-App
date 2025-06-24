@@ -10,7 +10,7 @@ function Registerpage() {
   // const [state] = useActionState(RegesterUser, initialState);
   return (
     <div>
-      <FormContainer action={RegesterUser}>
+      <FormContainer className="" action={RegesterUser}>
         <div
           data-slot="card"
           className="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm"

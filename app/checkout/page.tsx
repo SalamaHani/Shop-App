@@ -13,15 +13,13 @@ async function page() {
   const cart = await fetchOrCreateCart({ userID: user.id });
   const { currentCart } = await updateCart(cart);
   return (
-    <div>
+    <>
       <TitelSection text="Shopping Checkout" />
-      <div className="mt-8 grid gap-4 lg:grid-cols-12">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
         <Inputformch />
-        <div className="lg:col-span-4">
-          <Totoalcheacout cart={currentCart} />
-        </div>
+        <Totoalcheacout cart={currentCart} />
       </div>
-    </div>
+    </>
   );
 }
 

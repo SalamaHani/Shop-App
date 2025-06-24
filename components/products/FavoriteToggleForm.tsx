@@ -14,7 +14,7 @@ function FavoriteToggleForm({
 }: FavoriteToggleFormProps) {
   const pathname = usePathname();
   return (
-    <FormContainer action={toggleFavoriteAction}>
+    <FormContainer className="" action={toggleFavoriteAction}>
       <input type="hidden" name="pathname" value={pathname} />
       <input type="hidden" name="productId" value={productId} />
       <input

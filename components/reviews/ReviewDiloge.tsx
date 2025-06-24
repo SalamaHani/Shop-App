@@ -28,7 +28,7 @@ export function ReviewDiloge({ productId }: { productId: string }) {
           Write a Customer review
         </Button>
       </DialogTrigger>
-      <FormContainer action={createReviewAction}>
+      <FormContainer className="" action={createReviewAction}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Submiet Review</DialogTitle>

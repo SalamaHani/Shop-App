@@ -4,6 +4,7 @@ import { useFormState } from "react-dom";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { actionFunction } from "@/utils/Type";
+import { cn } from "@/lib/utils";
 
 const initialState = {
   message: "",
@@ -11,9 +12,11 @@ const initialState = {
 };
 
 function FormContainer({
+  className = "",
   action,
   children,
 }: {
+  className: string;
   action: actionFunction;
   children: React.ReactNode;
 }) {
@@ -23,6 +26,10 @@ function FormContainer({
       toast.error("", { description: state.message });
     }
   }, [state]);
-  return <form action={formAction}>{children}</form>;
+  return (
+    <form className={cn("capitalize", className)} action={formAction}>
+      {children}
+    </form>
+  );
 }
 export default FormContainer;

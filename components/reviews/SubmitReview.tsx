@@ -14,7 +14,7 @@ async function SubmitReview({ productId }: { productId: string }) {
   return (
     <div>
       <Card className="p-8 mt-8">
-        <FormContainer action={createReviewAction}>
+        <FormContainer className="" action={createReviewAction}>
           <input type="hidden" name="productId" value={productId} />
           <input type="hidden" name="authorName" value={user?.name || "user"} />
           <RatingInput name="rating" />
