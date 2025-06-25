@@ -9,6 +9,7 @@ import { Cart } from "@prisma/client";
 import { Checkbox } from "../ui/checkbox";
 import { Label } from "@radix-ui/react-dropdown-menu";
 import SeleactMethoudpay from "./SeleactMethoudpay";
+import { Input } from "../ui/input";
 function Totoalcheacout({ cart }: { cart: Cart }) {
   const { cartTotal, shipping, tax, orderTotal } = cart;
   return (
@@ -28,6 +29,7 @@ function Totoalcheacout({ cart }: { cart: Cart }) {
         </Label>
       </div>
       <FormContainer className="" action={createOrderAction}>
+        <Input hidden id="FirstName" type="text" />
         <SubmitButton text="Place Order" className="w-full " />
       </FormContainer>
     </Card>

@@ -16,7 +16,7 @@ function AddToCart({ productId }: { productId: string }) {
         amount={amount}
         setAmount={setAmount}
       />
-      <FormContainer action={addToCartAction}>
+      <FormContainer className="" action={addToCartAction}>
         <input type="hidden" name="pathname" value={pathname} />
         <input type="hidden" name="productId" value={productId} />
         <input type="hidden" name="amount" value={amount} />

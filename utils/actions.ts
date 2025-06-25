@@ -5,7 +5,6 @@ import { hashPassword, verifyPassword } from "@/lib/hash";
 import {
   registerSchema,
   loginSchemae,
-  FormState,
   validateWithZodSchema,
   reviewSchema,
 } from "./schema";
@@ -177,10 +176,12 @@ export const updateCart = async (cart: Cart) => {
   return { cartItems, currentCart };
 };
 export const addToCartAction = async (
-  prevState: FormState,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  prevState: any,
   formData: FormData
 ) => {
   const user = await getUserFromSession(await cookies());
+  if (user == null) return redirect("/auth/login");
   const productId = formData.get("productId") as string;
   const amount = Number(formData.get("amount"));
   const pathname = formData.get("pathname") as string;
@@ -198,7 +199,8 @@ export const addToCartAction = async (
   }
 };
 export const removeCartItemAction = async (
-  prevState: FormState,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  prevState: any,
   formData: FormData
 ) => {
   const user = await getUserFromSession(await cookies());
@@ -261,9 +263,13 @@ export const fetchCartItems = async () => {
 };
 /// User Oreder products
 export const createOrderAction = async (
-  prevState: FormState,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  prevState: any,
   formData: FormData
 ) => {
+  const DataUser = Object.fromEntries(formData);
+  console.log(DataUser);
+  console.log(formData.get("email") as string);
   let orderId: null | string = null;
   let cartId: null | string = null;
   const user = await getUserFromSession(await cookies());
@@ -286,14 +292,15 @@ export const createOrderAction = async (
         orderTotal: cart.orderTotal,
         tax: cart.tax,
         shipping: cart.shipping,
-        email: user.emailAddresses[0].emailAddress,
+        email: user.email,
       },
     });
     orderId = order.id;
   } catch (error) {
+    console.log(error);
     return renderError(error);
   }
-  redirect(`/checkout?orderId=${orderId}&cartId=${cartId}`);
+  redirect(`/payment?orderId=${orderId}&cartId=${cartId}`);
 };
 export const fetchOrderUser = async () => {
   const user = await getUserFromSession(await cookies());
@@ -310,14 +317,15 @@ export const fetchOrderUser = async () => {
 };
 
 ///Favorite PRODUCTS Action
-export const toggleFavoriteAction = async (
-  prevState: FormState,
-  formData: FormData
-) => {
+export const toggleFavoriteAction = async (prevState: {
+  productId: string;
+  favoriteId: string | null;
+  pathname: string;
+}) => {
   const user = await getUserFromSession(await cookies());
-  const productId = formData.get("productId") as string;
-  const favoriteId = formData.get("favoriteId") as string;
-  const pathname = formData.get("pathname") as string;
+  const { productId, favoriteId, pathname } = prevState;
+
+  if (user == null) return redirect("/auth/login");
   try {
     if (favoriteId) {
       await db.favorite.delete({
@@ -341,6 +349,7 @@ export const toggleFavoriteAction = async (
 };
 export const fetchFavoriteId = async ({ productId }: { productId: string }) => {
   const user = await getUserFromSession(await cookies());
+  if (user == null) return null;
   const favoreit = await db.favorite.findFirst({
     where: {
       productId,
@@ -437,7 +446,8 @@ export const fetchProductReviewsByUser = async () => {
   return reviews;
 };
 export const deleteReview = async (
-  prevState: FormState,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  prevState: any,
   formData: FormData
 ) => {
   const reviewId = formData.get("reviewId") as string;
@@ -460,7 +470,8 @@ export const deleteReview = async (
 
 //regestier user function auth
 export const RegesterUser = async (
-  prevState: FormState,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  prevState: any,
   formData: FormData
 ) => {
   try {
@@ -492,7 +503,7 @@ export const RegesterUser = async (
       },
     });
     await createSession(user, await cookies());
-    revalidatePath("/cart");
+    revalidatePath("/");
     return { message: "Login suacssfly" };
   } catch (error) {
     console.log(error);
@@ -500,7 +511,8 @@ export const RegesterUser = async (
   }
 };
 //log in user funcrion auth
-export const loginUser = async (prevState: FormState, formData: FormData) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const loginUser = async (prevState: any, formData: FormData) => {
   try {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;

@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
-import { FormState } from "./schema";
 export type actionFunction = (
-  prevState: FormState,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  prevState: any,
   formData: FormData
 ) => Promise<{ message: string }>;
 export type CartItemWithProduct = Prisma.CartItemGetPayload<{

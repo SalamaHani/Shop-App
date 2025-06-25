@@ -17,13 +17,13 @@ function Inputformch() {
               <Label className="mb-2" htmlFor="FirstName">
                 First Name*
               </Label>
-              <Input id="FirstName" type="text" />
+              <Input name="FirstName" id="FirstName" type="text" />
             </div>
             <div className="w-[50%]">
               <Label className="mb-2" htmlFor="FirstName">
                 Last Name *
               </Label>
-              <Input id="FirstName" type="text" />
+              <Input name="LastName" id="LastName" type="text" />
             </div>
           </div>
           <div>
@@ -35,33 +35,33 @@ function Inputformch() {
               <Label className="mb-2" htmlFor="StreetAddress ">
                 Street Address *
               </Label>
-              <Input id="StreetAddress" type="number" />
+              <Input name="StreetAddress" id="StreetAddress" type="number" />
             </div>
             <div className="w-[50%]">
               <Label className="mb-2" htmlFor="Town">
                 Town / City *
               </Label>
-              <Input id="Town" type="number" />
+              <Input name="Town" id="Town" type="number" />
             </div>
           </div>
           <div>
             <Label className="mb-2" htmlFor="ZIPCode">
               ZIP Code *
             </Label>
-            <Input id="ZIPCode" type="number" />
+            <Input name="ZIPCode" id="ZIPCode" type="number" />
           </div>
           <div className="flex gap-4">
             <div className="w-[50%]">
               <Label className="mb-2" htmlFor="email">
                 Email *
               </Label>
-              <Input id="email" type="email" />
+              <Input name="email" id="email" type="email" />
             </div>
             <div className="w-[50%]">
               <Label className="mb-2" htmlFor="Phone">
                 Phone *
               </Label>
-              <Input id="Phone" type="number" />
+              <Input name="Phone" id="Phone" type="number" />
             </div>
           </div>
           <TextAreaInput

@@ -3,7 +3,7 @@ import { getUserFromSession } from "@/lib/Auth";
 import { cookies } from "next/headers";
 
 // 1. Specify protected and public routes
-const protectedRoutes = ["/cart", "/orders"];
+const protectedRoutes = ["/cart", "/orders", "/favorites", "/reviews"];
 const publicRoutes = ["/login", "/signup"];
 
 export default async function middleware(req: NextRequest) {

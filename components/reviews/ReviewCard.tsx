@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Image from "next/image";
 import Rating from "./Rating";
 import Comment from "./Comment";
-import imgepro from "../../public/imges/Untitled-6.jpg";
+import imgepro from "../../public/imges/user-profile-icon-flat-style-member-avatar-vector-illustration-isolated-background-human-permission-sign-business-concept_157943-15752.avif";
 type ReviewCardProps = {
   reviewInfo: {
     comment: string;

@@ -20,11 +20,9 @@ export function Selectcuntery({ Arr }: { Arr: CuantersT[] }) {
         <SelectGroup>
           {Arr.map((item) => {
             return (
-              <>
-                <SelectItem key={item.iso_code} value={item.iso_code}>
-                  {item.country} {`(${item.iso_code})`}
-                </SelectItem>
-              </>
+              <SelectItem key={item.iso_code} value={item.iso_code}>
+                {item.country} {`(${item.iso_code})`}
+              </SelectItem>
             );
           })}
         </SelectGroup>
