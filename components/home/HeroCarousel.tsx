@@ -1,4 +1,11 @@
 import hero1 from "@/public/imges/hero1.jpg";
+import hero2 from "@/public/imges/hero2.jpg";
+import hero3 from "@/public/imges/hero3.jpg";
+import hero4 from "@/public/imges/hero4.jpg";
+import hero5 from "@/public/imges/product-3.jpg";
+import hero6 from "@/public/imges/product-4.jpg";
+import hero7 from "@/public/imges/product-2.jpg";
+
 import {
   Carousel,
   CarouselContent,
@@ -8,7 +15,7 @@ import {
 } from "../ui/carousel";
 import { Card, CardContent } from "../ui/card";
 import Image from "next/image";
-const carouselImages = [hero1, hero1, hero1, hero1];
+const carouselImages = [hero5, hero1, hero2, hero3, hero4, hero5, hero6, hero7];
 
 function HeroCarousel() {
   return (
