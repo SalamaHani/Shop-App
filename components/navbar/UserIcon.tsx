@@ -7,7 +7,7 @@ async function UserIcon() {
 
   if (user !== null)
     return (
-      <LuUserRound className="w-6 h-6 bg-primary rounded-full text-white" />
+      <LuUserRound className="w-6 h-6 bg-primary rounded-full dark:text-black text-white" />
     );
   return null;
 }

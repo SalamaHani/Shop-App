@@ -9,7 +9,7 @@ import Link from "next/link";
 function page() {
   return (
     <div>
-      <FormContainer className="" action={loginUser}>
+      <form className=""  action={loginUser}>
         <div
           data-slot="card"
           className="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm"
@@ -58,7 +58,7 @@ function page() {
             </Link>
           </div>
         </div>
-      </FormContainer>
+      </form>
     </div>
   );
 }

@@ -19,6 +19,7 @@ import { redirect } from "next/navigation";
 const productionUrl = "https://shop.motorscloud.net/api";
 import { cookies } from "next/headers";
 import { Cart } from "@prisma/client";
+import { toast } from "sonner";
 
 export const customFetch = axios.create({
   baseURL: productionUrl,
@@ -519,15 +520,17 @@ export const loginUser = async (prevState: any, formData: FormData) => {
     const resultvaled = loginSchemae.safeParse({ email, password });
     if (!resultvaled.success) {
       const errors = resultvaled.error.errors.map((error) => error.message);
-      throw new Error(errors.join("*"));
+      toast.error("", { description: errors.join("*") });
+      // throw new Error(errors.join("*"));
     }
     const user = await db.users.findUnique({ where: { email } });
     if (!user || !(await verifyPassword(password, user.password))) {
-      throw new Error("Invalid email or password");
+      toast.error("Invalid email or password");
+      throw new Error();
     }
     await createSession(user, await cookies());
-    revalidatePath("/cart");
-    return { message: "Login suacssfly" };
+    toast.success("suacssfly");
+    return redirect("/");
   } catch (error) {
     return renderError(error);
   }
