@@ -252,3 +252,50 @@ export type CuantersT = {
   iso_code: string;
   country: string;
 };
+export type CartItem = {
+  productId: string;
+  image: string;
+  title: string;
+  price: string;
+  amount: number;
+  company: string;
+};
+export type CartState = {
+  cartItems: CartItem[];
+  numItemsInCart: number;
+  cartTotal: number;
+  shipping: number;
+  tax: number;
+  orderTotal: number;
+};
+export type currenteCart = {
+  id: string;
+  userId: string;
+  numItemsInCart: number;
+  cartTotal: number;
+  shipping: number;
+  tax: number;
+  taxRate: number;
+  orderTotal: number;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export interface UserFormData {
+  FirstName: string;
+  LastName: string;
+  Country: string;
+  StreetAddress: number;
+  Town: number;
+  ZIPCode: number;
+  email: string;
+  Phone: number;
+}
+
+export interface ActionResponse {
+  success: boolean;
+  message: string;
+  errors?: {
+    [K in keyof UserFormData]?: string[];
+  };
+}

@@ -88,6 +88,9 @@ model Order {
   tax Int @default(0)
   shipping Int @default(0)
   email String
+  phone Int
+  country String
+  streetAddress Int
   isPaid Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
