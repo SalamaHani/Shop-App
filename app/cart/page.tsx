@@ -10,8 +10,8 @@ import React from "react";
 async function page() {
   const user = await getUserFromSession(await cookies());
   if (user == null) return redirect("/");
-  const cart = await fetchOrCreateCart({userID:user.id})
-  const { cartItems, currentCart} = await updateCart(cart)
+  const cart = await fetchOrCreateCart({ userID: user.id });
+  const { cartItems, currentCart } = await updateCart(cart);
   if (cartItems.length === 0) return <TitelSection text="Empty Cart" />;
   return (
     <>

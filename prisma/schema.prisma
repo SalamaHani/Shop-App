@@ -89,7 +89,8 @@ model Order {
   shipping Int @default(0)
   email String
   phone Int
-  country String
+  city String
+  status String
   streetAddress Int
   isPaid Boolean @default(false)
   createdAt DateTime @default(now())

@@ -13,7 +13,7 @@ import { formatCurrency, formatDate } from "@/utils/format";
 import React from "react";
 
 async function page() {
-  const orders = await fetchOrderUser()
+  const orders = await fetchOrderUser();
   return (
     <>
       <TitelSection text="Your Orders" />
@@ -25,18 +25,30 @@ async function page() {
             <TableHead>Order Total</TableHead>
             <TableHead>Tax</TableHead>
             <TableHead>Shipping</TableHead>
+            <TableHead>City</TableHead>
+            <TableHead>Status</TableHead>
             <TableHead>Date</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {orders.map((order) => {
-            const { products, orderTotal, tax, shipping, createdAt } = order;
+            const {
+              products,
+              orderTotal,
+              tax,
+              shipping,
+              createdAt,
+              city,
+              status,
+            } = order;
             return (
               <TableRow key={order.id}>
                 <TableCell>{products}</TableCell>
                 <TableCell>{formatCurrency(orderTotal)}</TableCell>
                 <TableCell>{formatCurrency(tax)}</TableCell>
                 <TableCell>{formatCurrency(shipping)}</TableCell>
+                <TableCell>{city}</TableCell>
+                <TableCell>{status}</TableCell>
                 <TableCell>{formatDate(createdAt)}</TableCell>
               </TableRow>
             );

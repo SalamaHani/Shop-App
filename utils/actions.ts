@@ -266,46 +266,43 @@ export const fetchCartItems = async () => {
   return cart?.numItemsInCart || 0;
 };
 /// User Oreder products
-// export const createOrderAction = async (
-//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//   prevState: any,
-//   formData: FormData
-// ) => {
-//   const DataUser = Object.fromEntries(formData);
-//   console.log(DataUser);
-//   console.log(formData.get("email") as string);
-//   let orderId: null | string = null;
-//   let cartId: null | string = null;
-//   const user = await getUserFromSession(await cookies());
-//   try {
-//     const cart = await fetchOrCreateCart({
-//       userID: user.id,
-//       errorOnFailure: true,
-//     });
-//     cartId = cart.id;
-//     await db.order.deleteMany({
-//       where: {
-//         userId: user.id,
-//         isPaid: false,
-//       },
-//     });
-//     const order = await db.order.create({
-//       data: {
-//         userId: user.id,
-//         products: cart.numItemsInCart,
-//         orderTotal: cart.orderTotal,
-//         tax: cart.tax,
-//         shipping: cart.shipping,
-//         email: user.email,
-//       },
-//     });
-//     orderId = order.id;
-//   } catch (error) {
-//     console.log(error);
-//     return renderError(error);
-//   }
-//   redirect(`/payment?orderId=${orderId}&cartId=${cartId}`);
-// };
+export const createOrderAction = async (UserData: UserFormData) => {
+  let orderId: null | string = null;
+  let cartId: null | string = null;
+  const user = await getUserFromSession(await cookies());
+  try {
+    const cart = await fetchOrCreateCart({
+      userID: user.id,
+      errorOnFailure: true,
+    });
+    cartId = cart.id;
+    await db.order.deleteMany({
+      where: {
+        userId: user.id,
+        isPaid: false,
+      },
+    });
+    const order = await db.order.create({
+      data: {
+        userId: user.id,
+        products: cart.numItemsInCart,
+        orderTotal: cart.orderTotal,
+        tax: cart.tax,
+        shipping: cart.shipping,
+        email: UserData.email,
+        city: UserData.Town,
+        streetAddress: UserData.StreetAddress,
+        phone: UserData.Phone,
+        status: 'pending'
+      },
+    });
+    orderId = order.id;
+  } catch (error) {
+    console.log(error);
+    return renderError(error);
+  }
+  redirect(`/payment?orderId=${orderId}&cartId=${cartId}`);
+};
 export const getdataformAction = async (
   prevState: ActionResponse | null,
   formData: FormData
@@ -318,7 +315,7 @@ export const getdataformAction = async (
       LastName: formData.get("LastName") as string,
       Country: formData.get("Country") as string,
       StreetAddress: Number(formData.get("StreetAddress")),
-      Town: Number(formData.get("Town")),
+      Town: formData.get("Town") as string,
       ZIPCode: Number(formData.get("ZIPCode")),
       email: formData.get("email") as string,
       Phone: Number(formData.get("Phone")),
@@ -336,41 +333,7 @@ export const getdataformAction = async (
     }
 
     // Here you would typically save the address to your database
-    let orderId: null | string = null;
-    let cartId: null | string = null;
-    const user = await getUserFromSession(await cookies());
-    try {
-      const cart = await fetchOrCreateCart({
-        userID: user.id,
-        errorOnFailure: true,
-      });
-      cartId = cart.id;
-      await db.order.deleteMany({
-        where: {
-          userId: user.id,
-          isPaid: false,
-        },
-      });
-      const order = await db.order.create({
-        data: {
-          userId: user.id,
-          products: cart.numItemsInCart,
-          orderTotal: cart.orderTotal,
-          tax: cart.tax,
-          shipping: cart.shipping,
-          email: UserData.email,
-          country: UserData.Country,
-          streetAddress: UserData.StreetAddress,
-          phone: UserData.Phone,
-        },
-      });
-      orderId = order.id;
-    } catch (error) {
-      console.log(error);
-      renderError(error);
-    }
-    revalidatePath(`/payment?orderId=${orderId}&cartId=${cartId}`);
-
+    createOrderAction(UserData);
     return {
       success: true,
       message: "Address saved successfully!",
@@ -406,7 +369,7 @@ export const toggleFavoriteAction = async (prevState: {
   const user = await getUserFromSession(await cookies());
   const { productId, favoriteId, pathname } = prevState;
 
-  if (user == null) return redirect("/auth/login");
+  if (user == null) return redirect("/login");
   try {
     if (favoriteId) {
       await db.favorite.delete({
@@ -444,6 +407,7 @@ export const fetchFavoriteId = async ({ productId }: { productId: string }) => {
 };
 export const fetchUserFavorites = async () => {
   const user = await getUserFromSession(await cookies());
+  if (user == null) return null;
   const faveretproduct = await db.favorite.findMany({
     where: {
       userId: user.id,
@@ -600,13 +564,11 @@ export const loginUser = async (prevState: any, formData: FormData) => {
     const resultvaled = loginSchemae.safeParse({ email, password });
     if (!resultvaled.success) {
       const errors = resultvaled.error.errors.map((error) => error.message);
-      toast.error("", { description: errors.join("*") });
-      // throw new Error(errors.join("*"));
+      throw new Error(errors.join("*"));
     }
     const user = await db.users.findUnique({ where: { email } });
     if (!user || !(await verifyPassword(password, user.password))) {
-      toast.error("Invalid email or password");
-      throw new Error();
+      throw new Error("Invalid email or password");
     }
     await createSession(user, await cookies());
     toast.success("suacssfly");

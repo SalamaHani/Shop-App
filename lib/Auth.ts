@@ -84,7 +84,7 @@ export function getUserFromSession(cookies: Pick<Cookies, "get">) {
 export const verifySession = async () => {
   const session = await getSession();
   if (!session?.userId) {
-    redirect("/auth/login");
+    redirect("/login");
   }
 
   return { isAuth: true, userId: session.userId };

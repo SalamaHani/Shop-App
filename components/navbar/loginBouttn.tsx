@@ -9,7 +9,7 @@ async function LoginBouttn() {
   if (user != null) return null;
   return (
     <DropdownMenuItem>
-      <Link href="/auth/login" className="w-full text-left">
+      <Link href="/login" className="w-full text-left">
         Login
       </Link>
     </DropdownMenuItem>

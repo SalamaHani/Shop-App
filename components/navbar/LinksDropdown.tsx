@@ -26,12 +26,12 @@ async function LinksDropdown() {
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-40" align="start" sideOffset={10}>
           <DropdownMenuItem>
-            <Link href="/auth/login" className="capitalize w-full">
+            <Link href="/login" className="capitalize w-full">
               Log in
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Link href="/auth/register" className="capitalize w-full">
+            <Link href="/register" className="capitalize w-full">
               Register
             </Link>
           </DropdownMenuItem>

@@ -70,7 +70,7 @@ function Inputformch({ state }: { state: ActionResponse }) {
               <Input
                 name="Town"
                 id="Town"
-                type="number"
+                type="text"
                 className={state?.errors?.Town ? "border-red-500" : ""}
               />
               {state.errors?.Town && (
@@ -133,7 +133,6 @@ function Inputformch({ state }: { state: ActionResponse }) {
               <AlertDescription>{state.message}</AlertDescription>
             </Alert>
           )}
-          <Input placeholder="supmir" type="submit" />
         </div>
       </div>
     </div>
