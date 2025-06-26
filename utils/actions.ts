@@ -267,6 +267,7 @@ export const fetchCartItems = async () => {
 };
 /// User Oreder products
 export const createOrderAction = async (UserData: UserFormData) => {
+  console.log(UserData);
   let orderId: null | string = null;
   let cartId: null | string = null;
   const user = await getUserFromSession(await cookies());
@@ -293,13 +294,13 @@ export const createOrderAction = async (UserData: UserFormData) => {
         city: UserData.Town,
         streetAddress: UserData.StreetAddress,
         phone: UserData.Phone,
-        status: 'pending'
+        status: "pending",
       },
     });
     orderId = order.id;
   } catch (error) {
     console.log(error);
-    return renderError(error);
+    renderError(error);
   }
   redirect(`/payment?orderId=${orderId}&cartId=${cartId}`);
 };
@@ -308,22 +309,18 @@ export const getdataformAction = async (
   formData: FormData
 ): Promise<ActionResponse> => {
   await new Promise((resolve) => setTimeout(resolve, 1000));
-
   try {
     const UserData: UserFormData = {
       FirstName: formData.get("FirstName") as string,
       LastName: formData.get("LastName") as string,
-      Country: formData.get("Country") as string,
       StreetAddress: Number(formData.get("StreetAddress")),
       Town: formData.get("Town") as string,
       ZIPCode: Number(formData.get("ZIPCode")),
       email: formData.get("email") as string,
       Phone: Number(formData.get("Phone")),
     };
-
     // Validate the form data
     const validatedData = checkoutSchema.safeParse(UserData);
-
     if (!validatedData.success) {
       return {
         success: false,
@@ -331,13 +328,16 @@ export const getdataformAction = async (
         errors: validatedData.error.flatten().fieldErrors,
       };
     }
-
-    // Here you would typically save the address to your database
     createOrderAction(UserData);
     return {
       success: true,
-      message: "Address saved successfully!",
+      message: "saved successfully!",
     };
+    // Here you would typically save the address to your database
+    // return {
+    //   success: true,
+    //   message: "saved successfully!",
+    // };
   } catch (error) {
     console.log(error);
     return {

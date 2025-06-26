@@ -69,7 +69,6 @@ export const userSchema = z.object({
 export const checkoutSchema = z.object({
   FirstName: z.string().min(1, { message: "First Name is required" }),
   LastName: z.string().min(1, { message: "Last Name is required" }),
-  Country: z.string().min(1, { message: "Country is required" }),
   StreetAddress: z.number().min(1, { message: "Street Address is required" }),
   Town: z.string().min(1, { message: "Town/City is required" }),
   ZIPCode: z.number().min(4, { message: "ZIP Code is required" }),

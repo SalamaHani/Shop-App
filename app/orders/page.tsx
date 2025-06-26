@@ -11,7 +11,12 @@ import {
 import { fetchOrderUser } from "@/utils/actions";
 import { formatCurrency, formatDate } from "@/utils/format";
 import React from "react";
-
+const staus = [
+  { id: 1, states: "delivered", color: "bg-success/20 text-success/100" },
+  { id: 2, states: "shipped", color: "bg-error/20 text-error/100" },
+  { id: 3, states: "processing", color: "bg-primary/20 text-primary/100" },
+  { id: 4, states: "pending", color: "bg-warning/20 text-warning/100" },
+];
 async function page() {
   const orders = await fetchOrderUser();
   return (
@@ -48,7 +53,20 @@ async function page() {
                 <TableCell>{formatCurrency(tax)}</TableCell>
                 <TableCell>{formatCurrency(shipping)}</TableCell>
                 <TableCell>{city}</TableCell>
-                <TableCell>{status}</TableCell>
+                <TableCell>
+                  {staus.map((item) => {
+                    if (item.states == status) {
+                      return (
+                        <span
+                          key={item.id}
+                          className={`${item.color} text-xs text-success-600 dark:bg-success/500/15 rounded-full px-2 py-0.5 font-medium`}
+                        >
+                          {status}
+                        </span>
+                      );
+                    }
+                  })}
+                </TableCell>
                 <TableCell>{formatDate(createdAt)}</TableCell>
               </TableRow>
             );

@@ -284,7 +284,6 @@ export type currenteCart = {
 export interface UserFormData {
   FirstName: string;
   LastName: string;
-  Country: string;
   StreetAddress: number;
   Town: string;
   ZIPCode: number;
