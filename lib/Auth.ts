@@ -1,6 +1,7 @@
+import "server-only";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
+
 import { redirect } from "next/navigation";
 import { cache } from "react";
 const secretKey = "secret";
@@ -124,22 +125,12 @@ export async function createSession(
 ) {
   const sessionId = await encrypt(userId);
   setCookie(sessionId, cookies);
-  redirect("/");
 }
 
-export async function updateSession(request: NextRequest) {
-  const session = request.cookies.get("session")?.value;
-  if (!session) return;
-
-  // Refresh the session so it doesn't expire
-  const parsed = await decrypt(session);
-  parsed.expires = Date.now() + SESSION_EXPIRATION_SECONDS * 1000;
-  const res = NextResponse.next();
-  res.cookies.set({
-    name: "session",
-    value: await encrypt(parsed),
-    httpOnly: true,
-    expires: parsed.expires,
-  });
-  return res;
+export async function updateUserSessionExpiration(
+  cookies: Pick<Cookies, "get" | "set">
+) {
+  const sessionId = cookies.get(COOKIE_SESSION_KEY)?.value;
+  if (sessionId == null) return null;
+  setCookie(sessionId, cookies);
 }

@@ -1,18 +1,27 @@
+"use client";
 import React from "react";
+import { useActionState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
 import { SubmitButton } from "@/components/form/Buttons";
-import FormContainer from "@/components/form/FormContener";
 import { loginUser } from "@/utils/actions";
 import Link from "next/link";
+import { ActionResponse } from "@/utils/Type";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { CheckCircle2 } from "lucide-react";
 
+const initialState: ActionResponse = {
+  success: false,
+  message: "",
+};
 function page() {
+  const [state, action] = useActionState(loginUser, initialState);
   return (
     <div>
-      <FormContainer className="" action={loginUser}>
+      <form action={action}>
         <div
           data-slot="card"
-          className="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm"
+          className="bg-card mb-5 text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm"
         >
           <div
             data-slot="card-header"
@@ -42,10 +51,16 @@ function page() {
             <div className="flex flex-col gap-3">
               <Label htmlFor="email">Your email address</Label>
               <Input name="email" placeholder="m@example.com" type="email" />
+              {state.errors?.email && (
+                <p className="text-red-500 text-xs">{state.errors.email}</p>
+              )}
             </div>
             <div className="flex flex-col gap-3">
               <Label htmlFor="email">Your Password</Label>
               <Input name="password" type="password" />
+              {state.errors?.password && (
+                <p className="text-red-500 text-xs">{state.errors.password}</p>
+              )}
             </div>
           </div>
           <div
@@ -58,7 +73,13 @@ function page() {
             </Link>
           </div>
         </div>
-      </FormContainer>
+        {state?.message && (
+          <Alert variant={state.success ? "default" : "destructive"}>
+            {state.success && <CheckCircle2 className="h-4 w-4" />}
+            <AlertDescription>{state.message}</AlertDescription>
+          </Alert>
+        )}
+      </form>
     </div>
   );
 }

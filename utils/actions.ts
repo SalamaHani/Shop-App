@@ -21,6 +21,7 @@ const productionUrl = "https://shop.motorscloud.net/api";
 import { cookies } from "next/headers";
 import { Cart } from "@prisma/client";
 import { ActionResponse, UserFormData } from "./Type";
+import { toast } from "sonner";
 
 export const customFetch = axios.create({
   baseURL: productionUrl,
@@ -183,7 +184,7 @@ export const addToCartAction = async (
   formData: FormData
 ) => {
   const user = await getUserFromSession(await cookies());
-  if (user == null) return redirect("/auth/login");
+  if (user == null) return redirect("login");
   const productId = formData.get("productId") as string;
   const amount = Number(formData.get("amount"));
   const pathname = formData.get("pathname") as string;
@@ -398,7 +399,6 @@ export const toggleFavoriteAction = async (prevState: {
 };
 export const fetchFavoriteId = async ({ productId }: { productId: string }) => {
   const user = await getUserFromSession(await cookies());
-  if (user == null) return null;
   const favoreit = await db.favorite.findFirst({
     where: {
       productId,
@@ -412,7 +412,6 @@ export const fetchFavoriteId = async ({ productId }: { productId: string }) => {
 };
 export const fetchUserFavorites = async () => {
   const user = await getUserFromSession(await cookies());
-  if (user == null) return null;
   const faveretproduct = await db.favorite.findMany({
     where: {
       userId: user.id,
@@ -560,25 +559,39 @@ export const RegesterUser = async (
   }
 };
 //log in user funcrion auth
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const loginUser = async (prevState: any, formData: FormData) => {
-  try {
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-    const resultvaled = loginSchemae.safeParse({ email, password });
-    if (!resultvaled.success) {
-      const errors = resultvaled.error.errors.map((error) => error.message);
-      throw new Error(errors.join("*"));
-    }
-    const user = await db.users.findUnique({ where: { email } });
-    if (!user || !(await verifyPassword(password, user.password))) {
-      throw new Error("Invalid email or password");
-    }
-    await createSession(user, await cookies());
-    return { message: "Login suacssfly" };
-  } catch (error) {
-    return renderError(error);
+
+export const loginUser = async (
+  prevState: ActionResponse | null,
+  formData: FormData
+): Promise<ActionResponse> => {
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  const UserData = {
+    email: formData.get("email") as string,
+    password: formData.get("password") as string,
+  };
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+  const validatedData = loginSchemae.safeParse(UserData);
+  if (!validatedData.success) {
+    return {
+      success: false,
+      message: "Please fix the errors in the form",
+      errors: validatedData.error.flatten().fieldErrors,
+    };
   }
+  const user = await db.users.findUnique({ where: { email } });
+  if (!user || !(await verifyPassword(password, user.password))) {
+    return { success: false, message: "Invalid email or password" };
+    // throw new Error("Invalid email or password");
+  }
+  await createSession(user, await cookies());
+  return (
+    redirect("/") ||
+    toast.success("Login successfully!") || {
+      success: true,
+      message: "Login successfully!",
+    }
+  );
 };
 //log out functhin Auth
 export async function logout() {

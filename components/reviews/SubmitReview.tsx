@@ -10,7 +10,7 @@ import { redirect } from "next/navigation";
 
 async function SubmitReview({ productId }: { productId: string }) {
   const user = await getUserFromSession(await cookies());
-  if (user == null) return redirect("/auth/login");
+  if (user == null) return redirect("/login");
   return (
     <div>
       <Card className="p-8 mt-8">
