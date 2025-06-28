@@ -20,7 +20,6 @@ import { redirect } from "next/navigation";
 const productionUrl = "https://shop.motorscloud.net/api";
 import { cookies } from "next/headers";
 import { Cart } from "@prisma/client";
-import { toast } from "sonner";
 import { ActionResponse, UserFormData } from "./Type";
 
 export const customFetch = axios.create({
@@ -265,6 +264,22 @@ export const fetchCartItems = async () => {
   });
   return cart?.numItemsInCart || 0;
 };
+export const fetchCartItemtest = async () => {
+  const user = await getUserFromSession(await cookies());
+  try {
+    await db.cart.findFirst({
+      where: {
+        userId: user?.id ?? "",
+      },
+      select: {
+        numItemsInCart: true,
+      },
+    });
+  } catch (error) {
+    renderError(error);
+  }
+  redirect("/checkout");
+};
 /// User Oreder products
 export const createOrderAction = async (UserData: UserFormData) => {
   console.log(UserData);
@@ -297,6 +312,7 @@ export const createOrderAction = async (UserData: UserFormData) => {
         status: "pending",
       },
     });
+    console.log(order);
     orderId = order.id;
   } catch (error) {
     console.log(error);
@@ -304,47 +320,36 @@ export const createOrderAction = async (UserData: UserFormData) => {
   }
   redirect(`/payment?orderId=${orderId}&cartId=${cartId}`);
 };
+
 export const getdataformAction = async (
   prevState: ActionResponse | null,
   formData: FormData
 ): Promise<ActionResponse> => {
   await new Promise((resolve) => setTimeout(resolve, 1000));
-  try {
-    const UserData: UserFormData = {
-      FirstName: formData.get("FirstName") as string,
-      LastName: formData.get("LastName") as string,
-      StreetAddress: Number(formData.get("StreetAddress")),
-      Town: formData.get("Town") as string,
-      ZIPCode: Number(formData.get("ZIPCode")),
-      email: formData.get("email") as string,
-      Phone: Number(formData.get("Phone")),
-    };
-    // Validate the form data
-    const validatedData = checkoutSchema.safeParse(UserData);
-    if (!validatedData.success) {
-      return {
-        success: false,
-        message: "Please fix the errors in the form",
-        errors: validatedData.error.flatten().fieldErrors,
-      };
-    }
-    createOrderAction(UserData);
-    return {
-      success: true,
-      message: "saved successfully!",
-    };
-    // Here you would typically save the address to your database
-    // return {
-    //   success: true,
-    //   message: "saved successfully!",
-    // };
-  } catch (error) {
-    console.log(error);
+  const UserData: UserFormData = {
+    FirstName: formData.get("FirstName") as string,
+    LastName: formData.get("LastName") as string,
+    StreetAddress: Number(formData.get("StreetAddress")),
+    Town: formData.get("Town") as string,
+    ZIPCode: Number(formData.get("ZIPCode")),
+    email: formData.get("email") as string,
+    Phone: Number(formData.get("Phone")),
+  };
+  // Validate the form data
+  const validatedData = checkoutSchema.safeParse(UserData);
+  if (!validatedData.success) {
     return {
       success: false,
-      message: "An unexpected error occurred",
+      message: "Please fix the errors in the form",
+      errors: validatedData.error.flatten().fieldErrors,
     };
   }
+  return (
+    (await createOrderAction(UserData)) || {
+      success: true,
+      message: "saved successfully!",
+    }
+  );
 };
 export const fetchOrderUser = async () => {
   const user = await getUserFromSession(await cookies());
@@ -548,8 +553,7 @@ export const RegesterUser = async (
       },
     });
     await createSession(user, await cookies());
-    revalidatePath("/");
-    return { message: "Login suacssfly" };
+    return { message: "Regester suacssfly" };
   } catch (error) {
     console.log(error);
     return renderError(error);
@@ -571,7 +575,6 @@ export const loginUser = async (prevState: any, formData: FormData) => {
       throw new Error("Invalid email or password");
     }
     await createSession(user, await cookies());
-    toast.success("suacssfly");
     return { message: "Login suacssfly" };
   } catch (error) {
     return renderError(error);

@@ -292,6 +292,8 @@ export interface UserFormData {
 }
 
 export interface ActionResponse {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  funactuon?: any;
   success: boolean;
   message: string;
   errors?: {

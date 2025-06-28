@@ -59,6 +59,7 @@ export type Cookies = {
   get: (key: string) => { name: string; value: string } | undefined;
   delete: (key: string) => void;
 };
+//set cookise prorser
 function setCookie(sessionId: string, cookies: Pick<Cookies, "set">) {
   cookies.set(COOKIE_SESSION_KEY, sessionId, {
     secure: true,
@@ -112,9 +113,9 @@ export async function deleteSession() {
 export async function removeUserFromSession(
   cookies: Pick<Cookies, "get" | "delete">
 ) {
-  const sessionId = cookies.get(COOKIE_SESSION_KEY)?.value
-  if (sessionId == null) return null
-  cookies.delete(COOKIE_SESSION_KEY)
+  const sessionId = cookies.get(COOKIE_SESSION_KEY)?.value;
+  if (sessionId == null) return null;
+  cookies.delete(COOKIE_SESSION_KEY);
 }
 
 export async function createSession(
@@ -123,6 +124,7 @@ export async function createSession(
 ) {
   const sessionId = await encrypt(userId);
   setCookie(sessionId, cookies);
+  redirect("/");
 }
 
 export async function updateSession(request: NextRequest) {
