@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-
 import "./globals.css";
 import Continer from "@/components/global/Continer";
 import Navbar from "@/components/navbar/Navbar";
 
 import Providers from "./Providers";
 export const metadata: Metadata = {
-  title: "Next Storefront",
-  description: "A nifty store built with Next.js",
+  title: "Astorefront",
+  description: "A nifty Astorefonte Shope Abagor Laump  built with Next.js",
+  icons: { icon: "/public/vercel.svg" },
 };
 
 export default function RootLayout({

@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Sign In to Bacola | Order Fresh Groceries Online Store",
+  title: "Sign In or Log in to Astorefront | Order Lumps Online Store",
   description:
-    "Log in to your Bacola account to easily order your favorite fresh vegetables, fruits, meats, and more..",
+    "Log in to your Astorefront account to easily order Lamups  Room, and more..",
   keywords: ["sign in", "log in", "login", "online store"],
 
-  icons: { icon: "/cart-logo-bacola.png" },
+    icons: { icon: "/public/vercel.svg" },
 };
 
 export default function LoginLayout({

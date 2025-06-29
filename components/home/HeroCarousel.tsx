@@ -15,7 +15,7 @@ import {
 } from "../ui/carousel";
 import { Card, CardContent } from "../ui/card";
 import Image from "next/image";
-const carouselImages = [hero5, hero1, hero2, hero3, hero4, hero5, hero6, hero7];
+const carouselImages = [hero7, hero1, hero2, hero3, hero4, hero5, hero6, hero7];
 
 function HeroCarousel() {
   return (
