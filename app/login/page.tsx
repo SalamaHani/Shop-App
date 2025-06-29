@@ -8,7 +8,7 @@ import { loginUser } from "@/utils/actions";
 import Link from "next/link";
 import { ActionResponse } from "@/utils/Type";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Ban } from "lucide-react";
 
 const initialState: ActionResponse = {
   success: false,
@@ -19,9 +19,18 @@ function page() {
   return (
     <div>
       <form action={action}>
+        {state?.message && (
+          <Alert
+            className="mb-5"
+            variant={state.success ? "default" : "destructive"}
+          >
+            {state.success ? <CheckCircle2 className="h-4 w-4" /> : <Ban />}
+            <AlertDescription>{state.message}</AlertDescription>
+          </Alert>
+        )}
         <div
           data-slot="card"
-          className="bg-card mb-5 text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm"
+          className="bg-card  text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm"
         >
           <div
             data-slot="card-header"
@@ -73,12 +82,6 @@ function page() {
             </Link>
           </div>
         </div>
-        {state?.message && (
-          <Alert variant={state.success ? "default" : "destructive"}>
-            {state.success && <CheckCircle2 className="h-4 w-4" />}
-            <AlertDescription>{state.message}</AlertDescription>
-          </Alert>
-        )}
       </form>
     </div>
   );

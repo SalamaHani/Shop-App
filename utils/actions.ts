@@ -3,11 +3,11 @@ import axios from "axios";
 import db from "./db";
 import { hashPassword, verifyPassword } from "@/lib/hash";
 import {
-  registerSchema,
-  loginSchemae,
   validateWithZodSchema,
   reviewSchema,
   checkoutSchema,
+  LoginFormSchema,
+  SignupFormSchema,
 } from "./schema";
 import {
   createSession,
@@ -20,7 +20,12 @@ import { redirect } from "next/navigation";
 const productionUrl = "https://shop.motorscloud.net/api";
 import { cookies } from "next/headers";
 import { Cart } from "@prisma/client";
-import { ActionResponse, UserFormData } from "./Type";
+import {
+  ActionResponRegester,
+  ActionResponse,
+  ActionResponseere,
+  UserFormData,
+} from "./Type";
 import { toast } from "sonner";
 
 export const customFetch = axios.create({
@@ -64,8 +69,12 @@ export const fetchallproductsdb = async ({
   return products;
 };
 export const fatchFutrerProduct = async () => {
-  const product = await db.product.findMany();
-  return product;
+  const products = await db.product.findMany({
+    where: {
+      featured: true,
+    },
+  });
+  return products;
 };
 const fetchProduct = async (productId: string) => {
   const product = await db.product.findUnique({
@@ -519,51 +528,56 @@ export const deleteReview = async (
 
 //regestier user function auth
 export const RegesterUser = async (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  prevState: any,
+  prevState: ActionResponRegester | null,
   formData: FormData
-) => {
-  try {
-    // const rawData = Object.fromEntries(formData);
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-    const name = formData.get("name") as string;
-    const resultvaled = registerSchema.safeParse({ email, password, name });
-    if (!resultvaled.success) {
-      // return {
-      //   errors: resultvaled.error.flatten().fieldErrors,
-      // };
-      const errors = resultvaled.error.errors.map((error) => error.message);
-      throw new Error(errors.join("*"));
-    }
+): Promise<ActionResponRegester> => {
+  // const rawData = Object.fromEntries(formData);
+  const UserData = {
+    email: formData.get("email") as string,
+    password: formData.get("password") as string,
+    name: formData.get("name") as string,
+  };
 
-    const existingUser = await db.users.findUnique({ where: { email } });
-    if (existingUser) {
-      throw new Error("User already exists");
-    }
-    const hashedPassword = await hashPassword(password);
-    const Token = await encrypt({ email: email });
-    const user = await db.users.create({
-      data: {
-        email: email,
-        name: name,
-        password: hashedPassword,
-        token: Token,
-      },
-    });
-    await createSession(user, await cookies());
-    return { message: "Regester suacssfly" };
-  } catch (error) {
-    console.log(error);
-    return renderError(error);
+  const validatedData = SignupFormSchema.safeParse(UserData);
+  if (!validatedData.success) {
+    return {
+      success: false,
+      message: "Please fix the errors in the form",
+      errors: validatedData.error.flatten().fieldErrors,
+    };
   }
+
+  const existingUser = await db.users.findUnique({
+    where: { email: UserData.email },
+  });
+  if (existingUser) {
+    return { success: false, message: "User already exists" };
+  }
+  const hashedPassword = await hashPassword(UserData.password);
+  const Token = await encrypt({ email: UserData.email });
+  const user = await db.users.create({
+    data: {
+      email: UserData.email,
+      name: UserData.name,
+      password: hashedPassword,
+      token: Token,
+    },
+  });
+  await createSession(user, await cookies());
+  return (
+    redirect("/") ||
+    toast.success("Regester successfully!") || {
+      success: true,
+      message: "Login successfully!",
+    }
+  );
 };
 //log in user funcrion auth
 
 export const loginUser = async (
-  prevState: ActionResponse | null,
+  prevState: ActionResponseere | null,
   formData: FormData
-): Promise<ActionResponse> => {
+): Promise<ActionResponseere> => {
   await new Promise((resolve) => setTimeout(resolve, 1000));
   const UserData = {
     email: formData.get("email") as string,
@@ -571,7 +585,7 @@ export const loginUser = async (
   };
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
-  const validatedData = loginSchemae.safeParse(UserData);
+  const validatedData = LoginFormSchema.safeParse(UserData);
   if (!validatedData.success) {
     return {
       success: false,

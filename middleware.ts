@@ -7,6 +7,7 @@ const protectedRoutes = ["/cart", "/orders", "/favorites", "/reviews"];
 const publicRoutes = ["/login", "/signup"];
 
 export default async function middleware(req: NextRequest) {
+  //1. Updeat session set
   // 2. Check if the current route is protected or public
   const path = req.nextUrl.pathname;
   const isProtectedRoute = protectedRoutes.includes(path);

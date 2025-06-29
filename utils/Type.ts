@@ -290,6 +290,15 @@ export interface UserFormData {
   email: string;
   Phone: number;
 }
+export interface LoginData {
+  email:string,
+  password:string
+}
+export interface RegesterData {
+  name: string,
+  email:string,
+  password:string
+}
 
 export interface ActionResponse {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -298,5 +307,23 @@ export interface ActionResponse {
   message: string;
   errors?: {
     [K in keyof UserFormData]?: string[];
+  };
+}
+export interface ActionResponseere {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  funactuon?: any;
+  success: boolean;
+  message: string;
+  errors?: {
+    [K in keyof LoginData]?: string[];
+  };
+}
+export interface ActionResponRegester {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  funactuon?: any;
+  success: boolean;
+  message: string;
+  errors?: {
+    [K in keyof RegesterData]?: string[];
   };
 }
