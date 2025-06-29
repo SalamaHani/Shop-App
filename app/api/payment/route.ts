@@ -53,6 +53,7 @@ export const POST = async (req: NextRequest) => {
       metadata: { orderId, cartId },
       line_items: line_items,
       mode: "payment",
+      payment_method_configuration: undefined,
       return_url: `${origin}/api/confirm?session_id={CHECKOUT_SESSION_ID}`,
     });
     return Response.json({ clientSecret: session.client_secret });

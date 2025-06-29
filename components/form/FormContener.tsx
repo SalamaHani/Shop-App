@@ -22,7 +22,7 @@ function FormContainer({
   const [state, formAction] = useActionState(action, initialState);
   useEffect(() => {
     if (state.message) {
-      toast.error("", { description: state.message });
+      toast.success("", { description: state.message });
     }
   }, [state]);
   return (

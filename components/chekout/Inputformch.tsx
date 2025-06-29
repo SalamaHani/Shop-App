@@ -4,12 +4,21 @@ import { Label } from "../ui/label";
 import { Selectcuntery } from "../form/Selectcuntery";
 import TextAreaInput from "../form/TextAreaInput";
 import { ActionResponse, Cuanters } from "@/utils/Type";
-import { CheckCircle2 } from "lucide-react";
+import { Ban, CheckCircle2 } from "lucide-react";
 import { Alert, AlertDescription } from "../ui/alert";
 
 function Inputformch({ state }: { state: ActionResponse }) {
   return (
     <div className="col-span-12 h-full lg:col-span-8 border p-4 rounded-lg">
+      {state?.message && (
+        <Alert
+          className="mb-5"
+          variant={state.success ? "default" : "destructive"}
+        >
+          {state.success ? <CheckCircle2 className="h-4 w-4" /> : <Ban />}
+          <AlertDescription>{state.message}</AlertDescription>
+        </Alert>
+      )}
       <div className="h-full">
         <div className="space-y-4">
           <div className="flex gap-4">
@@ -127,12 +136,6 @@ function Inputformch({ state }: { state: ActionResponse }) {
             labelText="Order Notes"
             defaultValue="Add any additional instructions or comments here..."
           />
-          {state?.message && (
-            <Alert variant={state.success ? "default" : "destructive"}>
-              {state.success && <CheckCircle2 className="h-4 w-4" />}
-              <AlertDescription>{state.message}</AlertDescription>
-            </Alert>
-          )}
         </div>
       </div>
     </div>

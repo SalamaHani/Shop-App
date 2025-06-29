@@ -322,7 +322,6 @@ export const createOrderAction = async (UserData: UserFormData) => {
         status: "pending",
       },
     });
-    console.log(order);
     orderId = order.id;
   } catch (error) {
     console.log(error);

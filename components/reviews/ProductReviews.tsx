@@ -2,9 +2,6 @@ import { fetchProductReviews } from "@/utils/actions";
 import TitelSection from "../global/TitelSection";
 import ReviewCard from "./ReviewCard";
 
-
-
-
 async function ProductReviews({ productId }: { productId: string }) {
   const reviews = await fetchProductReviews(productId);
 
@@ -13,7 +10,7 @@ async function ProductReviews({ productId }: { productId: string }) {
       <TitelSection text="product reviews" />
       <div className="grid md:grid-cols-2 gap-8 my-8">
         {reviews.map((review) => {
-          const { comment, rating,  authorName } = review;
+          const { comment, rating, authorName } = review;
           const reviewInfo = {
             comment,
             rating,
