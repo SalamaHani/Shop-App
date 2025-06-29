@@ -1,7 +1,7 @@
 "use server";
 import axios from "axios";
 import db from "./db";
-import { hashPassword, verifyPassword } from "@/lib/hash";
+import { comparePasswords, generateSalt, hashPassword } from "@/lib/hash";
 import {
   validateWithZodSchema,
   reviewSchema,
@@ -325,7 +325,7 @@ export const createOrderAction = async (UserData: UserFormData) => {
     orderId = order.id;
   } catch (error) {
     console.log(error);
-    renderError(error);
+    return { success: false, message: "Please fix the errors in the form" };
   }
   redirect(`/payment?orderId=${orderId}&cartId=${cartId}`);
 };
@@ -410,7 +410,7 @@ export const fetchFavoriteId = async ({ productId }: { productId: string }) => {
   const favoreit = await db.favorite.findFirst({
     where: {
       productId,
-      userId: user?.id ?? "",
+      userId: user.id,
     },
     select: {
       id: true,
@@ -553,13 +553,15 @@ export const RegesterUser = async (
   if (existingUser) {
     return { success: false, message: "User already exists" };
   }
-  const hashedPassword = await hashPassword(UserData.password);
+  const salt = generateSalt();
+  const hashedPassword = await hashPassword(UserData.password, salt);
   const Token = await encrypt({ email: UserData.email });
   const user = await db.users.create({
     data: {
       email: UserData.email,
       name: UserData.name,
       password: hashedPassword,
+      salt: salt,
       token: Token,
     },
   });
@@ -593,8 +595,17 @@ export const loginUser = async (
       errors: validatedData.error.flatten().fieldErrors,
     };
   }
+
   const user = await db.users.findUnique({ where: { email } });
-  if (!user || !(await verifyPassword(password, user.password))) {
+  if (user == null || user.password == null || user.salt == null) {
+    return { success: false, message: "Invalid email or password" };
+  }
+  const isCorrectPassword = await comparePasswords({
+    hashedPassword: user.password,
+    password: password,
+    salt: user.salt,
+  });
+  if (!user || !isCorrectPassword) {
     return { success: false, message: "Invalid email or password" };
     // throw new Error("Invalid email or password");
   }

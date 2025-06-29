@@ -29,6 +29,7 @@ model Users {
   name     String?
   password String
   token String @unique
+  salt String
   createdAt DateTime @default(now())
 }
 
