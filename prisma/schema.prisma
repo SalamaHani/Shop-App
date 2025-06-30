@@ -84,15 +84,15 @@ model CartItem {
 model Order {
   id        String   @id @default(uuid())
   userId String
-  products Int  @default(0)
-  orderTotal Int @default(0)
-  tax Int @default(0)
+  products BigInt  @default(0)
+  orderTotal BigInt @default(0)
+  tax BigInt @default(0)
   shipping Int @default(0)
   email String
-  phone Int
+  phone BigInt
   city String
   status String
-  streetAddress Int
+  streetAddress BigInt
   isPaid Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

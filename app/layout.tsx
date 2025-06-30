@@ -7,7 +7,9 @@ import Providers from "./Providers";
 export const metadata: Metadata = {
   title: "Astorefront",
   description: "A nifty Astorefonte Shope Abagor Laump  built with Next.js",
-  icons: { icon: "/public/vercel.svg" },
+  icons: {
+    icon: ["/favicon.ico"],
+  },
 };
 
 export default function RootLayout({

@@ -18,6 +18,7 @@ import TextAreaInput from "../form/TextAreaInput";
 import { SubmitButton } from "../form/Buttons";
 
 export function ReviewDiloge({ productId }: { productId: string }) {
+  console.log(productId);
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -28,15 +29,14 @@ export function ReviewDiloge({ productId }: { productId: string }) {
           Write a Customer review
         </Button>
       </DialogTrigger>
-      <FormContainer className="" action={createReviewAction}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Submiet Review</DialogTitle>
-            <DialogDescription>
-              Make here. Click save when you&apos;re done.
-            </DialogDescription>
-          </DialogHeader>
-          <input type="hidden" name="productId" value={productId} />
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Submiet Review</DialogTitle>
+          <DialogDescription>
+            Make here. Click save when you&apos;re done.
+          </DialogDescription>
+        </DialogHeader>
+        <FormContainer className="" action={createReviewAction}>
           <RatingInput name="rating" />
           <TextAreaInput
             name="comment"
@@ -47,10 +47,11 @@ export function ReviewDiloge({ productId }: { productId: string }) {
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
+            <input type="text" hidden name="productId" value={productId} />
             <SubmitButton text="Send Review" />
           </DialogFooter>
-        </DialogContent>
-      </FormContainer>
+        </FormContainer>
+      </DialogContent>
     </Dialog>
   );
 }

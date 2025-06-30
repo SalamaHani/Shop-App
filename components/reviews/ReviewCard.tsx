@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Image from "next/image";
 import Rating from "./Rating";
 import Comment from "./Comment";
-import imgepro from "../../public/imges/user-profile-icon-flat-style-member-avatar-vector-illustration-isolated-background-human-permission-sign-business-concept_157943-15752.avif";
+import imgUser from "../../public/imges/user-profile-icon-flat-style-member-avatar-vector-illustration-isolated-background-human-permission-sign-business-concept_157943-15752.avif";
 type ReviewCardProps = {
   reviewInfo: {
     comment: string;
@@ -18,7 +18,7 @@ function ReviewCard({ reviewInfo, children }: ReviewCardProps) {
       <CardHeader>
         <div className="flex items-center">
           <Image
-            src={imgepro}
+            src={imgUser}
             alt={reviewInfo.authorName}
             width={48}
             height={48}

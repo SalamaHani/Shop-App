@@ -109,6 +109,7 @@ export const fetchOrCreateCart = async ({
     include: includeProductClause,
   });
   if (!cart && errorOnFailure) {
+    // return { success: false, message: "Cart not found" };
     throw new Error("Cart not found");
   }
   if (!cart) {
@@ -407,6 +408,7 @@ export const toggleFavoriteAction = async (prevState: {
 };
 export const fetchFavoriteId = async ({ productId }: { productId: string }) => {
   const user = await getUserFromSession(await cookies());
+  if (user == null) return null;
   const favoreit = await db.favorite.findFirst({
     where: {
       productId,
