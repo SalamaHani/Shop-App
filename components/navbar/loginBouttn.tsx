@@ -1,7 +1,7 @@
 "use server";
 import React from "react";
 import Link from "next/link";
-import { getUserFromSession } from "@/lib/Auth";
+import { getUserFromSession } from "@/lib/auth";
 import { DropdownMenuItem } from "../ui/dropdown-menu";
 import { cookies } from "next/headers";
 async function LoginBouttn() {

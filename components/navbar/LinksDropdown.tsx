@@ -12,7 +12,7 @@ import { links } from "@/utils/links";
 import LoginBouttn from "./LoginBouttn";
 import LogoutBoutton from "./LogoutBoutton";
 import UserIcon from "./UserIcon";
-import { getUserFromSession } from "@/lib/Auth";
+import { getUserFromSession } from "@/lib/auth";
 import { cookies } from "next/headers";
 async function LinksDropdown() {
   const user = await getUserFromSession(await cookies());

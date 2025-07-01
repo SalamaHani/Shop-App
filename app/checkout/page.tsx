@@ -1,5 +1,5 @@
 import TitelSection from "@/components/global/TitelSection";
-import { getUserFromSession } from "@/lib/Auth";
+import { getUserFromSession } from "@/lib/auth";
 import { cookies } from "next/headers";
 import React from "react";
 import { redirect } from "next/navigation";
@@ -15,7 +15,7 @@ async function page() {
   return (
     <>
       <TitelSection text="Shopping Checkout" />
-        <Checoutmaren currentCart={currentCart} />
+      <Checoutmaren currentCart={currentCart} />
     </>
   );
 }

@@ -1,6 +1,6 @@
 import { fetchFavoriteId } from "@/utils/actions";
 import FavoriteToggleForm from "./FavoriteToggleForm";
-import { getUserFromSession } from "@/lib/Auth";
+import { getUserFromSession } from "@/lib/auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 

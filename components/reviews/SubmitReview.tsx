@@ -4,7 +4,7 @@ import FormContainer from "../form/FormContener";
 import { createReviewAction } from "@/utils/actions";
 import RatingInput from "./RatingInput";
 import TextAreaInput from "../form/TextAreaInput";
-import { getUserFromSession } from "@/lib/Auth";
+import { getUserFromSession } from "@/lib/auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 

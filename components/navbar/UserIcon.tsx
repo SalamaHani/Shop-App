@@ -1,4 +1,4 @@
-import { getUserFromSession } from "@/lib/Auth";
+import { getUserFromSession } from "@/lib/auth";
 import { cookies } from "next/headers";
 import { LuUserRound } from "react-icons/lu";
 

@@ -6,6 +6,7 @@ import { cache } from "react";
 const secretKey = "secret";
 import db from "@/utils/db";
 import { z } from "zod";
+import { betterAuth } from "better-auth";
 const key = new TextEncoder().encode(secretKey);
 const SESSION_EXPIRATION_SECONDS = 60 * 60 * 24 * 7;
 const COOKIE_SESSION_KEY = "session-id";
@@ -114,3 +115,12 @@ export async function updateUserSessionExpiration(
   if (sessionId == null) return null;
   setCookie(sessionId, cookies);
 }
+///
+export const auth = betterAuth({
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    },
+  },
+});

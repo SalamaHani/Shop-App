@@ -1,7 +1,7 @@
 import CartItemList from "@/components/cart/CartItemList";
 import CartToals from "@/components/cart/CartToals";
 import TitelSection from "@/components/global/TitelSection";
-import { getUserFromSession } from "@/lib/Auth";
+import { getUserFromSession } from "@/lib/auth";
 import { fetchOrCreateCart, updateCart } from "@/utils/actions";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";

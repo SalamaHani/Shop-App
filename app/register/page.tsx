@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useActionState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
@@ -8,11 +8,27 @@ import { RegesterUser } from "@/utils/actions";
 import { ActionResponRegester } from "@/utils/Type";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Ban, CheckCircle2 } from "lucide-react";
+import { signIn } from "@/lib/auth-client";
+import { Button } from "@/components/ui/button";
 const initialState: ActionResponRegester = {
   success: false,
   message: "",
 };
+
 function Registerpage() {
+  const [isPending, setIsPending] = useState(false);
+  async function handleClick() {
+    setIsPending(true);
+
+    await signIn.social({
+      provider,
+      callbackURL: "/profile",
+      errorCallbackURL: "/auth/login/error",
+    });
+
+    setIsPending(false);
+  }
+
   const [state, action] = useActionState(RegesterUser, initialState);
   return (
     <div>
@@ -58,6 +74,9 @@ function Registerpage() {
             >
               Enter your email below to create your account
             </div>
+            <Button onClick={handleClick} disabled={isPending}>
+              Sign in with Google
+            </Button>
           </div>
           <div data-slot="card-content" className="px-6 flex flex-col gap-4">
             <div className="relative">

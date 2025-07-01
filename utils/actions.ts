@@ -14,7 +14,7 @@ import {
   encrypt,
   getUserFromSession,
   removeUserFromSession,
-} from "@/lib/Auth";
+} from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 const productionUrl = "https://shop.motorscloud.net/api";
