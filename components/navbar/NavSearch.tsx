@@ -31,7 +31,7 @@ function NavSearch() {
     <Input
       type="search"
       placeholder="search product..."
-      className="max-w-xs dark:bg-muted"
+      className="max-w-xs dark:bg-muted md:block hidden"
       onChange={(e) => {
         setParmes(e.target.value);
         handleSearch(e.target.value);

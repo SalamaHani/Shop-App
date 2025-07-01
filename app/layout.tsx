@@ -7,6 +7,13 @@ import Providers from "./Providers";
 export const metadata: Metadata = {
   title: "Astorefront",
   description: "A nifty Astorefonte Shope Abagor Laump  built with Next.js",
+  keywords: [
+    "Lumps",
+    "online Lumps cotigers",
+    "Table",
+    "sout",
+  ],
+  authors: [{ name: "Astorefront" }],
   icons: {
     icon: ["/favicon.ico"],
   },
