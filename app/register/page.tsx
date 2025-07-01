@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { useActionState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
@@ -8,30 +8,38 @@ import { RegesterUser } from "@/utils/actions";
 import { ActionResponRegester } from "@/utils/Type";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Ban, CheckCircle2 } from "lucide-react";
-import { signIn } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
+import { Github } from "lucide-react";
+import { RiGoogleLine } from "react-icons/ri";
+// import { signIn } from "@/lib/auth";
 const initialState: ActionResponRegester = {
   success: false,
   message: "",
 };
 
 function Registerpage() {
-  const [isPending, setIsPending] = useState(false);
-  async function handleClick() {
-    setIsPending(true);
-
-    await signIn.social({
-      provider,
-      callbackURL: "/profile",
-      errorCallbackURL: "/auth/login/error",
-    });
-
-    setIsPending(false);
-  }
-
   const [state, action] = useActionState(RegesterUser, initialState);
+  // const [error, setError] = useState<string>("");
+  // const [loading, setLoading] = useState<boolean>(false);
+
+  // const handleGoogleSignInClick = async () => {
+  //   try {
+  //     setLoading(true);
+  //     await signIn("google", {
+  //       redirect: true,
+  //     });
+  //   } catch (err) {
+  //     console.error("Unexpected Error:", err);
+  //     setError(
+  //       "Something went wrong. Please check your network and try again."
+  //     );
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   return (
     <div>
+      {/* {error && <p className="text-red-600 text-center">{error}</p>} */}
       <form className="" action={action}>
         {state?.message && (
           <Alert
@@ -74,9 +82,17 @@ function Registerpage() {
             >
               Enter your email below to create your account
             </div>
-            <Button onClick={handleClick} disabled={isPending}>
-              Sign in with Google
-            </Button>
+            <div className="flex justify-evenly ">
+              {/* onClick={handleGoogleSignInClick} disabled={loading} */}
+              <Button>
+                <RiGoogleLine />
+                Sign in with Google
+              </Button>
+              <Button>
+                <Github />
+                Sign in with Git Hub
+              </Button>
+            </div>
           </div>
           <div data-slot="card-content" className="px-6 flex flex-col gap-4">
             <div className="relative">

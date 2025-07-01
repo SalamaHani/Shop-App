@@ -6,10 +6,25 @@ import { cache } from "react";
 const secretKey = "secret";
 import db from "@/utils/db";
 import { z } from "zod";
-import { betterAuth } from "better-auth";
+// import NextAuth from "next-auth";
+// import GoogleProvider from "next-auth/providers/google";
 const key = new TextEncoder().encode(secretKey);
 const SESSION_EXPIRATION_SECONDS = 60 * 60 * 24 * 7;
 const COOKIE_SESSION_KEY = "session-id";
+// export const { auth, handlers, signIn, signOut } = NextAuth({
+//   trustHost: true,
+//   providers: [
+//     GoogleProvider({
+//       clientId: process.env.GOOGLE_CLIENT_ID!,
+//       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+//     }),
+//   ],
+//   callbacks: {
+//     async redirect({ url , baseUrl }) {
+//       return baseUrl;
+//     },
+//   },
+// });
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function encrypt(payload: any) {
   return await new SignJWT(payload)
@@ -116,11 +131,3 @@ export async function updateUserSessionExpiration(
   setCookie(sessionId, cookies);
 }
 ///
-export const auth = betterAuth({
-  socialProviders: {
-    google: {
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-    },
-  },
-});
