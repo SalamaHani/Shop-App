@@ -299,6 +299,10 @@ export interface RegesterData {
   email: string;
   password: string;
 }
+export interface metaData {
+  total: number;
+  totalPage: number;
+}
 
 export interface ActionResponse {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

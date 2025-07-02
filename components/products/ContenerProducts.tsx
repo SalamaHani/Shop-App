@@ -6,17 +6,20 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { LuLayoutGrid, LuList } from "react-icons/lu";
 import { Separator } from "../ui/separator";
+import Compelxpagination from "../global/Compelxpagination";
 async function ContenerProducts({
   layout,
   Parmes,
+  Page,
 }: {
   layout: string;
   Parmes: string;
+  Page: number;
 }) {
-  const products = await fetchallproductsdb({ Parmes });
-  console.log(products);
+  const { products, metadata } = await fetchallproductsdb({ Parmes, Page });
   const totalProducts = products.length;
   const searchTerm = Parmes ? `&Parmes=${Parmes}` : "";
+  const pagedata = Page ? `&Page=${Page}` : "";
   return (
     <>
       <section>
@@ -30,7 +33,7 @@ async function ContenerProducts({
               size="icon"
               asChild
             >
-              <Link href={`/products?layout=grid${searchTerm}`}>
+              <Link href={`/products?layout=grid${searchTerm}${pagedata}`}>
                 <LuLayoutGrid />
               </Link>
             </Button>
@@ -39,7 +42,7 @@ async function ContenerProducts({
               size="icon"
               asChild
             >
-              <Link href={`/products?layout=list${searchTerm}`}>
+              <Link href={`/products?layout=list${searchTerm}${pagedata}`}>
                 <LuList />
               </Link>
             </Button>
@@ -59,6 +62,7 @@ async function ContenerProducts({
             <ProductsList products={products} />
           )}
         </div>
+        <Compelxpagination Page={Page} metadata={metadata} />
       </section>
     </>
   );

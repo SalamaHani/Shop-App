@@ -27,7 +27,6 @@ import {
   UserFormData,
 } from "./Type";
 import { toast } from "sonner";
-
 export const customFetch = axios.create({
   baseURL: productionUrl,
 });
@@ -37,10 +36,7 @@ const renderError = (error: unknown): { message: string } => {
     message: error instanceof Error ? error.message : "an error occurred",
   };
 };
-export const fetchAllProducts = async ({ Parmes = "" }: { Parmes: string }) => {
-  const respones = await customFetch.get(`/products/${Parmes}`);
-  return respones.data;
-};
+
 export const fetchSingleProduct = async (productId: string) => {
   const product = await db.product.findUnique({
     where: {
@@ -49,13 +45,23 @@ export const fetchSingleProduct = async (productId: string) => {
   });
   return product;
 };
+
 export const fetchallproductsdb = async ({
   Parmes = "",
+  Page = 1,
 }: {
   Parmes: string;
+  Page: number;
 }) => {
   console.log(Parmes);
+  const limet = 3;
+  const gnoer = (Page - 1) * limet;
+  const total = await db.product.count();
+  const totalPage = Math.ceil(total / limet);
+  const metadata = { total, totalPage };
   const products = await db.product.findMany({
+    skip: gnoer,
+    take: limet,
     where: {
       OR: [
         { name: { contains: Parmes, mode: "insensitive" } },
@@ -66,7 +72,8 @@ export const fetchallproductsdb = async ({
       createdAt: "desc",
     },
   });
-  return products;
+
+  return { products, metadata };
 };
 export const fatchFutrerProduct = async () => {
   const products = await db.product.findMany({
@@ -553,7 +560,11 @@ export const RegesterUser = async (
   if (!validatedData.success) {
     return {
       success: false,
-      Data:{email:UserData.email,password:UserData.password,name:UserData.name},
+      Data: {
+        email: UserData.email,
+        password: UserData.password,
+        name: UserData.name,
+      },
       message: "Please fix the errors in the form",
       errors: validatedData.error.flatten().fieldErrors,
     };
@@ -563,7 +574,15 @@ export const RegesterUser = async (
     where: { email: UserData.email },
   });
   if (existingUser) {
-    return { success: false, Data:{email:UserData.email,password:UserData.password,name:UserData.name}, message: "User already exists" };
+    return {
+      success: false,
+      Data: {
+        email: UserData.email,
+        password: UserData.password,
+        name: UserData.name,
+      },
+      message: "User already exists",
+    };
   }
   const salt = generateSalt();
   const hashedPassword = await hashPassword(UserData.password, salt);
