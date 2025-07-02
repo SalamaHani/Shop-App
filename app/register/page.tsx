@@ -11,35 +11,15 @@ import { Ban, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Github } from "lucide-react";
 import { RiGoogleLine } from "react-icons/ri";
-// import { signIn } from "@/lib/auth";
+
 const initialState: ActionResponRegester = {
   success: false,
   message: "",
 };
-
 function Registerpage() {
   const [state, action] = useActionState(RegesterUser, initialState);
-  // const [error, setError] = useState<string>("");
-  // const [loading, setLoading] = useState<boolean>(false);
-
-  // const handleGoogleSignInClick = async () => {
-  //   try {
-  //     setLoading(true);
-  //     await signIn("google", {
-  //       redirect: true,
-  //     });
-  //   } catch (err) {
-  //     console.error("Unexpected Error:", err);
-  //     setError(
-  //       "Something went wrong. Please check your network and try again."
-  //     );
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
   return (
     <div>
-      {/* {error && <p className="text-red-600 text-center">{error}</p>} */}
       <form className="" action={action}>
         {state?.message && (
           <Alert
@@ -83,7 +63,6 @@ function Registerpage() {
               Enter your email below to create your account
             </div>
             <div className="flex justify-evenly ">
-              {/* onClick={handleGoogleSignInClick} disabled={loading} */}
               <Button>
                 <RiGoogleLine />
                 Sign in with Google
@@ -107,21 +86,30 @@ function Registerpage() {
             </div>
             <div className="flex flex-col gap-3">
               <Label htmlFor="name">Your Name </Label>
-              <Input name="name" type="text" />
+              <Input defaultValue={state.Data?.name} name="name" type="text" />
               {state.errors?.name && (
                 <p className="text-red-500 text-xs">{state.errors.name}</p>
               )}
             </div>
             <div className="flex flex-col gap-3">
               <Label htmlFor="email">Your email address</Label>
-              <Input name="email" placeholder="m@example.com" type="email" />
+              <Input
+                defaultValue={state.Data?.email}
+                name="email"
+                placeholder="m@example.com"
+                type="email"
+              />
               {state.errors?.email && (
                 <p className="text-red-500 text-xs">{state.errors.email}</p>
               )}
             </div>
             <div className="flex flex-col gap-3">
               <Label htmlFor="email">Your Password</Label>
-              <Input name="password" type="password" />
+              <Input
+                defaultValue={state.Data?.password}
+                name="password"
+                type="password"
+              />
               {state.errors?.password && (
                 <p className="text-red-500 text-xs">{state.errors.password}</p>
               )}

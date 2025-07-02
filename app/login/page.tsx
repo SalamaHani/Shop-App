@@ -6,16 +6,16 @@ import { Label } from "@radix-ui/react-label";
 import { SubmitButton } from "@/components/form/Buttons";
 import { loginUser } from "@/utils/actions";
 import Link from "next/link";
-import { ActionResponse } from "@/utils/Type";
+import { ActionResponseere } from "@/utils/Type";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { CheckCircle2, Ban } from "lucide-react";
 
-const initialState: ActionResponse = {
+const initialState: ActionResponseere = {
   success: false,
   message: "",
 };
-function page() {
-  const [state, action] = useActionState(loginUser, initialState);
+function Page() {
+  const [state , action] = useActionState(loginUser, initialState);
   return (
     <div>
       <form action={action}>
@@ -59,14 +59,23 @@ function page() {
             </div>
             <div className="flex flex-col gap-3">
               <Label htmlFor="email">Your email address</Label>
-              <Input name="email" placeholder="m@example.com" type="email" />
+              <Input
+                defaultValue={state.Data?.email}
+                name="email"
+                placeholder="m@example.com"
+                type="email"
+              />
               {state.errors?.email && (
                 <p className="text-red-500 text-xs">{state.errors.email}</p>
               )}
             </div>
             <div className="flex flex-col gap-3">
               <Label htmlFor="email">Your Password</Label>
-              <Input name="password" type="password" />
+              <Input
+                defaultValue={state.Data?.password}
+                name="password"
+                type="password"
+              />
               {state.errors?.password && (
                 <p className="text-red-500 text-xs">{state.errors.password}</p>
               )}
@@ -87,4 +96,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

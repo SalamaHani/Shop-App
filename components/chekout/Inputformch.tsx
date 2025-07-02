@@ -30,6 +30,7 @@ function Inputformch({ state }: { state: ActionResponse }) {
                 name="FirstName"
                 id="FirstName"
                 type="text"
+                defaultValue={state.Data?.FirstName}
                 className={state?.errors?.FirstName ? "border-red-500" : ""}
               />
               {state.errors?.FirstName && (
@@ -44,6 +45,7 @@ function Inputformch({ state }: { state: ActionResponse }) {
                 name="LastName"
                 id="LastName"
                 type="text"
+                defaultValue={state.Data?.LastName}
                 className={state?.errors?.LastName ? "border-red-500" : ""}
               />
               {state.errors?.LastName && (
@@ -63,6 +65,7 @@ function Inputformch({ state }: { state: ActionResponse }) {
               <Input
                 name="StreetAddress"
                 id="StreetAddress"
+                defaultValue={state.Data?.StreetAddress}
                 type="number"
                 className={state?.errors?.StreetAddress ? "border-red-500" : ""}
               />
@@ -79,6 +82,7 @@ function Inputformch({ state }: { state: ActionResponse }) {
               <Input
                 name="Town"
                 id="Town"
+                defaultValue={state.Data?.Town}
                 type="text"
                 className={state?.errors?.Town ? "border-red-500" : ""}
               />
@@ -93,6 +97,7 @@ function Inputformch({ state }: { state: ActionResponse }) {
             </Label>
             <Input
               name="ZIPCode"
+              defaultValue={state.Data?.ZIPCode}
               id="ZIPCode"
               type="number"
               className={state?.errors?.ZIPCode ? "border-red-500" : ""}
@@ -109,6 +114,7 @@ function Inputformch({ state }: { state: ActionResponse }) {
               <Input
                 name="email"
                 id="email"
+                defaultValue={state.Data?.email}
                 type="email"
                 className={state?.errors?.email ? "border-red-500" : ""}
               />
@@ -123,6 +129,7 @@ function Inputformch({ state }: { state: ActionResponse }) {
               <Input
                 name="Phone"
                 id="Phone"
+                defaultValue={state.Data?.Phone}
                 type="number"
                 className={state?.errors?.Phone ? "border-red-500" : ""}
               />

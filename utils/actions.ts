@@ -350,6 +350,15 @@ export const getdataformAction = async (
   if (!validatedData.success) {
     return {
       success: false,
+      Data: {
+        FirstName: UserData.FirstName,
+        LastName: UserData.LastName,
+        StreetAddress: UserData.StreetAddress,
+        Town: UserData.Town,
+        ZIPCode: UserData.ZIPCode,
+        email: UserData.email,
+        Phone: UserData.Phone,
+      },
       message: "Please fix the errors in the form",
       errors: validatedData.error.flatten().fieldErrors,
     };
@@ -544,6 +553,7 @@ export const RegesterUser = async (
   if (!validatedData.success) {
     return {
       success: false,
+      Data:{email:UserData.email,password:UserData.password,name:UserData.name},
       message: "Please fix the errors in the form",
       errors: validatedData.error.flatten().fieldErrors,
     };
@@ -553,7 +563,7 @@ export const RegesterUser = async (
     where: { email: UserData.email },
   });
   if (existingUser) {
-    return { success: false, message: "User already exists" };
+    return { success: false, Data:{email:UserData.email,password:UserData.password,name:UserData.name}, message: "User already exists" };
   }
   const salt = generateSalt();
   const hashedPassword = await hashPassword(UserData.password, salt);
@@ -594,13 +604,18 @@ export const loginUser = async (
     return {
       success: false,
       message: "Please fix the errors in the form",
+      Data: { email: UserData.email, password: UserData.password },
       errors: validatedData.error.flatten().fieldErrors,
     };
   }
 
   const user = await db.users.findUnique({ where: { email } });
   if (user == null || user.password == null || user.salt == null) {
-    return { success: false, message: "Invalid email or password" };
+    return {
+      success: false,
+      Data: { email: UserData.email, password: UserData.password },
+      message: "Invalid email or password",
+    };
   }
   const isCorrectPassword = await comparePasswords({
     hashedPassword: user.password,
@@ -608,13 +623,18 @@ export const loginUser = async (
     salt: user.salt,
   });
   if (!user || !isCorrectPassword) {
-    return { success: false, message: "Invalid email or password" };
+    return {
+      success: false,
+      Data: { email: UserData.email, password: UserData.password },
+      message: "Invalid email or password",
+    };
     // throw new Error("Invalid email or password");
   }
   await createSession(user, await cookies());
   return (
     redirect("/") ||
     toast.success("Login successfully!") || {
+      Data: { email: "", password: "" },
       success: true,
       message: "Login successfully!",
     }

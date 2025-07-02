@@ -12,7 +12,6 @@ const key = new TextEncoder().encode(secretKey);
 const SESSION_EXPIRATION_SECONDS = 60 * 60 * 24 * 7;
 const COOKIE_SESSION_KEY = "session-id";
 // export const { auth, handlers, signIn, signOut } = NextAuth({
-//   trustHost: true,
 //   providers: [
 //     GoogleProvider({
 //       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -20,7 +19,7 @@ const COOKIE_SESSION_KEY = "session-id";
 //     }),
 //   ],
 //   callbacks: {
-//     async redirect({ url , baseUrl }) {
+//     async redirect({ baseUrl }) {
 //       return baseUrl;
 //     },
 //   },
