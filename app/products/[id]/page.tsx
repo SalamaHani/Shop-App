@@ -1,4 +1,4 @@
-import { fetchSingleProduct } from "@/utils/actions";
+import { fetchSingleProduct, getProductById } from "@/utils/actions";
 import React from "react";
 import Image from "next/image";
 import { formatCurrency } from "@/utils/format";
@@ -9,15 +9,12 @@ import ShareButton from "@/components/singel-product/ShareButton";
 import ProductRating from "@/components/singel-product/ProductRating";
 import ProductReviews from "@/components/reviews/ProductReviews";
 import { ReviewDiloge } from "@/components/reviews/ReviewDiloge";
-import SubmitReview from "@/components/reviews/SubmitReview";
-interface ProductPageProps {
-  params: {
-    id: string;
-  };
-}
-async function SingleProductPage({ params }: ProductPageProps) {
+// import SubmitReview from "@/components/reviews/SubmitReview";
+
+async function SingleProductPage({ params }: { params: { id: string } }) {
   const product = await fetchSingleProduct(params.id);
   const { name, image, company, description, price } = product;
+  const ProductId = await getProductById(params.id);
   return (
     <section>
       <Titelproduct name={name} />
@@ -51,8 +48,8 @@ async function SingleProductPage({ params }: ProductPageProps) {
           <AddToCart productId={params.id} />
         </div>
       </div>
-      <ProductReviews productId={params.id} />
-      <SubmitReview productId={params.id} />
+      <ProductReviews productId={ProductId.id} />
+      <ReviewDiloge productId={ProductId.id} />
     </section>
   );
 }

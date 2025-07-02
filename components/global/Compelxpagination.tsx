@@ -23,7 +23,7 @@ export default function Compelxpagination({
       params.delete("Page");
     }
     replace(`/products?${params.toString()}`);
-  });
+  }, 10);
 
   useEffect(() => {
     if (!searchParams.get("Page")) {
@@ -45,8 +45,8 @@ export default function Compelxpagination({
         onClick={() => {
           handleSearch(pageNumber.toString());
         }}
-        className={`'flex items-center justify-center px-4 h-10 leading-tight text-gray-500  border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-200 dark:hover:text-white' ${
-          activeClass ? "bg-black dark:bg-gray-900 " : ""
+        className={`'flex items-center justify-center pointer-coarse px-4 h-10 leading-tight text-gray-500  border border-gray-300 hover:bg-gray-100 dark:bg-neutral-900  dark:text-gray-100 dark:border-neutral-800 dark:hover:bg-neutral-800 dark:hover:text-white  dark:hover:text-white' ${
+          activeClass ? " dark:bg-neutral-600" : ""
         }`}
       >
         {pageNumber}
@@ -60,10 +60,10 @@ export default function Compelxpagination({
     pageButtons.push(addPageButton({ pageNumber: 1, activeClass: Page === 1 }));
 
     // dots
-    if (Page > 3) {
+    if (Page > 2) {
       pageButtons.push(
         <button
-          className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500  border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:text-white"
+          className="flex items-center justify-center px-4 h-10 leading-tight pointer-coarse text-gray-500  border border-gray-300 hover:bg-gray-100 dark:bg-neutral-900  dark:text-gray-100 dark:border-neutral-800 dark:hover:bg-neutral-800 dark:hover:text-white"
           key="dots-1"
         >
           ...
@@ -79,7 +79,7 @@ export default function Compelxpagination({
     if (Page < totalPage - 1) {
       pageButtons.push(
         <button
-          className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500  border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400  dark:hover:text-white"
+          className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 pointer-coarse  border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-neutral-900 dark:text-gray-100 dark:border-neutral-800 dark:hover:bg-neutral-800 dark:hover:text-white"
           key="dots-2"
         >
           ...
@@ -112,7 +112,7 @@ export default function Compelxpagination({
               if (prevpage < 1) prevpage = totalPage;
               handleSearch(prevpage.toString());
             }}
-            className="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            className="flex items-center justify-center px-4 h-10 ms-0 pointer-coarse leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-neutral-900  dark:text-gray-100 dark:border-neutral-800 dark:hover:bg-neutral-800 dark:hover:text-white"
           >
             Prev
           </button>
@@ -124,7 +124,7 @@ export default function Compelxpagination({
 
               handleSearch(nextpage.toString());
             }}
-            className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            className="flex items-center justify-center px-4 h-10 pointer-coarse leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-neutral-900  dark:text-gray-100 dark:border-neutral-800 dark:hover:bg-neutral-800 dark:hover:text-white"
           >
             Next
           </button>

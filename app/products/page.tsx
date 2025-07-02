@@ -4,11 +4,11 @@ import React from "react";
 function ProductsPage({
   searchParams,
 }: {
-  searchParams: { layout: string; Parmes: string; page: string };
+  searchParams: { layout: string; Parmes: string; Page: string };
 }) {
   const layout = searchParams.layout || "grid";
   const Parmes = searchParams.Parmes || "";
-  const Page = parseInt(searchParams.page || "1");
+  const Page = parseInt(searchParams.Page || "1");
   return (
     <>
       <ContenerProducts layout={layout} Page={Page} Parmes={Parmes} />

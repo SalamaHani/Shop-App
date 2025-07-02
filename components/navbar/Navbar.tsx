@@ -3,7 +3,7 @@ import Continer from "../global/Continer";
 import Logo from "./Logo";
 import CartButton from "./CartButton";
 import { Suspense } from "react";
-import NavSearch from "./NavSearch";
+// import NavSearch from "./NavSearch";
 import LinksDropdown from "./LinksDropdown";
 import DarkMode from "./DarkMode";
 
@@ -13,9 +13,7 @@ function Navbar() {
       <nav className="border-b ">
         <Continer className="flex justify-between md:flex-row md:justify-between md:items-center flex-wrap py-8 gap-4">
           <Logo />
-            <Suspense>
-              <NavSearch />
-            </Suspense>
+          <Suspense>{/* <NavSearch /> */}</Suspense>
           <div className=" flex gap-4 items-center ">
             <CartButton />
             <DarkMode />

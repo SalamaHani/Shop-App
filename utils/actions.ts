@@ -54,7 +54,7 @@ export const fetchallproductsdb = async ({
   Page: number;
 }) => {
   console.log(Parmes);
-  const limet = 3;
+  const limet = 6;
   const gnoer = (Page - 1) * limet;
   const total = await db.product.count();
   const totalPage = Math.ceil(total / limet);
@@ -487,6 +487,7 @@ export const createReviewAction = async (
   const user = await getUserFromSession(await cookies());
   try {
     const rawData = Object.fromEntries(formData);
+    console.log(rawData);
     const validatedFields = validateWithZodSchema(reviewSchema, rawData);
     await db.review.create({
       data: {
@@ -497,9 +498,26 @@ export const createReviewAction = async (
     revalidatePath(`/products/${validatedFields.productId}`);
     return { message: "review submitted successfully" };
   } catch (error) {
+    console.log(error);
     return renderError(error);
   }
 };
+export async function getProductById(id: string) {
+  try {
+    const product = await db.product.findUnique({
+      where: { id },
+    });
+
+    if (!product) {
+      throw new Error("Product not found");
+    }
+
+    return product;
+  } catch (error) {
+    console.error("getProductById error:", error);
+    throw new Error("Failed to fetch product");
+  }
+}
 export const fetchProductReviewsByUser = async () => {
   const user = await getUserFromSession(await cookies());
   const reviews = await db.review.findMany({
