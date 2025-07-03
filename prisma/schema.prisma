@@ -28,6 +28,12 @@ model Users {
   email    String   @unique
   name     String?
   password String
+  image       String?
+  phone BigInt?
+  city String?
+  bio String?
+  country String?
+  streetAddress BigInt?
   token String @unique
   salt String
   createdAt DateTime @default(now())

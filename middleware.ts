@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 
 // 1. Specify protected and public routes
 const protectedRoutes = ["/cart", "/orders", "/favorites", "/reviews"];
-const publicRoutes = ["/login", "/signup"];
+const publicRoutes = ["/login", "/register"];
 
 export default async function middleware(req: NextRequest) {
   //1. Updeat session set

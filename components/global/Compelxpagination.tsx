@@ -23,7 +23,7 @@ export default function Compelxpagination({
       params.delete("Page");
     }
     replace(`/products?${params.toString()}`);
-  }, 10);
+  }, 0);
 
   useEffect(() => {
     if (!searchParams.get("Page")) {
@@ -46,7 +46,7 @@ export default function Compelxpagination({
           handleSearch(pageNumber.toString());
         }}
         className={`'flex items-center justify-center pointer-coarse px-4 h-10 leading-tight text-gray-500  border border-gray-300 hover:bg-gray-100 dark:bg-neutral-900  dark:text-gray-100 dark:border-neutral-800 dark:hover:bg-neutral-800 dark:hover:text-white  dark:hover:text-white' ${
-          activeClass ? " dark:bg-neutral-600" : ""
+          activeClass ? "bg-black dark:bg-gray-900 " : ""
         }`}
       >
         {pageNumber}

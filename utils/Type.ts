@@ -303,6 +303,18 @@ export interface metaData {
   total: number;
   totalPage: number;
 }
+export interface UserData {
+  id: string;
+  email: string;
+  name: string;
+  image: string;
+  phone: number;
+  city: string;
+  bio: string;
+  country: string;
+  streetAddress: number;
+  createdAt: string;
+}
 
 export interface ActionResponse {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -13,3 +13,6 @@ export const formatDate = (date: Date) => {
     day: "numeric",
   }).format(date);
 };
+export const setstring = (Username: string) => {
+  return Username.toUpperCase().slice(0, 1);
+};

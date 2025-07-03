@@ -15,7 +15,7 @@ const initialState: ActionResponseere = {
   message: "",
 };
 function Page() {
-  const [state , action] = useActionState(loginUser, initialState);
+  const [state, action] = useActionState(loginUser, initialState);
   return (
     <div>
       <form action={action}>
@@ -86,8 +86,14 @@ function Page() {
             className="flex items-center justify-between px-6 [.border-t]:pt-6"
           >
             <SubmitButton text="Log in" className="mt-8" />
-            <Link href="register" className="capitalize mt-8 ">
-              Register
+          </div>
+          <div
+            data-slot="card-footer"
+            className="flex items-center justify-between px-6"
+          >
+            <Link href="register" className="capitalize mt-3 text-xs ">
+              <span>Don`t have an account?</span>
+              <span className=" font-bold text-smt">Register</span>
             </Link>
           </div>
         </div>

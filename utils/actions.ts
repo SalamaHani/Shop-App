@@ -8,6 +8,7 @@ import {
   checkoutSchema,
   LoginFormSchema,
   SignupFormSchema,
+  imageSchema,
 } from "./schema";
 import {
   createSession,
@@ -27,6 +28,7 @@ import {
   UserFormData,
 } from "./Type";
 import { toast } from "sonner";
+import { uploadImage } from "./supabase";
 export const customFetch = axios.create({
   baseURL: productionUrl,
 });
@@ -681,3 +683,71 @@ export const loginUser = async (
 export async function logout() {
   await removeUserFromSession(await cookies());
 }
+//get User Data profile
+export const getUserData = async () => {
+  const user = await getUserFromSession(await cookies());
+  const userData = await db.users.findUnique({
+    where: {
+      email: user.email,
+    },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      image: true,
+      country: true,
+      phone: true,
+      city: true,
+      bio: true,
+      streetAddress: true,
+      createdAt: true,
+    },
+  });
+  return userData;
+};
+//Updeat User Data Action
+export const UpdeatUserDataAction = async (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  prevState: any,
+  formData: FormData
+) => {
+  const email = formData.get("email") as string;
+  const file = formData.get("image") as File;
+  const userdata = {
+    email: formData.get("email") as string,
+    name: formData.get("name") as string,
+    image: formData.get("image") as File,
+    country: formData.get("country") as string,
+    phone: Number(formData.get("phone")),
+    city: formData.get("city") as string,
+    bio: formData.get("bio") as string,
+    streetAddress: Number(formData.get("streetAddress")),
+  };
+
+  try {
+    const validatedFile = validateWithZodSchema(imageSchema, { image: file });
+    const fullPath = await uploadImage(validatedFile.image);
+    //     const validatedFile = imageSchema.safeParse(userdata.image);
+    // if (!validatedFile.success) {
+    //   throw new Error("File size must be less than 1MB");
+    // }
+    // const fullPath = await uploadImage(validatedFile.data.image);
+    await db.users.update({
+      where: { email },
+      data: {
+        email: userdata.email,
+        name: userdata.name,
+        image: fullPath,
+        country: userdata.country,
+        phone: userdata.phone,
+        city: userdata.city,
+        bio: userdata.bio,
+        streetAddress: userdata.streetAddress,
+      },
+    });
+    revalidatePath("/profile");
+    return { message: "Updeat User Data successfully" };
+  } catch (error) {
+    return renderError(error);
+  }
+};

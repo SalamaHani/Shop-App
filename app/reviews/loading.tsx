@@ -8,6 +8,10 @@ function loading() {
     <section className="grid md:grid-cols-2 gap-8 mt-4">
       <ReviewLoadingCard />
       <ReviewLoadingCard />
+      <ReviewLoadingCard />
+      <ReviewLoadingCard />
+      <ReviewLoadingCard />
+      <ReviewLoadingCard />
     </section>
   );
 }

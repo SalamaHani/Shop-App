@@ -75,6 +75,25 @@ export const reviewSchema = z.object({
     .min(10, { message: "Comment must be at least 10 characters long" })
     .max(1000, { message: "Comment must be at most 1000 characters long" }),
 });
+///imge scaema 
+export const imageSchema = z.object({
+  image: validateImageFile(),
+});
+
+function validateImageFile() {
+  const maxUploadSize = 1024 * 1024;
+  const acceptedFileTypes = ['image/'];
+  return z
+    .instanceof(File)
+    .refine((file) => {
+      return !file || file.size <= maxUploadSize;
+    }, 'File size must be less than 1MB')
+    .refine((file) => {
+      return (
+        !file || acceptedFileTypes.some((type) => file.type.startsWith(type))
+      );
+    }, 'File must be an image');
+}
 
 // Optional: used internally (e.g. returning user data)
 export const userSchema = z.object({

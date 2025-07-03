@@ -48,7 +48,9 @@ export async function ReviewDiloge({ productId }: { productId: string }) {
           />
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="destructive">Cancel</Button>
+              <Button size="lg" variant="destructive">
+                Cancel
+              </Button>
             </DialogClose>
             <input
               type="text"
