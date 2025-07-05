@@ -304,16 +304,16 @@ export interface metaData {
   totalPage: number;
 }
 export interface UserData {
-  id: string;
+  id?: string;
   email: string;
   name: string;
-  image: string;
+  image?: string;
   phone: number;
   city: string;
   bio: string;
   country: string;
   streetAddress: number;
-  createdAt: string;
+  createdAt?: string;
 }
 
 export interface ActionResponse {
@@ -334,6 +334,16 @@ export interface ActionResponseere {
   message: string;
   errors?: {
     [K in keyof LoginData]?: string[];
+  };
+}
+export interface ActionResponsUpdeat {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  funactuon?: any;
+  Data?: UserData;
+  success: boolean;
+  message: string;
+  errors?: {
+    [K in keyof UserData]?: string[] | number[];
   };
 }
 export interface ActionResponRegester {

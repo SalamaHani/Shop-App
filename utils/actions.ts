@@ -8,7 +8,7 @@ import {
   checkoutSchema,
   LoginFormSchema,
   SignupFormSchema,
-  imageSchema,
+  UbdeatUserSchema,
 } from "./schema";
 import {
   createSession,
@@ -25,6 +25,7 @@ import {
   ActionResponRegester,
   ActionResponse,
   ActionResponseere,
+  ActionResponsUpdeat,
   UserFormData,
 } from "./Type";
 import { toast } from "sonner";
@@ -710,7 +711,7 @@ export const UpdeatUserDataAction = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   prevState: any,
   formData: FormData
-) => {
+): Promise<ActionResponsUpdeat> => {
   const email = formData.get("email") as string;
   const file = formData.get("image") as File;
   const userdata = {
@@ -725,13 +726,24 @@ export const UpdeatUserDataAction = async (
   };
 
   try {
-    const validatedFile = validateWithZodSchema(imageSchema, { image: file });
-    const fullPath = await uploadImage(validatedFile.image);
-    //     const validatedFile = imageSchema.safeParse(userdata.image);
-    // if (!validatedFile.success) {
-    //   throw new Error("File size must be less than 1MB");
-    // }
-    // const fullPath = await uploadImage(validatedFile.data.image);
+    const valdetionuser = UbdeatUserSchema.safeParse(userdata);
+    const fullPath = await uploadImage(file);
+    if (!valdetionuser.success) {
+      return {
+        success: false,
+        Data: {
+          email: userdata.email,
+          name: userdata.name,
+          country: userdata.country,
+          city: userdata.city,
+          bio: userdata.bio,
+          phone: userdata.phone,
+          streetAddress: userdata.streetAddress,
+        },
+        message: "Please fix the errors in the form",
+        errors: valdetionuser.error.flatten().fieldErrors,
+      };
+    }
     await db.users.update({
       where: { email },
       data: {
@@ -745,9 +757,26 @@ export const UpdeatUserDataAction = async (
         streetAddress: userdata.streetAddress,
       },
     });
+    console.log(fullPath);
     revalidatePath("/profile");
-    return { message: "Updeat User Data successfully" };
+    return {
+      success: true,
+      message: "Updeat User Data successfully!",
+    };
   } catch (error) {
-    return renderError(error);
+    return {
+      funactuon: renderError(error),
+      success: false,
+      Data: {
+        email: userdata.email,
+        name: userdata.name,
+        country: userdata.country,
+        city: userdata.city,
+        bio: userdata.bio,
+        phone: userdata.phone,
+        streetAddress: userdata.streetAddress,
+      },
+      message: "Please fix the errors in the form",
+    };
   }
 };

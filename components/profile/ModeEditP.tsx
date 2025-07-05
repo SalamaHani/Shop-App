@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useActionState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,14 +13,19 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "../ui/input";
 import { SubmitButton } from "../form/Buttons";
-import { getUserData, UpdeatUserDataAction } from "@/utils/actions";
-import { UserData } from "@/utils/Type";
+import { UpdeatUserDataAction } from "@/utils/actions";
+import { ActionResponsUpdeat } from "@/utils/Type";
 import { Label } from "../ui/label";
-import FormContainer from "../form/FormContener";
-
-async function ModeEditP() {
-  const userData: UserData = await getUserData();
-  const { city, email, name, streetAddress, country, phone, bio } = userData;
+import { toast } from "sonner";
+const initialState: ActionResponsUpdeat = {
+  success: false,
+  message: "",
+};
+function ModeEditP() {
+  const [state, action] = useActionState(UpdeatUserDataAction, initialState);
+  if (state.success) {
+    toast.success("Updeat User Data successfully!");
+  }
   return (
     <>
       <Dialog>
@@ -28,7 +34,7 @@ async function ModeEditP() {
             Edit
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[625px] ">
+        <DialogContent className="sm:max-w-[725px] ">
           <DialogHeader>
             <DialogTitle>Edit profile</DialogTitle>
             <DialogDescription>
@@ -36,20 +42,17 @@ async function ModeEditP() {
               done.
             </DialogDescription>
           </DialogHeader>
-          <FormContainer
-            action={UpdeatUserDataAction}
-            className="flex flex-col pb-2"
-          >
+          <form action={action} className="flex flex-col pb-2">
             <div className="custom-scrollbar h-[450px] overflow-y-auto px-2">
               <div>
                 <h5 className="mb-5 text-lg font-medium  dark:text-white/90 lg:mb-6">
                   Update imge
                 </h5>
-                <div className="dropzone  hover:border-green-500 dark:hover:border-brand-500 rounded-xl border border-dashed border-gray-300 bg-gray-50 p-7 lg:p-10 dark:border-gray-700 dark:bg-gray-900 dz-clickable">
+                <div className="  hover:border-green-500 dark:hover:border-brand-500 w-full rounded-xl border border-dashed border-gray-300 bg-gray-50 p-7 lg:p-10 dark:border-gray-700  dz-clickable">
                   <div className="dz-message m-0 ">
                     <Label htmlFor="image">
                       <div className="mb-[20px] flex  tems-center justify-center">
-                        <div className="flex h-[68px] w-[68px]  items-center justify-center rounded-full bg-gray-200 text-gray-700 dark:bg-gray-800 dark:text-gray-400">
+                        <div className=" flex h-[68px] w-[68px]  items-center justify-center rounded-full bg-gray-200 text-gray-700  dark:text-gray-400">
                           <svg
                             className="fill-current"
                             width="29"
@@ -72,7 +75,13 @@ async function ModeEditP() {
                       id="image"
                       name="image"
                       accept="image/*"
+                      defaultValue={state.Data?.image}
                     />
+                    {state.errors?.image && (
+                      <p className="text-red-500 text-xs">
+                        {state.errors?.image}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -88,9 +97,14 @@ async function ModeEditP() {
                     <Input
                       name="name"
                       type="text"
-                      defaultValue={name ?? "lname"}
-                      className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                      defaultValue={state.Data?.name ?? "lname"}
+                      className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700  dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                     />
+                    {state.errors?.name && (
+                      <p className="text-red-500 text-xs">
+                        {state.errors?.name}
+                      </p>
+                    )}
                   </div>
                   <div className="col-span-2 lg:col-span-1">
                     <Label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
@@ -99,9 +113,14 @@ async function ModeEditP() {
                     <Input
                       name="email"
                       type="text"
-                      defaultValue={email ?? "randomuser@pimjo.com"}
-                      className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                      defaultValue={state.Data?.email ?? "randomuser@pimjo.com"}
+                      className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700  dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                     />
+                    {state.errors?.email && (
+                      <p className="text-red-500 text-xs">
+                        {state.errors?.email}
+                      </p>
+                    )}
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
@@ -111,9 +130,14 @@ async function ModeEditP() {
                     <Input
                       name="phone"
                       type="text"
-                      defaultValue={phone ?? "+09 363 398 46"}
-                      className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                      defaultValue={state.Data?.phone ?? 45683845526}
+                      className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700  dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                     />
+                    {state.errors?.phone && (
+                      <p className="text-red-500 text-xs">
+                        {state.errors?.phone}
+                      </p>
+                    )}
                   </div>
 
                   <div className="col-span-2">
@@ -123,9 +147,14 @@ async function ModeEditP() {
                     <Input
                       name="bio"
                       type="text"
-                      defaultValue={bio ?? "Team Manager"}
-                      className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                      defaultValue={state.Data?.bio ?? "Team Manager"}
+                      className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700  dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                     />
+                    {state.errors?.bio && (
+                      <p className="text-red-500 text-xs">
+                        {state.errors?.bio}
+                      </p>
+                    )}
                   </div>
                   {/* <div className="col-span-2"></div>
                   <>
@@ -138,7 +167,7 @@ async function ModeEditP() {
                         type="password"
                         placeholder="••••••••"
                         autoComplete="frflr"
-                        className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                        className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700  dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                       />
                     </div>
                     <div className="col-span-2 lg:col-span-1">
@@ -149,7 +178,7 @@ async function ModeEditP() {
                         name="password_confirmation"
                         placeholder="••••••••"
                         type="text"
-                        className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                        className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700  dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                       />
                     </div>
                   </> */}
@@ -160,9 +189,14 @@ async function ModeEditP() {
                     <Input
                       name="country"
                       type="text"
-                      defaultValue={country ?? "United States"}
-                      className=" h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                      defaultValue={state.Data?.country ?? "United States"}
+                      className=" h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700  dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                     />
+                    {state.errors?.country && (
+                      <p className="text-red-500 text-xs">
+                        {state.errors?.country}
+                      </p>
+                    )}
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
@@ -172,9 +206,16 @@ async function ModeEditP() {
                     <Input
                       name="city"
                       type="text"
-                      defaultValue={city ?? "Arizona, United States."}
-                      className=" h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                      defaultValue={
+                        state.Data?.city ?? "Arizona, United States."
+                      }
+                      className=" h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700  dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                     />
+                    {state.errors?.city && (
+                      <p className="text-red-500 text-xs">
+                        {state.errors?.city}
+                      </p>
+                    )}
                   </div>
                   <div className="col-span-2 lg:col-span-1">
                     <Label className="mb-1.5 block text-sm font-medium">
@@ -183,9 +224,14 @@ async function ModeEditP() {
                     <Input
                       name="streetAddress"
                       type="text"
-                      defaultValue={streetAddress ?? "AS4568384"}
-                      className=" h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                      defaultValue={state.Data?.streetAddress ?? 4568384}
+                      className=" h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700  dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                     />
+                    {state.errors?.streetAddress && (
+                      <p className="text-red-500 text-xs">
+                        {state.errors?.streetAddress}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -198,7 +244,7 @@ async function ModeEditP() {
               </DialogClose>
               <SubmitButton text="Save changes" />
             </DialogFooter>
-          </FormContainer>
+          </form>
         </DialogContent>
       </Dialog>
     </>

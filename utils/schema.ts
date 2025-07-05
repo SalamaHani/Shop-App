@@ -12,23 +12,23 @@ export const registerSchema = z.object({
 export const SignupFormSchema = z.object({
   name: z
     .string()
-    .min(2, { message: 'Name must be at least 2 characters long.' })
+    .min(2, { message: "Name must be at least 2 characters long." })
     .trim(),
-  email: z.string().email({ message: 'Please enter a valid email.' }).trim(),
+  email: z.string().email({ message: "Please enter a valid email." }).trim(),
   password: z
     .string()
-    .min(8, { message: 'Be at least 8 characters long' })
-    .regex(/[a-zA-Z]/, { message: 'Contain at least one letter.' })
-    .regex(/[0-9]/, { message: 'Contain at least one number.' })
+    .min(8, { message: "Be at least 8 characters long" })
+    .regex(/[a-zA-Z]/, { message: "Contain at least one letter." })
+    .regex(/[0-9]/, { message: "Contain at least one number." })
     .regex(/[^a-zA-Z0-9]/, {
-      message: 'Contain at least one special character.',
+      message: "Contain at least one special character.",
     })
     .trim(),
 });
 
 export const LoginFormSchema = z.object({
-  email: z.string().email({ message: 'Please enter a valid email.' }),
-  password: z.string().min(1, { message: 'Password field must not be empty.' }),
+  email: z.string().email({ message: "Please enter a valid email." }),
+  password: z.string().min(1, { message: "Password field must not be empty." }),
 });
 
 export const loginSchema = z.object({
@@ -75,24 +75,30 @@ export const reviewSchema = z.object({
     .min(10, { message: "Comment must be at least 10 characters long" })
     .max(1000, { message: "Comment must be at most 1000 characters long" }),
 });
-///imge scaema 
+///imge scaema
 export const imageSchema = z.object({
   image: validateImageFile(),
 });
 
 function validateImageFile() {
   const maxUploadSize = 1024 * 1024;
-  const acceptedFileTypes = ['image/'];
+  const acceptedFileTypes = ["image/"];
   return z
     .instanceof(File)
-    .refine((file) => {
-      return !file || file.size <= maxUploadSize;
-    }, 'File size must be less than 1MB')
-    .refine((file) => {
-      return (
-        !file || acceptedFileTypes.some((type) => file.type.startsWith(type))
-      );
-    }, 'File must be an image');
+    .refine(
+      (file) => {
+        return !file || file.size <= maxUploadSize;
+      },
+      { message: "File size must be less than 1MB" }
+    )
+    .refine(
+      (file) => {
+        return (
+          !file || acceptedFileTypes.some((type) => file.type.startsWith(type))
+        );
+      },
+      { message: "File must be an image" }
+    );
 }
 
 // Optional: used internally (e.g. returning user data)
@@ -110,6 +116,16 @@ export const checkoutSchema = z.object({
   ZIPCode: z.number().min(4, { message: "ZIP Code is required" }),
   email: z.string().email({ message: "Invalid email address" }),
   Phone: z.number().min(7, { message: "Phone number is required" }),
+});
+export const UbdeatUserSchema = z.object({
+  email: z.string().email({ message: "First Name is required" }),
+  name: z.string().min(1, { message: "name is required" }),
+  image: validateImageFile(),
+  StreetAddress: z.number().min(1, { message: "Street Address is required" }),
+  Phone: z.number().min(7, { message: "Phone number is required" }),
+  bio: z.string().min(4, { message: "bio is required" }),
+  city: z.string().min(1, { message: "city  is required" }),
+  country: z.string().min(3, { message: "country  is required" }),
 });
 
 export type CheckoutSchema = z.infer<typeof checkoutSchema>;

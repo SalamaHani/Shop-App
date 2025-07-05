@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Card, CardContent } from "../ui/card";
 import Image from "next/image";
 import { Product } from "@prisma/client";
+
 import FavoriteToggleButton from "./FavaretToggel";
 function ProductsGrid({ products }: { products: Product[] }) {
   return (

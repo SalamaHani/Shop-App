@@ -1,3 +1,4 @@
+
 import { fetchFavoriteId } from "@/utils/actions";
 import FavoriteToggleForm from "./FavoriteToggleForm";
 import { getUserFromSession } from "@/lib/auth";

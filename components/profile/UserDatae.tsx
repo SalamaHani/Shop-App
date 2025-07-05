@@ -2,8 +2,8 @@ import React from "react";
 import ModeEditP from "./ModeEditP";
 import { getUserData } from "@/utils/actions";
 import Image from "next/image";
-import imgUser from "../../public/imges/user-profile-icon-flat-style-member-avatar-vector-illustration-isolated-background-human-permission-sign-business-concept_157943-15752.avif";
 import { UserData } from "@/utils/Type";
+import { setstring } from "@/utils/format";
 async function UserDatae() {
   const userData: UserData = await getUserData();
   const { name, image, bio, city } = userData;
@@ -22,13 +22,8 @@ async function UserDatae() {
               />
             ) : (
               <div className="w-20 h-20 flex items-center justify-center  overflow-hidden  bg-gray-600 border-gray-200 rounded-full ">
-                <Image
-                  src={imgUser}
-                  alt={"UserName"}
-                  width={48}
-                  height={48}
-                  className="w-12 h-12 rounded-full object-cover"
-                />
+                
+                {setstring(name)}
               </div>
             )}
             <div className="order-3 xl:order-2">
@@ -37,7 +32,7 @@ async function UserDatae() {
               </h4>
               <div className="flex flex-col items-center gap-1 text-center xl:flex-row xl:gap-3 xl:text-left">
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {bio}
+                  {bio ?? "Custumer"}
                 </p>
                 <div className="hidden h-3.5 w-px bg-gray-300  mb-0 xl:block"></div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
