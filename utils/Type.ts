@@ -308,11 +308,11 @@ export interface UserData {
   email: string;
   name: string;
   image?: string;
-  phone: number;
+  phone?: number;
   city: string;
   bio: string;
   country: string;
-  streetAddress: number;
+  streetAddress?: number;
   createdAt?: string;
 }
 

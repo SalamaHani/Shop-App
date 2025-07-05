@@ -1,5 +1,5 @@
 "use client";
-import React, { useActionState } from "react";
+import React, { useActionState, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -16,15 +16,17 @@ import { SubmitButton } from "../form/Buttons";
 import { UpdeatUserDataAction } from "@/utils/actions";
 import { ActionResponsUpdeat } from "@/utils/Type";
 import { Label } from "../ui/label";
-import { toast } from "sonner";
+import { Alert, AlertDescription } from "../ui/alert";
+import { Ban, CheckCircle2 } from "lucide-react";
 const initialState: ActionResponsUpdeat = {
   success: false,
   message: "",
 };
 function ModeEditP() {
+  const [close, setclose] = useState(true);
   const [state, action] = useActionState(UpdeatUserDataAction, initialState);
   if (state.success) {
-    toast.success("Updeat User Data successfully!");
+    setclose(true);
   }
   return (
     <>
@@ -43,6 +45,15 @@ function ModeEditP() {
             </DialogDescription>
           </DialogHeader>
           <form action={action} className="flex flex-col pb-2">
+            {state?.message && (
+              <Alert
+                className="mb-5"
+                variant={state.success ? "default" : "destructive"}
+              >
+                {state.success ? <CheckCircle2 className="h-4 w-4" /> : <Ban />}
+                <AlertDescription>{state.message}</AlertDescription>
+              </Alert>
+            )}
             <div className="custom-scrollbar h-[450px] overflow-y-auto px-2">
               <div>
                 <h5 className="mb-5 text-lg font-medium  dark:text-white/90 lg:mb-6">
@@ -117,7 +128,7 @@ function ModeEditP() {
                     <Input
                       name="email"
                       type="text"
-                      defaultValue={state.Data?.email ?? "randomuser@pimjo.com"}
+                      defaultValue={state.Data?.email}
                       className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700  dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                     />
                     {state.errors?.email && (
@@ -134,7 +145,7 @@ function ModeEditP() {
                     <Input
                       name="phone"
                       type="text"
-                      defaultValue={state.Data?.phone ?? 45683845526}
+                      defaultValue={state.Data?.phone}
                       className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700  dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                     />
                     {state.errors?.phone && (
@@ -160,32 +171,6 @@ function ModeEditP() {
                       </p>
                     )}
                   </div>
-                  {/* <div className="col-span-2"></div>
-                  <>
-                    <div className="col-span-2 lg:col-span-1">
-                      <Label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                        New Password
-                      </Label>
-                      <Input
-                        name="password"
-                        type="password"
-                        placeholder="••••••••"
-                        autoComplete="frflr"
-                        className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700  dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                      />
-                    </div>
-                    <div className="col-span-2 lg:col-span-1">
-                      <Label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                        Confirm password
-                      </Label>
-                      <Input
-                        name="password_confirmation"
-                        placeholder="••••••••"
-                        type="text"
-                        className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700  dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                      />
-                    </div>
-                  </> */}
                   <div className="col-span-2 lg:col-span-1">
                     <Label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                       Country
@@ -228,7 +213,7 @@ function ModeEditP() {
                     <Input
                       name="streetAddress"
                       type="text"
-                      defaultValue={state.Data?.streetAddress ?? 4568384}
+                      defaultValue={state.Data?.streetAddress}
                       className=" h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700  dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                     />
                     {state.errors?.streetAddress && (

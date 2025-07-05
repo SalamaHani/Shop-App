@@ -744,7 +744,6 @@ export const UpdeatUserDataAction = async (
         errors: valdetionuser.error.flatten().fieldErrors,
       };
     }
-    console.log(fullPath);
     await db.users.update({
       where: { id: user.id },
       data: {
@@ -764,7 +763,6 @@ export const UpdeatUserDataAction = async (
       message: "Updeat User Data successfully!",
     };
   } catch (error) {
-    console.log(error);
     return renderError(error);
   }
 };
