@@ -6,7 +6,7 @@ function loading() {
     <>
       <UserDataLoadingCard />
       <UserProfinalLoadingCard />
-      <UserProfinalLoadingCard />
+      <UserAderrdsLoadingCard />
     </>
   );
 }
@@ -32,6 +32,41 @@ const UserDataLoadingCard = () => {
   );
 };
 const UserProfinalLoadingCard = () => {
+  return (
+    <div className="p-5 mb-6 border rounded-2xl h-60  lg:p-6">
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+        <div>
+          <Skeleton className="w-100 h-4" />
+          <div className="grid grid-cols-3 mt-10 gap-10 lg:grid-cols-2 lg:gap-7 2xl:gap-x-32">
+            <div>
+              <div>
+                <Skeleton className="w-50 h-4 my-8" />
+              </div>
+              <div>
+                <Skeleton className="w-50 h-4 my-8" />
+              </div>
+            </div>
+            <div>
+              <div>
+                <Skeleton className="w-50 h-4 my-8" />
+              </div>
+              <div>
+                <Skeleton className="w-50 h-4 my-8" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <Skeleton className="w-30 h-8  rounded-full" />
+        </div>
+        <div>
+          <Skeleton className="w-15 h-8  rounded-full" />
+        </div>
+      </div>
+    </div>
+  );
+};
+const UserAderrdsLoadingCard = () => {
   return (
     <div className="p-5 mb-6 border rounded-2xl h-60  lg:p-6">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">

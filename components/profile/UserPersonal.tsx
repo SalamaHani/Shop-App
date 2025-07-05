@@ -2,6 +2,7 @@ import React from "react";
 import ModeEditP from "./ModeEditP";
 import { getUserData } from "@/utils/actions";
 import { UserData } from "@/utils/Type";
+import ModeChangpass from "./ModeChangpass";
 
 async function UserPersonal() {
   const userData: UserData = await getUserData();
@@ -10,7 +11,7 @@ async function UserPersonal() {
     <div className="p-5 mb-6 border rounded-2xl  lg:p-6">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
         <div>
-          <h4 className="text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-6">
+          <h4 className="text-lg font-semibold  dark:text-white/90 lg:mb-6">
             Personal Information
           </h4>
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-7 2xl:gap-x-32">
@@ -46,6 +47,9 @@ async function UserPersonal() {
               </p>
             </div>
           </div>
+        </div>
+        <div>
+          <ModeChangpass />
         </div>
         <div>
           <ModeEditP />

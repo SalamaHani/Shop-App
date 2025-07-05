@@ -340,8 +340,8 @@ export interface ActionResponsUpdeat {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   funactuon?: any;
   Data?: UserData;
-  success: boolean;
-  message: string;
+  success?: boolean;
+  message?: string;
   errors?: {
     [K in keyof UserData]?: string[] | number[];
   };

@@ -48,7 +48,13 @@ function ModeEditP() {
                 <h5 className="mb-5 text-lg font-medium  dark:text-white/90 lg:mb-6">
                   Update imge
                 </h5>
-                <div className="  hover:border-green-500 dark:hover:border-brand-500 w-full rounded-xl border border-dashed border-gray-300 bg-gray-50 p-7 lg:p-10 dark:border-gray-700  dz-clickable">
+                <div
+                  className={
+                    state.errors?.image
+                      ? `border-red-500  dark:hover:border-brand-500 w-full rounded-xl border border-dashed  bg-gray-50 p-7 lg:p-10 dark:border-gray-700  dz-clickable`
+                      : ` hover:border-green-500 dark:hover:border-brand-500 w-full rounded-xl border border-dashed border-gray-300 bg-gray-50 p-7 lg:p-10 dark:border-gray-700  dz-clickable`
+                  }
+                >
                   <div className="dz-message m-0 ">
                     <Label htmlFor="image">
                       <div className="mb-[20px] flex  tems-center justify-center">
@@ -77,13 +83,11 @@ function ModeEditP() {
                       accept="image/*"
                       defaultValue={state.Data?.image}
                     />
-                    {state.errors?.image && (
-                      <p className="text-red-500 text-xs">
-                        {state.errors?.image}
-                      </p>
-                    )}
                   </div>
                 </div>
+                {state.errors?.image && (
+                  <p className="text-red-500 text-xs">{state.errors?.image}</p>
+                )}
               </div>
               <div className="mt-7">
                 <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">

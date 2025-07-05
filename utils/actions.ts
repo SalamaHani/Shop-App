@@ -712,7 +712,7 @@ export const UpdeatUserDataAction = async (
   prevState: any,
   formData: FormData
 ): Promise<ActionResponsUpdeat> => {
-  const email = formData.get("email") as string;
+  const user = await getUserFromSession(await cookies());
   const file = formData.get("image") as File;
   const userdata = {
     email: formData.get("email") as string,
@@ -744,8 +744,9 @@ export const UpdeatUserDataAction = async (
         errors: valdetionuser.error.flatten().fieldErrors,
       };
     }
+    console.log(fullPath);
     await db.users.update({
-      where: { email },
+      where: { id: user.id },
       data: {
         email: userdata.email,
         name: userdata.name,
@@ -757,26 +758,13 @@ export const UpdeatUserDataAction = async (
         streetAddress: userdata.streetAddress,
       },
     });
-    console.log(fullPath);
     revalidatePath("/profile");
     return {
       success: true,
       message: "Updeat User Data successfully!",
     };
   } catch (error) {
-    return {
-      funactuon: renderError(error),
-      success: false,
-      Data: {
-        email: userdata.email,
-        name: userdata.name,
-        country: userdata.country,
-        city: userdata.city,
-        bio: userdata.bio,
-        phone: userdata.phone,
-        streetAddress: userdata.streetAddress,
-      },
-      message: "Please fix the errors in the form",
-    };
+    console.log(error);
+    return renderError(error);
   }
 };
