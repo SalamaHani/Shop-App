@@ -47,6 +47,22 @@ export const loginSchema = z.object({
     })
     .trim(),
 });
+export const changePasswordSchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, { message: "Be at least 8 characters long" })
+      .regex(/[a-zA-Z]/, { message: "Contain at least one letter." })
+      .regex(/[0-9]/, { message: "Contain at least one number." })
+      .regex(/[^a-zA-Z0-9]/, {
+        message: "Contain at least one special character.",
+      }),
+    password_confirmation: z.string(),
+  })
+  .refine((data) => data.password === data.password_confirmation, {
+    message: "Passwords do not match",
+    path: ["password_confirmation"],
+  });
 export function validateWithZodSchema<T>(
   schema: ZodSchema<T>,
   data: unknown

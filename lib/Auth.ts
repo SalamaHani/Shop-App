@@ -11,22 +11,14 @@ import { z } from "zod";
 const key = new TextEncoder().encode(secretKey);
 const SESSION_EXPIRATION_SECONDS = 60 * 60 * 24 * 7;
 const COOKIE_SESSION_KEY = "session-id";
-// export const { auth, handlers, signIn, signOut } = NextAuth({
-//   providers: [
-//     GoogleProvider({
-//       clientId: process.env.GOOGLE_CLIENT_ID!,
-//       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-//     }),
-//   ],
-//   callbacks: {
-//     async redirect({ baseUrl }) {
-//       return baseUrl;
-//     },
-//   },
-// });
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function encrypt(payload: any) {
-  return await new SignJWT(payload)
+  const safeData = JSON.parse(
+    JSON.stringify(payload, (_, value) =>
+      typeof value === "bigint" ? value.toString() : value
+    )
+  );
+  return await new SignJWT(safeData)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime(Date.now() + SESSION_EXPIRATION_SECONDS * 1000)

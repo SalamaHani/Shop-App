@@ -315,6 +315,10 @@ export interface UserData {
   streetAddress?: number;
   createdAt?: string;
 }
+export interface ChangPass {
+  password: string;
+  password_confirmation: string;
+}
 
 export interface ActionResponse {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -354,5 +358,15 @@ export interface ActionResponRegester {
   message: string;
   errors?: {
     [K in keyof RegesterData]?: string[];
+  };
+}
+export interface ActionChangePass {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  funactuon?: any;
+  Data?: ChangPass;
+  success: boolean;
+  message: string;
+  errors?: {
+    [K in keyof ChangPass]?: string[];
   };
 }

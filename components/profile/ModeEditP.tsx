@@ -1,5 +1,5 @@
 "use client";
-import React, { useActionState, useState } from "react";
+import React, { useActionState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -23,11 +23,7 @@ const initialState: ActionResponsUpdeat = {
   message: "",
 };
 function ModeEditP() {
-  const [close, setclose] = useState(true);
   const [state, action] = useActionState(UpdeatUserDataAction, initialState);
-  if (state.success) {
-    setclose(true);
-  }
   return (
     <>
       <Dialog>

@@ -9,6 +9,7 @@ import {
   LoginFormSchema,
   SignupFormSchema,
   UbdeatUserSchema,
+  changePasswordSchema,
 } from "./schema";
 import {
   createSession,
@@ -22,6 +23,7 @@ const productionUrl = "https://shop.motorscloud.net/api";
 import { cookies } from "next/headers";
 import { Cart } from "@prisma/client";
 import {
+  ActionChangePass,
   ActionResponRegester,
   ActionResponse,
   ActionResponseere,
@@ -648,7 +650,6 @@ export const loginUser = async (
       errors: validatedData.error.flatten().fieldErrors,
     };
   }
-
   const user = await db.users.findUnique({ where: { email } });
   if (user == null || user.password == null || user.salt == null) {
     return {
@@ -724,7 +725,6 @@ export const UpdeatUserDataAction = async (
     bio: formData.get("bio") as string,
     streetAddress: Number(formData.get("streetAddress")),
   };
-
   try {
     const valdetionuser = UbdeatUserSchema.safeParse(userdata);
     const fullPath = await uploadImage(file);
@@ -765,4 +765,44 @@ export const UpdeatUserDataAction = async (
   } catch (error) {
     return renderError(error);
   }
+};
+///Action Change Password
+export const ChangePasswordAction = async (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  prevState: any,
+  formData: FormData
+): Promise<ActionChangePass> => {
+  const user = await getUserFromSession(await cookies());
+  const UserPss = {
+    password: formData.get("password") as string,
+    password_confirmation: formData.get("password_confirmation") as string,
+  };
+
+  const valdtionChnagePass = changePasswordSchema.safeParse(UserPss);
+  if (!valdtionChnagePass.success) {
+    return {
+      success: false,
+      Data: {
+        password: UserPss.password,
+        password_confirmation: UserPss.password_confirmation,
+      },
+      message: "Please fix the errors in the form",
+      errors: valdtionChnagePass.error.flatten().fieldErrors,
+    };
+  }
+  const salt = generateSalt();
+  const hashedPassword = await hashPassword(UserPss.password, salt);
+  // const Token = await encrypt({ email: user.email });
+  await db.users.update({
+    where: { id: user.id },
+    data: {
+      password: hashedPassword,
+      salt: salt,
+    },
+  });
+  revalidatePath("/profile");
+  return {
+    success: true,
+    message: "Updeat Password successfully!",
+  };
 };
