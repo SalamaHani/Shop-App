@@ -36,6 +36,7 @@ model Users {
   streetAddress BigInt?
   token String @unique
   salt String
+  role String 
   createdAt DateTime @default(now())
 }
 
