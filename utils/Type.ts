@@ -319,6 +319,14 @@ export interface ChangPass {
   password: string;
   password_confirmation: string;
 }
+export interface product {
+  name: string;
+  company: string;
+  description: string;
+  featured?: boolean;
+  image?: string;
+  price: number;
+}
 
 export interface ActionResponse {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -368,5 +376,16 @@ export interface ActionChangePass {
   message: string;
   errors?: {
     [K in keyof ChangPass]?: string[];
+  };
+}
+
+export interface ActionUpdeatproduct {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  funactuon?: any;
+  Data?: product;
+  success?: boolean;
+  message?: string;
+  errors?: {
+    [K in keyof product]?: string[];
   };
 }

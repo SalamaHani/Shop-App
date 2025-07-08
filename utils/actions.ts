@@ -10,6 +10,8 @@ import {
   SignupFormSchema,
   UbdeatUserSchema,
   changePasswordSchema,
+  updateProductSchema,
+  updateProductSchemaoning,
 } from "./schema";
 import {
   createSession,
@@ -28,10 +30,11 @@ import {
   ActionResponse,
   ActionResponseere,
   ActionResponsUpdeat,
+  ActionUpdeatproduct,
   UserFormData,
 } from "./Type";
 import { toast } from "sonner";
-import { uploadImage } from "./supabase";
+import { deleteImage, uploadImage } from "./supabase";
 export const customFetch = axios.create({
   baseURL: productionUrl,
 });
@@ -615,6 +618,7 @@ export const RegesterUser = async (
       email: UserData.email,
       name: UserData.name,
       password: hashedPassword,
+      role: "custamar",
       salt: salt,
       token: Token,
     },
@@ -805,4 +809,179 @@ export const ChangePasswordAction = async (
     success: true,
     message: "Updeat Password successfully!",
   };
+};
+///Dashbord products
+export const deleteProductAction = async (prevState: { productId: string }) => {
+  const { productId } = prevState;
+  try {
+    const product = await db.product.delete({
+      where: {
+        id: productId,
+      },
+    });
+    await deleteImage(product.image);
+    revalidatePath("/admin/products");
+    return { message: "product removed" };
+  } catch (error) {
+    return renderError(error);
+  }
+};
+export const fetchAdminProducts = async () => {
+  const products = await db.product.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return products;
+};
+export const fetchAdminProductDetails = async (productID: string) => {
+  const product = await db.product.findUnique({
+    where: { id: productID },
+  });
+  if (!product) redirect("dashbord");
+  return product;
+};
+
+export const updateProductAction = async (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  prevState: any,
+  formData: FormData
+): Promise<ActionUpdeatproduct> => {
+  {
+    try {
+      const priductID = formData.get("id") as string;
+      const file = formData.get("image") as File;
+      console.log(file.size);
+      const url = formData.get("url") as string;
+      const ProductData = {
+        name: formData.get("name") as string,
+        company: formData.get("company") as string,
+        image: formData.get("image") as File,
+        price: Number(formData.get("price")),
+        description: formData.get("description") as string,
+        featured: formData.get("featured") === "on",
+      };
+      if (file.size != 0) {
+        const vlidetion = updateProductSchema.safeParse(ProductData);
+        await deleteImage(url);
+        const fullPath = await uploadImage(file);
+        if (!vlidetion.success) {
+          return {
+            success: false,
+            Data: {
+              name: ProductData.name,
+              company: ProductData.company,
+              price: ProductData.price,
+              description: ProductData.description,
+            },
+            message: "Please fix the errors in the form",
+            errors: vlidetion.error.flatten().fieldErrors,
+          };
+        }
+        await db.product.update({
+          where: {
+            id: priductID,
+          },
+          data: {
+            name: ProductData.name,
+            company: ProductData.company,
+            image: fullPath,
+            price: ProductData.price,
+            description: ProductData.description,
+            featured: ProductData.featured,
+          },
+        });
+        revalidatePath("/dashbord");
+        return {
+          success: true,
+          message: "Updeat Password successfully!",
+        };
+      }
+      const vlidetion = updateProductSchemaoning.safeParse(ProductData);
+      if (!vlidetion.success) {
+        return {
+          success: false,
+          Data: {
+            name: ProductData.name,
+            company: ProductData.company,
+            price: ProductData.price,
+            description: ProductData.description,
+          },
+          message: "Please fix the errors in the form",
+          errors: vlidetion.error.flatten().fieldErrors,
+        };
+      }
+      await db.product.update({
+        where: {
+          id: priductID,
+        },
+        data: {
+          name: ProductData.name,
+          company: ProductData.company,
+          price: ProductData.price,
+          description: ProductData.description,
+          featured: ProductData.featured,
+        },
+      });
+      revalidatePath("dashbord");
+      return {
+        success: true,
+        message: "Updeat Product successfully!",
+      };
+    } catch (error) {
+      return renderError(error);
+    }
+  }
+};
+export const cerateProductAction = async (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  prevState: any,
+  formData: FormData
+): Promise<ActionUpdeatproduct> => {
+  {
+    try {
+      const file = formData.get("image") as File;
+      const ProductData = {
+        name: formData.get("name") as string,
+        company: formData.get("company") as string,
+        image: formData.get("image") as File,
+        price: Number(formData.get("price")),
+        description: formData.get("description") as string,
+        featured: formData.get("featured") === "on",
+      };
+      const vlidetion = updateProductSchema.safeParse(ProductData);
+      const fullPath = await uploadImage(file);
+      if (!vlidetion.success) {
+        return {
+          success: false,
+          Data: {
+            name: ProductData.name,
+            company: ProductData.company,
+            price: ProductData.price,
+            description: ProductData.description,
+          },
+          message: "Please fix the errors in the form",
+          errors: vlidetion.error.flatten().fieldErrors,
+        };
+      }
+      await db.product.create({
+        data: {
+          name: ProductData.name,
+          company: ProductData.company,
+          image: fullPath,
+          price: ProductData.price,
+          description: ProductData.description,
+          featured: ProductData.featured,
+          userId: "Admin",
+        },
+      });
+      revalidatePath("/dashbord");
+      return {
+        success: true,
+        message: "Updeat Password successfully!",
+      };
+    } catch (error) {
+      renderError(error);
+    }
+  }
 };

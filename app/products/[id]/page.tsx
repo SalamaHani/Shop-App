@@ -1,6 +1,6 @@
 import { fetchSingleProduct, getProductById } from "@/utils/actions";
 import React from "react";
-import Image from "next/image";
+import { Image } from "@imagekit/next";
 import { formatCurrency } from "@/utils/format";
 import AddToCart from "@/components/singel-product/AddToCart";
 import Titelproduct from "@/components/singel-product/Titelproduct";
@@ -22,12 +22,13 @@ async function SingleProductPage({ params }: { params: { id: string } }) {
         {/* IMAGE FIRST COL */}
         <div className="relative h-full">
           <Image
+            urlEndpoint={process.env.ImagekitIDURL}
             src={image}
             alt={name}
             fill
             sizes="(max-width:768px) 100vw,(max-width:1200px) 50vw, 33vw"
-            priority
             className="w-full rounded object-cover"
+            loading="lazy" // Use "eager" to load immediately. `lazy` is the default value
           />
         </div>
         {/* PRODUCT INFO SECOND COL */}

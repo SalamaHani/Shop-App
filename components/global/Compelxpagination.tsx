@@ -13,7 +13,6 @@ export default function Compelxpagination({
   const searchParams = useSearchParams();
   const { replace } = useRouter();
   const { total, totalPage } = metadata;
-  console.log(total, totalPage);
   const [Pag, setPage] = useState(searchParams.get("Page")?.toString() || "");
   const handleSearch = useDebouncedCallback((value: string) => {
     const params = new URLSearchParams(searchParams);

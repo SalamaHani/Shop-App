@@ -16,6 +16,7 @@ import { getUserFromSession } from "@/lib/auth";
 import { cookies } from "next/headers";
 async function LinksDropdown() {
   const user = await getUserFromSession(await cookies());
+  const roles = user?.role;
   if (user == null)
     return (
       <DropdownMenu>
@@ -49,6 +50,7 @@ async function LinksDropdown() {
       <DropdownMenuContent className="w-40" align="start" sideOffset={10}>
         <DropdownMenuSeparator />
         {links.map((link) => {
+          if (link.label === "dashbord" && roles == "custamar") return null;
           return (
             <DropdownMenuItem key={link.href}>
               <Link href={link.href} className="capitalize w-full">

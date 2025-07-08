@@ -117,6 +117,25 @@ function validateImageFile() {
     );
 }
 
+export const updateProductSchema = z.object({
+  name: z.string().min(1, "Name is required").max(100, "Name too long"),
+  description: z.string().optional(),
+  image: validateImageFile(),
+  price: z
+    .number({ invalid_type_error: "Price must be a number" })
+    .positive("Price must be greater than zero"),
+  company: z.string().min(1, "Company is required").max(100),
+});
+export const updateProductSchemaoning = z.object({
+  name: z.string().min(1, "Name is required").max(100, "Name too long"),
+  description: z.string().optional(),
+  price: z
+    .number({ invalid_type_error: "Price must be a number" })
+    .positive("Price must be greater than zero"),
+  company: z.string().min(1, "Company is required").max(100),
+});
+
+
 // Optional: used internally (e.g. returning user data)
 export const userSchema = z.object({
   id: z.string(),

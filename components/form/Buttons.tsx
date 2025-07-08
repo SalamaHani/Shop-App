@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { LuTrash2 } from "react-icons/lu";
+import { Pencil } from "lucide-react";
 
 type btnSize = "default" | "lg" | "sm";
 
@@ -48,7 +49,7 @@ export const IconButton = ({ actionType }: { actionType: actionType }) => {
   const renderIcon = () => {
     switch (actionType) {
       case "edit":
-        return <LuTrash2 />;
+        return <Pencil />;
       case "delete":
         return <LuTrash2 />;
       default:

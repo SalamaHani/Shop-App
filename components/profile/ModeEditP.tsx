@@ -64,7 +64,7 @@ function ModeEditP() {
                 >
                   <div className="dz-message m-0 ">
                     <Label htmlFor="image">
-                      <div className="mb-[20px] flex  tems-center justify-center">
+                      <div className="mb-[20px] flex items-center justify-center">
                         <div className=" flex h-[68px] w-[68px]  items-center justify-center rounded-full bg-gray-200 text-gray-700  dark:text-gray-400">
                           <svg
                             className="fill-current"
