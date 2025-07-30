@@ -38,13 +38,15 @@ import { deleteImage, uploadImage } from "./supabase";
 export const customFetch = axios.create({
   baseURL: productionUrl,
 });
+///handelar error re rednder react js and next js
 const renderError = (error: unknown): { message: string } => {
   // console.log(error);
   return {
     message: error instanceof Error ? error.message : "an error occurred",
   };
 };
-
+//fetching product//
+//fetch Singel peoduct
 export const fetchSingleProduct = async (productId: string) => {
   const product = await db.product.findUnique({
     where: {
@@ -53,7 +55,7 @@ export const fetchSingleProduct = async (productId: string) => {
   });
   return product;
 };
-
+//fetch All product and pagination product 
 export const fetchallproductsdb = async ({
   Parmes = "",
   Page = 1,
@@ -83,6 +85,7 @@ export const fetchallproductsdb = async ({
 
   return { products, metadata };
 };
+//fetch futer prudeat filter 
 export const fatchFutrerProduct = async () => {
   const products = await db.product.findMany({
     where: {
@@ -91,6 +94,7 @@ export const fatchFutrerProduct = async () => {
   });
   return products;
 };
+//fetch product ID
 const fetchProduct = async (productId: string) => {
   const product = await db.product.findUnique({
     where: {
@@ -102,7 +106,7 @@ const fetchProduct = async (productId: string) => {
   }
   return product;
 };
-
+//include product reashen 
 const includeProductClause = {
   cartItems: {
     include: {
@@ -110,6 +114,7 @@ const includeProductClause = {
     },
   },
 };
+
 export const fetchOrCreateCart = async ({
   userID,
   errorOnFailure = false,
@@ -568,9 +573,10 @@ export const deleteReview = async (
   }
 };
 
-//Authntcation Users
+/// Authntcation Users or Cusetamer App ///
 
 //regestier user function auth
+
 export const RegesterUser = async (
   prevState: ActionResponRegester | null,
   formData: FormData
@@ -632,8 +638,9 @@ export const RegesterUser = async (
     }
   );
 };
-//log in user funcrion auth
 
+
+//log in user funcrion auth
 export const loginUser = async (
   prevState: ActionResponseere | null,
   formData: FormData
@@ -770,6 +777,7 @@ export const UpdeatUserDataAction = async (
     return renderError(error);
   }
 };
+
 ///Action Change Password
 export const ChangePasswordAction = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -810,7 +818,10 @@ export const ChangePasswordAction = async (
     message: "Updeat Password successfully!",
   };
 };
-///Dashbord products
+
+///Dashbord products ///
+
+///Delete Product Dashbord Admin
 export const deleteProductAction = async (prevState: { productId: string }) => {
   const { productId } = prevState;
   try {
@@ -841,7 +852,7 @@ export const fetchAdminProductDetails = async (productID: string) => {
   if (!product) redirect("dashbord");
   return product;
 };
-
+///Uodaet Product Dashbordd Admin
 export const updateProductAction = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   prevState: any,
@@ -933,6 +944,7 @@ export const updateProductAction = async (
     }
   }
 };
+//ceart product Dashbord Admin
 export const cerateProductAction = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   prevState: any,
@@ -981,7 +993,7 @@ export const cerateProductAction = async (
         message: "Updeat Password successfully!",
       };
     } catch (error) {
-      renderError(error);
+      return renderError(error);
     }
   }
 };

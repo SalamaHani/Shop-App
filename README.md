@@ -4,6 +4,7 @@
 Astorefront is a full-stack e-commerce solution built with modern technologies like React, Next.js, and Prisma. It enables online grocery businesses to launch a secure, customizable storefront with role-based dashboards and advanced payment integration.
 
 ---
+database port :5432
 
 ## ✅ Key Capabilities
 
