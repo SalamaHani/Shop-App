@@ -309,9 +309,9 @@ export interface UserData {
   name: string;
   image?: string;
   phone?: number;
-  city: string;
-  bio: string;
-  country: string;
+  city?: string;
+  bio?: string;
+  country?: string;
   streetAddress?: number;
   createdAt?: string;
 }

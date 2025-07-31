@@ -12,7 +12,7 @@ async function UserDatae() {
       <div className="p-5 mb-6 border  rounded-2xl  lg:p-6">
         <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
           <div className="flex flex-col items-center w-full gap-6 xl:flex-row">
-            {image && image != null ? (
+            {image && image != "Image upload failed" ? (
               <Image
                 src={image}
                 alt={"UserName"}
@@ -22,7 +22,6 @@ async function UserDatae() {
               />
             ) : (
               <div className="w-20 h-20 flex items-center justify-center  overflow-hidden  bg-gray-600 border-gray-200 rounded-full ">
-                
                 {setstring(name)}
               </div>
             )}
