@@ -35,6 +35,7 @@ import {
 } from "./Type";
 import { toast } from "sonner";
 import { deleteImage, uploadImage } from "./supabase";
+import { console } from "inspector";
 export const customFetch = axios.create({
   baseURL: productionUrl,
 });
@@ -55,7 +56,7 @@ export const fetchSingleProduct = async (productId: string) => {
   });
   return product;
 };
-//fetch All product and pagination product 
+//fetch All product and pagination product
 export const fetchallproductsdb = async ({
   Parmes = "",
   Page = 1,
@@ -85,7 +86,7 @@ export const fetchallproductsdb = async ({
 
   return { products, metadata };
 };
-//fetch futer prudeat filter 
+//fetch futer prudeat filter
 export const fatchFutrerProduct = async () => {
   const products = await db.product.findMany({
     where: {
@@ -106,7 +107,7 @@ const fetchProduct = async (productId: string) => {
   }
   return product;
 };
-//include product reashen 
+//include product reashen
 const includeProductClause = {
   cartItems: {
     include: {
@@ -471,12 +472,46 @@ export const fetchProductRating = async (productId: string) => {
     _count: {
       rating: true,
     },
+    _sum: {
+      rating: true,
+    },
     where: { productId },
   });
+  console.log(result);
   return {
     rating: result[0]?._avg.rating?.toFixed(1) ?? 0,
     count: result[0]?._count.rating ?? 0,
   };
+};
+///rating summary product
+export const ratingSummary = async (productId: string) => {
+  const resuet = await db.review.groupBy({
+    by: ["rating"],
+    _count: true,
+    orderBy: {
+      rating: "asc",
+    },
+    where: { productId },
+  });
+  const total = await db.review.count({
+    where: { productId },
+  });
+  console.log(total);
+  const ratingBreakdown = [
+    { stars: 5, count: 0, percentage: 0 },
+    { stars: 4, count: 0, percentage: 0 },
+    { stars: 3, count: 0, percentage: 0 },
+    { stars: 2, count: 0, percentage: 0 },
+    { stars: 1, count: 0, percentage: 0 },
+  ];
+  const resultStart = resuet.map((item) => ({
+    stars: item.rating,
+    count: item._count,
+    percentage: (item._count / total) * 100,
+  }));
+
+  console.log(resultStart);
+  return resultStart;
 };
 
 ///Product Reviews
@@ -491,6 +526,7 @@ export const fetchProductReviews = async (productId: string) => {
   });
   return reviews;
 };
+
 export const createReviewAction = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   prevState: any,
@@ -637,7 +673,6 @@ export const RegesterUser = async (
     }
   );
 };
-
 
 //log in user funcrion auth
 export const loginUser = async (
