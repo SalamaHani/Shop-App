@@ -24,7 +24,7 @@ export default function RootLayout({
       <body>
         <Providers>
           <Navbar />
-          <Continer className="py-20">{children}</Continer>
+          <Continer className="py-10">{children}</Continer>
         </Providers>
       </body>
     </html>

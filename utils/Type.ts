@@ -303,6 +303,11 @@ export interface metaData {
   total: number;
   totalPage: number;
 }
+export interface RatingBreakdown {
+  stars: number;
+  count: number;
+  percentage: number;
+}
 export interface UserData {
   id?: string;
   email: string;

@@ -13,3 +13,8 @@ export const links: NavLink[] = [
   { href: "/profile", label: "profile" },
   { href: "/dashbord", label: "dashbord" },
 ];
+export const DashbordLink: NavLink[] = [
+  { href: "dashbord/products", label: "products" },
+  { href: "dashbord/orders", label: "orders" },
+  { href: "dashbord/users", label: "users" },
+];

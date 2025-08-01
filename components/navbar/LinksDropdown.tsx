@@ -4,17 +4,21 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
+  DropdownMenuSubTrigger,
+  DropdownMenuSub,
+  DropdownMenuPortal,
+  DropdownMenuSubContent,
 } from "@/components/ui/dropdown-menu";
 import { LuAlignLeft } from "react-icons/lu";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { links } from "@/utils/links";
+import { DashbordLink, links } from "@/utils/links";
 import LoginBouttn from "./LoginBouttn";
 import LogoutBoutton from "./LogoutBoutton";
 import UserIcon from "./UserIcon";
 import { getUserFromSession } from "@/lib/auth";
 import { cookies } from "next/headers";
-async function LinksDropdown() {
+export async function LinksDropdown() {
   const user = await getUserFromSession(await cookies());
   const roles = user?.role;
   if (user == null)
@@ -52,11 +56,39 @@ async function LinksDropdown() {
         {links.map((link) => {
           if (link.label === "dashbord" && roles == "custamar") return null;
           return (
-            <DropdownMenuItem key={link.href}>
-              <Link href={link.href} className="capitalize w-full">
-                {link.label}
-              </Link>
-            </DropdownMenuItem>
+            <div key={link.href}>
+              {link.label === "dashbord" ? (
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger key={link.href}>
+                    <Link href={link.href} className="capitalize w-full">
+                      {link.label}
+                    </Link>
+                  </DropdownMenuSubTrigger>
+                  <DropdownMenuPortal>
+                    <DropdownMenuSubContent>
+                      {DashbordLink.map((item) => {
+                        return (
+                          <DropdownMenuItem key={item.href}>
+                            <Link
+                              href={item.href}
+                              className="capitalize w-full"
+                            >
+                              {item.label}
+                            </Link>
+                          </DropdownMenuItem>
+                        );
+                      })}
+                    </DropdownMenuSubContent>
+                  </DropdownMenuPortal>
+                </DropdownMenuSub>
+              ) : (
+                <DropdownMenuItem key={link.href}>
+                  <Link href={link.href} className="capitalize w-full">
+                    {link.label}
+                  </Link>
+                </DropdownMenuItem>
+              )}
+            </div>
           );
         })}
         <DropdownMenuSeparator />
@@ -66,4 +98,3 @@ async function LinksDropdown() {
     </DropdownMenu>
   );
 }
-export default LinksDropdown;

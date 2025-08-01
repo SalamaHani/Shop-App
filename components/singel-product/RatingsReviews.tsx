@@ -19,15 +19,9 @@ interface RatingsReviewsProps {
 }
 
 export default function RatingsReviews({
-  overallRating = 5,
-  totalRatings = 11,
-  ratingBreakdown = [
-    { stars: 5, count: 0, percentage: 100 },
-    { stars: 4, count: 0, percentage: 0 },
-    { stars: 3, count: 0, percentage: 0 },
-    { stars: 2, count: 0, percentage: 0 },
-    { stars: 1, count: 0, percentage: 0 },
-  ],
+  overallRating,
+  totalRatings,
+  ratingBreakdown,
   onClose,
 }: RatingsReviewsProps) {
   const [animatedPercentages, setAnimatedPercentages] = useState<number[]>(
@@ -122,7 +116,7 @@ export default function RatingsReviews({
               />
             </div>
             <span className="text-xs text-gray-500 w-8 text-right">
-              {rating.count > 0 ? rating.count : ""}
+              {rating.count > 0 ? rating.count : 0}
             </span>
           </div>
         ))}

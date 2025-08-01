@@ -53,7 +53,7 @@ function ModeEditP() {
             <div className="custom-scrollbar h-[450px] overflow-y-auto px-2">
               <div>
                 <h5 className="mb-5 text-lg font-medium  dark:text-white/90 lg:mb-6">
-                  Update imge
+                  Update Image Product
                 </h5>
                 <div
                   className={
@@ -63,8 +63,11 @@ function ModeEditP() {
                   }
                 >
                   <div className="dz-message m-0 ">
-                    <Label htmlFor="image">
-                      <div className="mb-[20px] flex items-center justify-center">
+                    <Label
+                      htmlFor="image"
+                      className="flex items-center justify-center"
+                    >
+                      <div className="mb-[20px] flex  items-center justify-center">
                         <div className=" flex h-[68px] w-[68px]  items-center justify-center rounded-full bg-gray-200 text-gray-700  dark:text-gray-400">
                           <svg
                             className="fill-current"

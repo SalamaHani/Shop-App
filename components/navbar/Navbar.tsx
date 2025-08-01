@@ -4,8 +4,8 @@ import Logo from "./Logo";
 import CartButton from "./CartButton";
 import { Suspense } from "react";
 // import NavSearch from "./NavSearch";
-import LinksDropdown from "./LinksDropdown";
 import DarkMode from "./DarkMode";
+import { LinksDropdown } from "./LinksDropdown";
 
 function Navbar() {
   return (

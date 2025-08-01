@@ -484,19 +484,20 @@ export const fetchProductRating = async (productId: string) => {
   };
 };
 ///rating summary product
+
 export const ratingSummary = async (productId: string) => {
-  const resuet = await db.review.groupBy({
+  const total = await db.review.count({
+    where: { productId },
+  });
+
+  const grouped = await db.review.groupBy({
     by: ["rating"],
+    where: { productId },
     _count: true,
     orderBy: {
       rating: "asc",
     },
-    where: { productId },
   });
-  const total = await db.review.count({
-    where: { productId },
-  });
-  console.log(total);
   const ratingBreakdown = [
     { stars: 5, count: 0, percentage: 0 },
     { stars: 4, count: 0, percentage: 0 },
@@ -504,14 +505,25 @@ export const ratingSummary = async (productId: string) => {
     { stars: 2, count: 0, percentage: 0 },
     { stars: 1, count: 0, percentage: 0 },
   ];
-  const resultStart = resuet.map((item) => ({
+  const result = grouped.map((item) => ({
     stars: item.rating,
     count: item._count,
-    percentage: (item._count / total) * 100,
+    percentage: total > 0 ? item._count / 2 : 0,
   }));
-
-  console.log(resultStart);
-  return resultStart;
+  // const nerar = [
+  //   { stars: 5, count: 5, percentage: 100},
+  //   { stars: 3, count: 1, percentage: 3}
+  // ]
+  ratingBreakdown.map((item) => {
+    result.map((itemin) => {
+      if (itemin.stars == item.stars) {
+        item.count = itemin.count;
+        item.percentage = itemin.percentage;
+      }
+    });
+  });
+  if (result.length == 0) return ratingBreakdown;
+  return ratingBreakdown;
 };
 
 ///Product Reviews
