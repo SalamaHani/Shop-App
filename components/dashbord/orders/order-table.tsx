@@ -158,7 +158,7 @@ export function OrdersTable({
   ];
   const genretorders = state?.orders == null ? orders : state?.orders;
   return (
-    <Card className="w-full">
+    <Card className="w-full ">
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">
@@ -176,11 +176,11 @@ export function OrdersTable({
       <CardContent>
         {/* Filters */}
         <div
-          className={`inline-flex items-center gap-1 p-1 bg-gray-50 dark:bg-gray-900 rounded-full border border-gray-200 dark:border-gray-800`}
+          className={`inline-flex items-center gap-1 p-1 mb-5    bg-card text-card-foreground   rounded-xl border  shadow-sm`}
         >
           {filterOptions.map((option) => {
             const Icon = option.icon;
-            const isSelected = state?.selectedStatus == option.value && state?.selectedStatus != null;
+            const isSelected = state?.selectedStatus == option.value;
             return (
               <Button
                 key={option.id}
@@ -190,18 +190,16 @@ export function OrdersTable({
                 className={`
               flex items-center gap-2 px-4 py-2 cursor-pointer rounded-full transition-all duration-200  text-sm font-medium
               ${
-                isSelected 
-                  ? "bg-black text-white dark:bg-gray-800 shadow-sm  dark:text-gray-100 border border-gray-200 dark:border-gray-700"
-                  : "hover:bg-gray-200 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400"
+                isSelected
+                  ? "bg-black dark:bg-gray-700 text-white shadow-sm  dark:text-gray-100 border border-gray-200 dark:border-gray-700"
+                  : "hover:bg-gray-200 g-card text-card-foreground   dark:text-gray-400"
               }
             `}
               >
                 {Icon && (
                   <Icon
                     className={`h-4 w-4 ${
-                      isSelected
-                        ? "text-gray-700 dark:text-gray-300"
-                        : "text-gray-500 dark:text-gray-500"
+                      isSelected ? "text-gray-800 " : "text-gray-500 "
                     }`}
                   />
                 )}
@@ -213,8 +211,8 @@ export function OrdersTable({
                   ml-1 text-xs px-1.5 py-0.5 min-w-[18px] h-4 flex items-center justify-center
                   ${
                     isSelected
-                      ? "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
-                      : "bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-400"
+                      ? " bg-card text-card-foreground  dark:text-gray-300"
+                      : "bg-card text-card-foreground dark:text-gray-400"
                   }
                 `}
                   >
@@ -429,7 +427,7 @@ export function OrdersTable({
             </TableBody>
           </Table>
         </div>
-        {orders.length === 0 && <Emptyorder />}
+        {genretorders.length === 0 && <Emptyorder />}
       </CardContent>
     </Card>
   );
