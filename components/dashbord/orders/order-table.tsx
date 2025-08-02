@@ -33,11 +33,8 @@ import {
   Mail,
   Phone,
   Home,
-  ShoppingBag,
   Hash,
   RefreshCw,
-  Plus,
-  Trash2,
   BarChart3,
   Settings,
   Receipt,
@@ -46,16 +43,14 @@ import {
   Target,
   Globe,
   Send,
-  CheckCircle2,
-  Ban,
 } from "lucide-react";
 import { Order } from "@prisma/client";
 import { formatDate } from "@/utils/format";
-import { ActionChangSutst } from "@/utils/Type";
+import Deletorder from "./Deletorder";
+import Emptyorder from "./Emptyorder";
+import OrderStatusDropdown from "./StatusOrders";
 import { startTransition, useActionState } from "react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { handleStatusChange } from "@/utils/actions";
-import { useRouter } from "next/navigation";
+import { filtarOrderStatusAction } from "@/utils/actions";
 
 const status = [
   {
@@ -92,8 +87,13 @@ const status = [
 const getStatusConfig = (statusName: string) => {
   return status.find((s) => s.states === statusName) || status[3];
 };
-
-export function OrdersTable({ orders }: { orders: Order[] }) {
+export function OrdersTable({
+  orders,
+  selectedStatus,
+}: {
+  orders: Order[];
+  selectedStatus: string;
+}) {
   const getInitials = (name: string) => {
     return name
       .split(" ")
@@ -101,30 +101,62 @@ export function OrdersTable({ orders }: { orders: Order[] }) {
       .join("")
       .toUpperCase();
   };
-  const initialState: ActionChangSutst = {
-    success: false,
-    message: "",
-  };
   // const [state, action] = useActionState(handleStatusChange, initialState);
   const [state, action] = useActionState(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async (prevState: any, formData: FormData) => {
-      const status = formData.get("status") as string;
-      const orderId = formData.get("orderId") as string;
-      return await handleStatusChange(orderId, status);
+      const option = formData.get("option") as string;
+      return await filtarOrderStatusAction(option);
     },
-    initialState
+    null
   );
-  const router = useRouter();
-  const handleClick = (status: string, orderId: string) => {
+  const onStatusChange = (option: string) => {
     const formData = new FormData();
-    formData.append("orderId", orderId);
-    formData.append("status", status);
+    formData.append("option", option);
     startTransition(() => {
       action(formData);
     });
-    router.refresh();
   };
+  console.log(state);
+  console.log(selectedStatus);
+  const filterOptions = [
+    {
+      id: "all",
+      label: "All",
+      value: "all",
+      icon: null,
+      count: state?.cont || 0,
+    },
+    {
+      id: "pending",
+      label: "pending",
+      value: "pending",
+      icon: Clock,
+      count: state?.cont || 0,
+    },
+    {
+      id: "processing",
+      label: "processing",
+      value: "processing",
+      icon: Package,
+      count: state?.cont || 0,
+    },
+    {
+      id: "shipped",
+      label: "shipped",
+      value: "shipped",
+      icon: Truck,
+      count: state?.cont || 0,
+    },
+    {
+      id: "delivered",
+      label: "delivered",
+      value: "delivered",
+      icon: CheckCircle,
+      count: state?.cont || 0,
+    },
+  ];
+  const genretorders = state?.orders == null ? orders : state?.orders;
   return (
     <Card className="w-full">
       <CardHeader>
@@ -136,128 +168,62 @@ export function OrdersTable({ orders }: { orders: Order[] }) {
           <div className="flex items-center gap-2">
             <Badge variant="secondary" className="ml-2 animate-pulse">
               <BarChart3 className="h-3 w-3 mr-1" />
-              {/* {filteredOrders.length} orders */}
+              {genretorders.length} orders
             </Badge>
           </div>
         </div>
       </CardHeader>
       <CardContent>
-        {state?.message && (
-          <Alert
-            className="mb-5"
-            variant={state?.success ? "default" : "destructive"}
-          >
-            {state?.success ? <CheckCircle2 className="h-4 w-4" /> : <Ban />}
-            <AlertDescription>{state.message}</AlertDescription>
-          </Alert>
-        )}
         {/* Filters */}
-        {/* <div className="flex items-center gap-4 mb-6">
-          <div className="relative flex-1 max-w-sm">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <Input
-              placeholder="Search orders, customers..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+        <div
+          className={`inline-flex items-center gap-1 p-1 bg-gray-50 dark:bg-gray-900 rounded-full border border-gray-200 dark:border-gray-800`}
+        >
+          {filterOptions.map((option) => {
+            const Icon = option.icon;
+            const isSelected = state?.selectedStatus == option.value && state?.selectedStatus != null;
+            return (
               <Button
-                variant="outline"
-                className="flex items-center gap-2 bg-transparent"
+                key={option.id}
+                variant="ghost"
+                size="sm"
+                onClick={() => onStatusChange(option.value)}
+                className={`
+              flex items-center gap-2 px-4 py-2 cursor-pointer rounded-full transition-all duration-200  text-sm font-medium
+              ${
+                isSelected 
+                  ? "bg-black text-white dark:bg-gray-800 shadow-sm  dark:text-gray-100 border border-gray-200 dark:border-gray-700"
+                  : "hover:bg-gray-200 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400"
+              }
+            `}
               >
-                <Filter className="h-4 w-4" />
-                Status: {statusFilter === "all" ? "All" : statusFilter}
-                <ChevronDown className="h-3 w-3" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuLabel className="flex items-center gap-2">
-                <Settings className="h-4 w-4" />
-                Filter by Status
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => setStatusFilter("all")}>
-                <Globe className="mr-2 h-4 w-4" />
-                All Orders
-              </DropdownMenuItem>
-              {status.map((s) => {
-                const StatusIcon = s.icon;
-                return (
-                  <DropdownMenuItem
-                    key={s.id}
-                    onClick={() => setStatusFilter(s.states)}
+                {Icon && (
+                  <Icon
+                    className={`h-4 w-4 ${
+                      isSelected
+                        ? "text-gray-700 dark:text-gray-300"
+                        : "text-gray-500 dark:text-gray-500"
+                    }`}
+                  />
+                )}
+                <span>{option.label}</span>
+                {option.count > 0 && (
+                  <Badge
+                    variant="secondary"
+                    className={`
+                  ml-1 text-xs px-1.5 py-0.5 min-w-[18px] h-4 flex items-center justify-center
+                  ${
+                    isSelected
+                      ? "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+                      : "bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-400"
+                  }
+                `}
                   >
-                    <StatusIcon className="mr-2 h-4 w-4" />
-                    {s.states.charAt(0).toUpperCase() + s.states.slice(1)}
-                  </DropdownMenuItem>
-                );
-              })}
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          <Button
-            variant="outline"
-            className="flex items-center gap-2 bg-transparent"
-          >
-            <Calendar className="h-4 w-4" />
-            Date Range
-          </Button>
-        </div> */}
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <Card className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                <ShoppingBag className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold">
-                  {/* {filteredOrders.length} */}
-                </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
-                  Total Orders
-                </div>
-              </div>
-            </div>
-          </Card>
-
-          <Card className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-green-100 dark:bg-green-900 rounded-lg">
-                <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
-              </div>
-              <div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
-                  Delivered
-                </div>
-              </div>
-            </div>
-          </Card>
-          <Card className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
-                <Clock className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
-              </div>
-              <div></div>
-            </div>
-          </Card>
-          <Card className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-100 dark:bg-purple-900 rounded-lg">
-                <DollarSign className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-              </div>
-              <div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
-                  Total Revenue
-                </div>
-              </div>
-            </div>
-          </Card>
+                    {option.count}
+                  </Badge>
+                )}
+              </Button>
+            );
+          })}
         </div>
         {/* Table */}
         <div className="rounded-md border">
@@ -321,7 +287,7 @@ export function OrdersTable({ orders }: { orders: Order[] }) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {orders.map((order, index) => {
+              {genretorders.map((order, index) => {
                 const statusConfig = getStatusConfig(order.status);
                 const StatusIcon = statusConfig.icon;
                 return (
@@ -438,22 +404,6 @@ export function OrdersTable({ orders }: { orders: Order[] }) {
                               Actions
                             </DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            {/* <DropdownMenuItem>
-                              <Eye className="mr-2 h-4 w-4" />
-                              View Details
-                            </DropdownMenuItem> */}
-                            {/* <DropdownMenuItem>
-                              <Edit className="mr-2 h-4 w-4" />
-                              Edit Order
-                            </DropdownMenuItem> */}
-                            {/* <DropdownMenuItem>
-                              <Copy className="mr-2 h-4 w-4" />
-                              Duplicate
-                            </DropdownMenuItem> */}
-                            {/* <DropdownMenuItem>
-                              <Printer className="mr-2 h-4 w-4" />
-                              Print Invoice
-                            </DropdownMenuItem> */}
                             <DropdownMenuItem>
                               <Send className="mr-2 h-4 w-4" />
                               Send Email
@@ -463,28 +413,12 @@ export function OrdersTable({ orders }: { orders: Order[] }) {
                               <RefreshCw className="h-4 w-4" />
                               Change Status
                             </DropdownMenuLabel>
-                            {status.map((s) => {
-                              const StatusIcon = s.icon;
-                              return (
-                                <div key={s.id}>
-                                  <DropdownMenuItem
-                                    disabled={order.status === s.states}
-                                    onClick={() =>
-                                      handleClick(s.states, order.id)
-                                    }
-                                  >
-                                    <StatusIcon className="mr-2 h-4 w-4" />
-                                    {s.states.charAt(0).toUpperCase() +
-                                      s.states.slice(1)}
-                                  </DropdownMenuItem>
-                                </div>
-                              );
-                            })}
+                            <OrderStatusDropdown
+                              orderId={order.id}
+                              sttus={order.status}
+                            />
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-red-600 dark:text-red-400">
-                              <Trash2 className="mr-2 h-4 w-4" />
-                              Delete Order
-                            </DropdownMenuItem>
+                            <Deletorder orderId={order.id} />
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </div>
@@ -495,28 +429,7 @@ export function OrdersTable({ orders }: { orders: Order[] }) {
             </TableBody>
           </Table>
         </div>
-
-        {orders.length === 0 && (
-          <div className="text-center py-8">
-            <div className="flex flex-col items-center gap-4">
-              <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-full">
-                <ShoppingCart className="h-12 w-12 text-gray-400" />
-              </div>
-              <div>
-                <p className="text-gray-600 dark:text-gray-400 font-medium">
-                  No orders found
-                </p>
-                <p className="text-sm text-gray-500 dark:text-gray-500">
-                  Try adjusting your search or filter criteria
-                </p>
-              </div>
-              <Button className="flex items-center gap-2">
-                <Plus className="h-4 w-4" />
-                Create New Order
-              </Button>
-            </div>
-          </div>
-        )}
+        {orders.length === 0 && <Emptyorder />}
       </CardContent>
     </Card>
   );

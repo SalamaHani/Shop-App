@@ -1,13 +1,12 @@
-import { OrdersTable } from "@/components/dashbord/orders/order-table";
-import { fetchAdminOrders } from "@/utils/actions";
+import { OrdersTable } from "@/components/dashbord/orders/Order-table";
+import { filtarOrderStatusAction } from "@/utils/actions";
 // import { EcommerceHeader } from "@/components/ecommerce-header"
 
 export default async function OrdersPage() {
-  const orders = await fetchAdminOrders();
+  const { orders, selectedStatus, cont } = await filtarOrderStatusAction();
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-black">
       {/* <EcommerceHeader /> */}
-
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
@@ -18,7 +17,11 @@ export default async function OrdersPage() {
             information
           </p>
         </div>
-        <OrdersTable orders={orders} />
+        <OrdersTable
+          orders={orders}
+          selectedStatus={selectedStatus}
+          cont={cont}
+        />
       </main>
     </div>
   );

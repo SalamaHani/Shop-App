@@ -1125,6 +1125,56 @@ export const handleStatusChange = async (
   }
 };
 //Deleat Oredr Acton
-export const deleteOrderAction = async (orderId: string) => {
-  try
+export const deleteOrderAction = async (
+  orderId: string
+): Promise<ActionChangSutst> => {
+  try {
+    await db.order.delete({
+      where: {
+        id: orderId,
+      },
+    });
+    return {
+      success: true,
+      message: "Successfuly Change Status Order",
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      message: `not change stuts order erorr`,
+    };
+  }
+};
+///Filtring Order Stutas Action
+export const filtarOrderStatusAction = async (
+  filterOptions?: string | "all"
+) => {
+  switch (filterOptions) {
+    case "pending":
+    case "processing":
+    case "shipped":
+    case "delivered": {
+      const orders = await db.order.findMany({
+        where: { status: filterOptions },
+      });
+      const cont = await db.order.count({ where: { status: filterOptions } });
+      const selectedStatus = filterOptions ?? "all";
+      return { orders, selectedStatus, cont };
+    }
+    case "all":
+    default:
+      const orders = await db.order.findMany({
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+      const cont = await db.order.count({
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+      const selectedStatus = filterOptions ?? "all";
+      return { orders, selectedStatus, cont };
+  }
 };
