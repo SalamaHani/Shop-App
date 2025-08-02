@@ -26,6 +26,7 @@ import { cookies } from "next/headers";
 import { Cart } from "@prisma/client";
 import {
   ActionChangePass,
+  ActionChangSutst,
   ActionResponRegester,
   ActionResponse,
   ActionResponseere,
@@ -83,7 +84,6 @@ export const fetchallproductsdb = async ({
       createdAt: "desc",
     },
   });
-
   return { products, metadata };
 };
 //fetch futer prudeat filter
@@ -311,9 +311,38 @@ export const fetchCartItemtest = async () => {
   }
   redirect("/checkout");
 };
+//Numbar order genereat
+async function generateOrderNumber() {
+  const prefix = "PRD-2025-";
+
+  // Get the last order number with this prefix
+  const lastOrder = await db.order.findFirst({
+    where: {
+      orderNumbar: {
+        startsWith: prefix,
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    select: {
+      orderNumbar: true,
+    },
+  });
+
+  let lastNumber = 199; // Start at 200
+  if (lastOrder?.orderNumbar) {
+    const parts = lastOrder.orderNumbar.split("-");
+    const numericPart = parseInt(parts[2]);
+    if (!isNaN(numericPart)) {
+      lastNumber = numericPart;
+    }
+  }
+  const newOrderNum = `${prefix}${lastNumber + 1}`;
+  return newOrderNum;
+}
 /// User Oreder products
 export const createOrderAction = async (UserData: UserFormData) => {
-  console.log(UserData);
   let orderId: null | string = null;
   let cartId: null | string = null;
   const user = await getUserFromSession(await cookies());
@@ -329,12 +358,18 @@ export const createOrderAction = async (UserData: UserFormData) => {
         isPaid: false,
       },
     });
+    const fullName = [UserData.FirstName, UserData.LastName]
+      .filter(Boolean)
+      .join(" ");
+    const ordernumar = await generateOrderNumber();
     const order = await db.order.create({
       data: {
+        orderNumbar: ordernumar,
         userId: user.id,
         products: cart.numItemsInCart,
         orderTotal: cart.orderTotal,
         tax: cart.tax,
+        name: fullName,
         shipping: cart.shipping,
         email: UserData.email,
         city: UserData.Town,
@@ -1042,4 +1077,54 @@ export const cerateProductAction = async (
       return renderError(error);
     }
   }
+};
+///Dashbord Order
+
+////fetsh Allorder
+export const fetchAdminOrders = async () => {
+  const orders = await db.order.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return orders;
+};
+//handleStatusChange Order
+export const fetshsingelorder = async (orderId: string) => {
+  const order = await db.order.findUnique({
+    where: {
+      id: orderId,
+    },
+  });
+  return order;
+};
+export const handleStatusChange = async (
+  orderId: string,
+  newStatus: string
+): Promise<ActionChangSutst> => {
+  try {
+    await db.order.update({
+      where: {
+        id: orderId,
+      },
+      data: {
+        status: newStatus,
+      },
+    });
+    return {
+      success: true,
+      Data: { states: newStatus },
+      message: "Successfuly Change Status Order",
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      message: `not change stuts order erorr`,
+    };
+  }
+};
+//Deleat Oredr Acton
+export const deleteOrderAction = async (orderId: string) => {
+  try
 };

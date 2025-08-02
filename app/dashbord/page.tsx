@@ -15,12 +15,12 @@ export default async function DashboardPage() {
   //   { id: 4, states: "pending", color: "bg-warning/20 text-warning/100" },
   // ];
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-black flex">
+    <div className="min-h-screen  k flex">
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
         {/* Dashboard Content */}
-        <main className="flex-1 p-6 space-y-5 bg-gray-50 dark:bg-black">
+        <main className="flex-1 p-6 space-y-5">
           {/* Welcome Section */}
           <div className="bg-gradient-to-r from-black to-gray-700 rounded-2xl p-6 text-white">
             <div className="flex items-center justify-between">

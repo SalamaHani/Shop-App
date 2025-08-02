@@ -353,6 +353,23 @@ export interface ActionResponseere {
     [K in keyof LoginData]?: string[];
   };
 }
+export interface Stuts {
+  id?: number;
+  states: string;
+  color?: string;
+  icon?: string;
+  description?: string;
+}
+export interface ActionChangSutst {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  funactuon?: any;
+  Data?: Stuts;
+  success: boolean;
+  message: string;
+  errors?: {
+    [K in keyof Stuts]?: string[];
+  };
+}
 export interface ActionResponsUpdeat {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   funactuon?: any;

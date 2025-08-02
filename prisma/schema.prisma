@@ -91,6 +91,8 @@ model CartItem {
 model Order {
   id        String   @id @default(uuid())
   userId String
+  orderNumbar String
+  name String
   products BigInt  @default(0)
   orderTotal BigInt @default(0)
   tax BigInt @default(0)
