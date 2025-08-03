@@ -43,6 +43,7 @@ import {
   Target,
   Globe,
   Send,
+  Eye,
 } from "lucide-react";
 import { Order } from "@prisma/client";
 import { formatDate } from "@/utils/format";
@@ -90,9 +91,11 @@ const getStatusConfig = (statusName: string) => {
 export function OrdersTable({
   orders,
   selectedStatus,
+  cont,
 }: {
   orders: Order[];
   selectedStatus: string;
+  cont: number;
 }) {
   const getInitials = (name: string) => {
     return name
@@ -125,40 +128,40 @@ export function OrdersTable({
       label: "All",
       value: "all",
       icon: null,
-      count: state?.cont || 0,
+      count: cont || 0,
     },
     {
       id: "pending",
       label: "pending",
       value: "pending",
       icon: Clock,
-      count: state?.cont || 0,
+      count: state?.selectedStatus == "pending" ? state.cont : 0,
     },
     {
       id: "processing",
       label: "processing",
       value: "processing",
       icon: Package,
-      count: state?.cont || 0,
+      count: state?.selectedStatus == "processing" ? state.cont : 0,
     },
     {
       id: "shipped",
       label: "shipped",
       value: "shipped",
       icon: Truck,
-      count: state?.cont || 0,
+      count: state?.selectedStatus == "shipped" ? state.cont : 0,
     },
     {
       id: "delivered",
       label: "delivered",
       value: "delivered",
       icon: CheckCircle,
-      count: state?.cont || 0,
+      count: state?.selectedStatus == "delivered" ? state.cont : 0,
     },
   ];
   const genretorders = state?.orders == null ? orders : state?.orders;
   return (
-    <Card className="w-full ">
+    <Card className="w-full">
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">
@@ -291,7 +294,7 @@ export function OrdersTable({
                 return (
                   <TableRow
                     key={order.id}
-                    className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors animate-in fade-in duration-300"
+                    className=" transition-colors animate-in fade-in duration-300"
                     style={{ animationDelay: `${index * 100}ms` }}
                   >
                     <TableCell className="font-medium">
@@ -339,7 +342,6 @@ export function OrdersTable({
                         </div>
                       </div>
                     </TableCell>
-
                     <TableCell>
                       <Badge
                         className={`${statusConfig.color} flex items-center gap-1 w-fit`}
@@ -386,7 +388,15 @@ export function OrdersTable({
                     </TableCell>
 
                     <TableCell className="text-right">
-                      <div className="flex items-center justify-center">
+                      <div className="flex items-center justify-center gap-1">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-8 w-8 p-0 hover:scale-110 transition-transform"
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                        <Deletorder orderId={order.id} />
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button
@@ -415,8 +425,6 @@ export function OrdersTable({
                               orderId={order.id}
                               sttus={order.status}
                             />
-                            <DropdownMenuSeparator />
-                            <Deletorder orderId={order.id} />
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </div>

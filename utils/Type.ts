@@ -260,6 +260,28 @@ export type CartItem = {
   amount: number;
   company: string;
 };
+export type Products = {
+  name: string;
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  description: string;
+  image: string;
+  company: string;
+  featured: boolean;
+  price: number;
+  userId: string;
+  reviews: {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    userId: string;
+    productId: string;
+    rating: number;
+    comment: string;
+    authorName: string;
+  }[];
+};
 export type CartState = {
   cartItems: CartItem[];
   numItemsInCart: number;
@@ -324,7 +346,7 @@ export interface ChangPass {
   password: string;
   password_confirmation: string;
 }
-export interface product {
+export interface producte {
   name: string;
   company: string;
   description: string;
@@ -404,10 +426,10 @@ export interface ActionChangePass {
 export interface ActionUpdeatproduct {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   funactuon?: any;
-  Data?: product;
+  Data?: producte;
   success?: boolean;
   message?: string;
   errors?: {
-    [K in keyof product]?: string[];
+    [K in keyof producte]?: string[];
   };
 }

@@ -115,6 +115,13 @@ const includeProductClause = {
     },
   },
 };
+// const includproductreviw = {
+//   review: {
+//     include: {
+//       product: true,
+//     },
+//   },
+// };
 export const fetchOrCreateCart = async ({
   userID,
   errorOnFailure = false,
@@ -512,7 +519,6 @@ export const fetchProductRating = async (productId: string) => {
     },
     where: { productId },
   });
-  console.log(result);
   return {
     rating: result[0]?._avg.rating?.toFixed(1) ?? 0,
     count: result[0]?._count.rating ?? 0,
@@ -545,10 +551,6 @@ export const ratingSummary = async (productId: string) => {
     count: item._count,
     percentage: total > 0 ? item._count / 2 : 0,
   }));
-  // const nerar = [
-  //   { stars: 5, count: 5, percentage: 100},
-  //   { stars: 3, count: 1, percentage: 3}
-  // ]
   ratingBreakdown.map((item) => {
     result.map((itemin) => {
       if (itemin.stars == item.stars) {
@@ -594,7 +596,7 @@ export const createReviewAction = async (
     return { message: "review submitted successfully" };
   } catch (error) {
     console.log(error);
-    return renderError(error);
+    return { message: "review submitted Error!!" };
   }
 };
 export async function getProductById(id: string) {
@@ -923,6 +925,9 @@ export const fetchAdminProducts = async () => {
     orderBy: {
       createdAt: "desc",
     },
+    include: {
+      reviews: true,
+    },
   });
   return products;
 };
@@ -1125,25 +1130,20 @@ export const handleStatusChange = async (
   }
 };
 //Deleat Oredr Acton
-export const deleteOrderAction = async (
-  orderId: string
-): Promise<ActionChangSutst> => {
+
+export const deleteOrdertAction = async (prevState: { orderId: string }) => {
+  const { orderId } = prevState;
   try {
     await db.order.delete({
       where: {
         id: orderId,
       },
     });
-    return {
-      success: true,
-      message: "Successfuly Change Status Order",
-    };
+    revalidatePath("/admin/products");
+
+    return { message: " removed order" };
   } catch (error) {
-    console.log(error);
-    return {
-      success: false,
-      message: `not change stuts order erorr`,
-    };
+    return renderError(error);
   }
 };
 ///Filtring Order Stutas Action

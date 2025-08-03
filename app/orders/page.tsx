@@ -10,15 +10,41 @@ import {
 } from "@/components/ui/table";
 import { fetchOrderUser } from "@/utils/actions";
 import { formatCurrency, formatDate } from "@/utils/format";
+import { Calendar, CheckCircle, Clock, Package, Truck } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import React from "react";
-const staus = [
-  { id: 1, states: "delivered", color: "bg-success/20 text-success/100" },
-  { id: 2, states: "shipped", color: "bg-error/20 text-error/100" },
-  { id: 3, states: "processing", color: "bg-primary/20 text-primary/100" },
+const getStatusConfig = (statusName: string) => {
+  return statuse.find((s) => s.states === statusName) || statuse[3];
+};
+const statuse = [
+  {
+    id: 1,
+    states: "delivered",
+    color: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+    icon: CheckCircle,
+    description: "Order successfully delivered",
+  },
+  {
+    id: 2,
+    states: "shipped",
+    color: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
+    icon: Truck,
+    description: "Order is in transit",
+  },
+  {
+    id: 3,
+    states: "processing",
+    color:
+      "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
+    icon: Package,
+    description: "Order is being prepared",
+  },
   {
     id: 4,
     states: "pending",
-    color: "bg-yellow-200 text-yellow-600",
+    color: "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300",
+    icon: Clock,
+    description: "Order awaiting confirmation",
   },
 ];
 async function page() {
@@ -50,28 +76,39 @@ async function page() {
               city,
               status,
             } = order;
+            ///stuts acont condeing
+
+            const statusConfig = getStatusConfig(status);
+            const StatusIcon = statusConfig.icon;
             return (
               <TableRow key={order.id}>
-                <TableCell>{products}</TableCell>
-                <TableCell>{formatCurrency(orderTotal)}</TableCell>
-                <TableCell>{formatCurrency(tax)}</TableCell>
-                <TableCell>{formatCurrency(shipping)}</TableCell>
-                <TableCell>{city}</TableCell>
-                <TableCell>
-                  {staus.map((item) => {
-                    if (item.states == status) {
-                      return (
-                        <span
-                          key={item.id}
-                          className={`${item.color} text-xs dark:bg-success/500/15 rounded-full px-2 py-0.5 font-medium`}
-                        >
-                          {status}
-                        </span>
-                      );
-                    }
-                  })}
+                <TableCell className="font-medium">{products}</TableCell>
+                <TableCell className="font-medium">
+                  {formatCurrency(Number(orderTotal))}
                 </TableCell>
-                <TableCell>{formatDate(createdAt)}</TableCell>
+                <TableCell className="font-medium">
+                  {formatCurrency(Number(tax))}
+                </TableCell>
+                <TableCell className="font-medium">
+                  {formatCurrency(shipping)}
+                </TableCell>
+                <TableCell className="font-medium">{city}</TableCell>
+                <TableCell>
+                  <Badge
+                    className={`${statusConfig.color} flex items-center gap-1 w-fit`}
+                  >
+                    <StatusIcon className="h-3 w-3" />
+                    {status.charAt(0).toUpperCase() + status.slice(1)}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-1">
+                    <Calendar className="h-3 w-3 text-gray-400" />
+                    <div>
+                      <div className="font-medium">{formatDate(createdAt)}</div>
+                    </div>
+                  </div>
+                </TableCell>
               </TableRow>
             );
           })}

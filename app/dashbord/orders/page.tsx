@@ -5,7 +5,7 @@ import { filtarOrderStatusAction } from "@/utils/actions";
 export default async function OrdersPage() {
   const { orders, selectedStatus, cont } = await filtarOrderStatusAction();
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-black">
+    <div className="min-h-screen  ">
       {/* <EcommerceHeader /> */}
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">

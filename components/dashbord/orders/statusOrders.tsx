@@ -2,12 +2,11 @@
 
 import {
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 
 // import { Input } from "@/components/ui/input";
-import { Truck, Package, Clock, CheckCircle, RefreshCw } from "lucide-react";
+import { Truck, Package, Clock, CheckCircle } from "lucide-react";
 import { ActionChangSutst } from "@/utils/Type";
 import { startTransition, useActionState } from "react";
 import { handleStatusChange } from "@/utils/actions";
@@ -79,10 +78,6 @@ export default function OrderStatusDropdown({
   return (
     <>
       <DropdownMenuSeparator />
-      <DropdownMenuLabel className="flex items-center gap-2">
-        <RefreshCw className="h-4 w-4" />
-        Change Status
-      </DropdownMenuLabel>
       {status.map((s) => {
         const StatusIcon = s.icon;
         return (
