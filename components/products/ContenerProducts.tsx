@@ -62,7 +62,7 @@ async function ContenerProducts({
             <ProductsList products={products} />
           )}
         </div>
-        <Compelxpagination Page={Page} metadata={metadata} />
+        <Compelxpagination pathe={"products"} Page={Page} metadata={metadata} />
       </section>
     </>
   );

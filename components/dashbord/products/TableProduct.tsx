@@ -30,7 +30,7 @@ import { deleteProductAction } from "@/utils/actions";
 
 import { Badge } from "@/components/ui/badge";
 import { Products } from "@/utils/Type";
-function TableProduct({ items }: { items: Products[] }) {
+function TableProduct({ products }: { products: Products[] }) {
   return (
     <Card className="w-full">
       <CardHeader>
@@ -40,7 +40,7 @@ function TableProduct({ items }: { items: Products[] }) {
             Products Management
             <Badge variant="secondary" className="ml-2 animate-pulse">
               <BarChart3 className="h-3 w-3 mr-1" />
-              {items.length} products
+              {products.length} products
             </Badge>
           </CardTitle>
           <div className="flex items-center gap-2">
@@ -53,7 +53,6 @@ function TableProduct({ items }: { items: Products[] }) {
                 Create Product
               </Link>
             </Button>
-            
           </div>
         </div>
       </CardHeader>
@@ -101,7 +100,7 @@ function TableProduct({ items }: { items: Products[] }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {items.map((product, index) => {
+            {products.map((product, index) => {
               const { id: productId, name } = product;
               return (
                 <TableRow
@@ -174,7 +173,7 @@ function TableProduct({ items }: { items: Products[] }) {
             })}
           </TableBody>
         </Table>
-        {items.length === 0 && <EmptyProduct />}
+        {products.length === 0 && <EmptyProduct />}
       </CardContent>
     </Card>
   );

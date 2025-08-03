@@ -1,9 +1,19 @@
 import { OrdersTable } from "@/components/dashbord/orders/Order-table";
-import { filtarOrderStatusAction } from "@/utils/actions";
+import Compelxpagination from "@/components/global/Compelxpagination";
+import { fetchAdminOrders } from "@/utils/actions";
 // import { EcommerceHeader } from "@/components/ecommerce-header"
-
-export default async function OrdersPage() {
-  const { orders, selectedStatus, cont } = await filtarOrderStatusAction();
+type Props = {
+  searchParams?: { Page?: string; status?: string };
+};
+export default async function OrdersPage({ searchParams }: Props) {
+  const Page = parseInt(searchParams?.Page || "1");
+  const status = searchParams?.status || "all";
+  // const { orders, selectedStatus, cont } = await filtarOrderStatusAction();
+  const { orders, metadata, statuse } = await fetchAdminOrders({
+    Page,
+    status,
+  });
+  console.log(statuse);
   return (
     <div className="min-h-screen  ">
       {/* <EcommerceHeader /> */}
@@ -17,10 +27,11 @@ export default async function OrdersPage() {
             information
           </p>
         </div>
-        <OrdersTable
-          orders={orders}
-          selectedStatus={selectedStatus}
-          cont={cont}
+        <OrdersTable orders={orders} />
+        <Compelxpagination
+          pathe={"dashbord/products"}
+          Page={Page}
+          metadata={metadata}
         />
       </main>
     </div>

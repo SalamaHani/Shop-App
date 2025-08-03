@@ -920,8 +920,17 @@ export const deleteProductAction = async (prevState: { productId: string }) => {
     return renderError(error);
   }
 };
-export const fetchAdminProducts = async () => {
+export const fetchAdminProducts = async ({
+  Page = 1,
+  limit = 10,
+}: {
+  Page?: number;
+  limit?: number;
+}) => {
+  const gnoer = (Page - 1) * limit;
   const products = await db.product.findMany({
+    take: limit,
+    skip: gnoer,
     orderBy: {
       createdAt: "desc",
     },
@@ -929,7 +938,9 @@ export const fetchAdminProducts = async () => {
       reviews: true,
     },
   });
-  return products;
+  const total = await db.product.count({});
+  const metadata = { totalPage: Math.ceil(total / limit), total };
+  return { products, metadata };
 };
 export const fetchAdminProductDetails = async (productID: string) => {
   const product = await db.product.findUnique({
@@ -1086,14 +1097,46 @@ export const cerateProductAction = async (
 ///Dashbord Order
 
 ////fetsh Allorder
-export const fetchAdminOrders = async () => {
+export const fetchAdminOrders = async ({
+  status,
+  Page = 1,
+  limit = 10,
+}: {
+  status?: string;
+  Page?: number;
+  limit?: number;
+}) => {
+  const gnoer = (Page - 1) * limit;
   const orders = await db.order.findMany({
+    where:
+      status != "all" //shping => true*** all=>false
+        ? {
+            status: status,
+          }
+        : {},
     orderBy: {
       createdAt: "desc",
     },
+    take: limit,
+    skip: gnoer,
   });
-  return orders;
+  const total = await db.order.count({
+    where:
+      status != "all" //shping => true*** all=>false
+        ? {
+            status: status,
+          }
+        : {},
+  });
+  const metadata = { totalPage: Math.ceil(total / limit), total };
+  const statuse = status;
+  return {
+    orders,
+    metadata,
+    statuse,
+  };
 };
+
 //handleStatusChange Order
 export const fetshsingelorder = async (orderId: string) => {
   const order = await db.order.findUnique({

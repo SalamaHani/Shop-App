@@ -1,4 +1,3 @@
-"use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -45,13 +44,15 @@ import {
   Send,
   Eye,
 } from "lucide-react";
-import { Order } from "@prisma/client";
+
 import { formatDate } from "@/utils/format";
 import Deletorder from "./Deletorder";
 import Emptyorder from "./Emptyorder";
 import OrderStatusDropdown from "./StatusOrders";
-import { startTransition, useActionState } from "react";
-import { filtarOrderStatusAction } from "@/utils/actions";
+
+
+import { CompactOrderFilter } from "./FilteringOrder";
+import { Order } from "@prisma/client";
 
 const status = [
   {
@@ -88,14 +89,10 @@ const status = [
 const getStatusConfig = (statusName: string) => {
   return status.find((s) => s.states === statusName) || status[3];
 };
-export function OrdersTable({
+export async function OrdersTable({
   orders,
-  selectedStatus,
-  cont,
 }: {
-  orders: Order[];
-  selectedStatus: string;
-  cont: number;
+  orders: Order [];
 }) {
   const getInitials = (name: string) => {
     return name
@@ -104,62 +101,6 @@ export function OrdersTable({
       .join("")
       .toUpperCase();
   };
-  // const [state, action] = useActionState(handleStatusChange, initialState);
-  const [state, action] = useActionState(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async (prevState: any, formData: FormData) => {
-      const option = formData.get("option") as string;
-      return await filtarOrderStatusAction(option);
-    },
-    null
-  );
-  const onStatusChange = (option: string) => {
-    const formData = new FormData();
-    formData.append("option", option);
-    startTransition(() => {
-      action(formData);
-    });
-  };
-  console.log(state);
-  console.log(selectedStatus);
-  const filterOptions = [
-    {
-      id: "all",
-      label: "All",
-      value: "all",
-      icon: null,
-      count: cont || 0,
-    },
-    {
-      id: "pending",
-      label: "pending",
-      value: "pending",
-      icon: Clock,
-      count: state?.selectedStatus == "pending" ? state.cont : 0,
-    },
-    {
-      id: "processing",
-      label: "processing",
-      value: "processing",
-      icon: Package,
-      count: state?.selectedStatus == "processing" ? state.cont : 0,
-    },
-    {
-      id: "shipped",
-      label: "shipped",
-      value: "shipped",
-      icon: Truck,
-      count: state?.selectedStatus == "shipped" ? state.cont : 0,
-    },
-    {
-      id: "delivered",
-      label: "delivered",
-      value: "delivered",
-      icon: CheckCircle,
-      count: state?.selectedStatus == "delivered" ? state.cont : 0,
-    },
-  ];
-  const genretorders = state?.orders == null ? orders : state?.orders;
   return (
     <Card className="w-full">
       <CardHeader>
@@ -171,61 +112,14 @@ export function OrdersTable({
           <div className="flex items-center gap-2">
             <Badge variant="secondary" className="ml-2 animate-pulse">
               <BarChart3 className="h-3 w-3 mr-1" />
-              {genretorders.length} orders
+              {orders.length} orders
             </Badge>
           </div>
         </div>
       </CardHeader>
       <CardContent>
         {/* Filters */}
-        <div
-          className={`inline-flex items-center gap-1 p-1 mb-5    bg-card text-card-foreground   rounded-xl border  shadow-sm`}
-        >
-          {filterOptions.map((option) => {
-            const Icon = option.icon;
-            const isSelected = state?.selectedStatus == option.value;
-            return (
-              <Button
-                key={option.id}
-                variant="ghost"
-                size="sm"
-                onClick={() => onStatusChange(option.value)}
-                className={`
-              flex items-center gap-2 px-4 py-2 cursor-pointer rounded-full transition-all duration-200  text-sm font-medium
-              ${
-                isSelected
-                  ? "bg-black dark:bg-gray-700 text-white shadow-sm  dark:text-gray-100 border border-gray-200 dark:border-gray-700"
-                  : "hover:bg-gray-200 g-card text-card-foreground   dark:text-gray-400"
-              }
-            `}
-              >
-                {Icon && (
-                  <Icon
-                    className={`h-4 w-4 ${
-                      isSelected ? "text-gray-800 " : "text-gray-500 "
-                    }`}
-                  />
-                )}
-                <span>{option.label}</span>
-                {option.count > 0 && (
-                  <Badge
-                    variant="secondary"
-                    className={`
-                  ml-1 text-xs px-1.5 py-0.5 min-w-[18px] h-4 flex items-center justify-center
-                  ${
-                    isSelected
-                      ? " bg-card text-card-foreground  dark:text-gray-300"
-                      : "bg-card text-card-foreground dark:text-gray-400"
-                  }
-                `}
-                  >
-                    {option.count}
-                  </Badge>
-                )}
-              </Button>
-            );
-          })}
-        </div>
+        <CompactOrderFilter orders={orders} />
         {/* Table */}
         <div className="rounded-md border">
           <Table>
@@ -288,7 +182,7 @@ export function OrdersTable({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {genretorders.map((order, index) => {
+              {orders.map((order, index) => {
                 const statusConfig = getStatusConfig(order.status);
                 const StatusIcon = statusConfig.icon;
                 return (
@@ -386,7 +280,6 @@ export function OrdersTable({
                         </div>
                       </div>
                     </TableCell>
-
                     <TableCell className="text-right">
                       <div className="flex items-center justify-center gap-1">
                         <Button
@@ -435,7 +328,7 @@ export function OrdersTable({
             </TableBody>
           </Table>
         </div>
-        {genretorders.length === 0 && <Emptyorder />}
+        {orders.length === 0 && <Emptyorder />}
       </CardContent>
     </Card>
   );

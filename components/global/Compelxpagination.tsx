@@ -4,16 +4,19 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 import { metaData } from "@/utils/Type";
 export default function Compelxpagination({
+  pathe,
   Page,
   metadata,
 }: {
+  pathe: string;
   Page: number;
   metadata: metaData;
 }) {
+  console.log(Page);
   const searchParams = useSearchParams();
   const { replace } = useRouter();
   const { total, totalPage } = metadata;
-  const [Pag, setPage] = useState(searchParams.get("Page")?.toString() || "");
+  const [page, setPage] = useState(searchParams.get("Page")?.toString() || "");
   const handleSearch = useDebouncedCallback((value: string) => {
     const params = new URLSearchParams(searchParams);
     if (value) {
@@ -21,16 +24,14 @@ export default function Compelxpagination({
     } else {
       params.delete("Page");
     }
-    replace(`/products?${params.toString()}`);
+    replace(`/${pathe}?${params.toString()}`);
   }, 0);
-
   useEffect(() => {
     if (!searchParams.get("Page")) {
       setPage("");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams.get("page")]);
-  console.log(Pag);
+  }, [searchParams.get("Page")]);
   const addPageButton = ({
     pageNumber,
     activeClass,
