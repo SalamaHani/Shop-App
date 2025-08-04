@@ -1,9 +1,9 @@
 "use client";
-
-import { Star, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useEffect, useState } from "react";
+// import { Star } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { FaStar } from "react-icons/fa";
 
 interface RatingBreakdown {
   stars: number;
@@ -15,14 +15,15 @@ interface RatingsReviewsProps {
   overallRating: number;
   totalRatings: number;
   ratingBreakdown: RatingBreakdown[];
-  onClose?: () => void;
+  onClose?: boolean;
+  className?: string;
 }
 
 export default function RatingsReviews({
   overallRating,
   totalRatings,
   ratingBreakdown,
-  onClose,
+  className,
 }: RatingsReviewsProps) {
   const [animatedPercentages, setAnimatedPercentages] = useState<number[]>(
     ratingBreakdown.map(() => 0)
@@ -70,32 +71,22 @@ export default function RatingsReviews({
   }, [overallRating, ratingBreakdown]);
 
   return (
-    <div className="border rounded-lg  shadow-sm  p-3">
+    <div className={cn("border  rounded-lg shadow-sm  p-3", className)}>
       {/* Header */}
-      <div className="flex items-center justify-between mb-2">
-        {onClose && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onClose}
-            className="h-2 w-2 p-0"
-          >
-            <X className="h-1 w-1" />
-            <span className="sr-only">Close</span>
-          </Button>
-        )}
-      </div>
+      <div className="flex items-center justify-between mb-2"></div>
       {/* Overall Rating */}
-      <div className="flex items-center gap-2 mb-3">
+      <div className="flex-col items-center gap-1 mb-3">
         <div className="flex items-center gap-1">
           <span className="text-4xl font-bold transition-all duration-500">
             {animatedRating.toFixed(1)}
           </span>
-          <Star className="h-3 w-3   transition-transform duration-500 hover:scale-110" />
+          <FaStar className="h-4 w-4   transition-transform duration-500 hover:scale-110" />
         </div>
-        <span className="text-sm ">
-          {totalRatings} rating{totalRatings !== 1 ? "s" : ""}
-        </span>
+        <div className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1">
+          <span className=" flex underline  mt-1 items-center gap-1">
+            {totalRatings} rating{totalRatings > 1 ? "s" : ""}
+          </span>
+        </div>
       </div>
       {/* Rating Breakdown */}
       <div className="space-y-1">

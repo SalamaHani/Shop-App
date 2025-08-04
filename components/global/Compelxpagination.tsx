@@ -26,6 +26,7 @@ export default function Compelxpagination({
     }
     replace(`/${pathe}?${params.toString()}`);
   }, 0);
+  console.log(page);
   useEffect(() => {
     if (!searchParams.get("Page")) {
       setPage("");

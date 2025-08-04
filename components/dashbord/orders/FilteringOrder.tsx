@@ -5,22 +5,36 @@ import { Badge } from "@/components/ui/badge";
 import { Clock, Package, Truck, CheckCircle } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Order } from "@prisma/client";
-
+// import { useDebouncedCallback } from "use-debounce";
 export function CompactOrderFilter({ orders }: { orders: Order[] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const currentStatus = searchParams.get("status") || "all";
-  const handleClick = (status: string) => {
+  const currentStatus = searchParams.get("Status") || "all";
+  const handleClick = (Status: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    if (status === "all") {
-      params.delete("status");
+    if (Status === "all") {
+      params.delete("Status");
     } else {
-      params.set("status", status);
+      params.set("Status", Status);
     }
     params.set("page", "1"); // reset to first page
     router.push(`?${params.toString()}`);
   };
 
+  // const searchParams = useSearchParams();
+  // const currentStatus = searchParams.get("status") || "all";
+  // const router = useRouter();
+  // const handleClick = useDebouncedCallback((value: string) => {
+  //   const params = new URLSearchParams(searchParams);
+  //   console.log(params.get("status"));
+  //   if (value) {
+  //     params.set("status", value);
+  //   } else {
+  //     params.delete("status");
+  //   }
+  //   params.set("page", "1"); // reset to first page
+  //   router.push(`?${params.toString()}`);
+  // }, 500);
   const filterOptions = [
     {
       id: "all",

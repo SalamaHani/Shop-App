@@ -565,6 +565,7 @@ export const ratingSummary = async (productId: string) => {
 
 ///Product Reviews
 export const fetchProductReviews = async (productId: string) => {
+  const limit = 5;
   const reviews = await db.review.findMany({
     where: {
       productId,
@@ -572,6 +573,35 @@ export const fetchProductReviews = async (productId: string) => {
     orderBy: {
       createdAt: "desc",
     },
+    take: limit,
+  });
+  const totalReviews = await db.review.count({
+    where: {
+      productId,
+    },
+  });
+  return { reviews, totalReviews };
+};
+///scroll read more loding fetch Reivews
+export const fetchReivewsReadMore = async ({
+  productId,
+  Page = 1,
+  limit = 5,
+}: {
+  productId: string;
+  Page?: number;
+  limit?: number;
+}) => {
+  const skip = (Page - 1) * limit;
+  const reviews = await db.review.findMany({
+    where: {
+      productId,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: limit,
+    skip,
   });
   return reviews;
 };
@@ -1098,20 +1128,20 @@ export const cerateProductAction = async (
 
 ////fetsh Allorder
 export const fetchAdminOrders = async ({
-  status,
+  Status,
   Page = 1,
   limit = 10,
 }: {
-  status?: string;
+  Status?: string;
   Page?: number;
   limit?: number;
 }) => {
   const gnoer = (Page - 1) * limit;
   const orders = await db.order.findMany({
     where:
-      status != "all" //shping => true*** all=>false
+      Status != "all" //shping => true*** all=>false
         ? {
-            status: status,
+            status: Status,
           }
         : {},
     orderBy: {
@@ -1122,14 +1152,14 @@ export const fetchAdminOrders = async ({
   });
   const total = await db.order.count({
     where:
-      status != "all" //shping => true*** all=>false
+      Status != "all" //shping => true*** all=>false
         ? {
-            status: status,
+            status: Status,
           }
         : {},
   });
   const metadata = { totalPage: Math.ceil(total / limit), total };
-  const statuse = status;
+  const statuse = Status;
   return {
     orders,
     metadata,

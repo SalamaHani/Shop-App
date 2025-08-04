@@ -2,11 +2,12 @@ import TableProduct from "@/components/dashbord/products/TableProduct";
 import Compelxpagination from "@/components/global/Compelxpagination";
 import { fetchAdminProducts } from "@/utils/actions";
 type Props = {
-  searchParams?: { Page?: string; status?: string };
+  searchParams?: { Page?: string };
 };
 async function AdminProductsPage({ searchParams }: Props) {
   const Page = parseInt(searchParams?.Page || "1");
   const { products, metadata } = await fetchAdminProducts({ Page });
+  console.log(Page);
   return (
     <div className="min-h-screen  ">
       {/* <EcommerceHeader /> */}

@@ -9,6 +9,7 @@ import ShareButton from "@/components/singel-product/ShareButton";
 import ProductRating from "@/components/singel-product/ProductRating";
 import ProductReviews from "@/components/reviews/ProductReviews";
 import { ReviewDiloge } from "@/components/reviews/ReviewDiloge";
+import ReviewsDiloge from "@/components/reviews/ReviewsDiloge";
 // import SubmitReview from "@/components/reviews/SubmitReview";
 
 async function SingleProductPage({ params }: { params: { id: string } }) {
@@ -51,6 +52,7 @@ async function SingleProductPage({ params }: { params: { id: string } }) {
       </div>
       <ProductReviews productId={ProductId.id} />
       <ReviewDiloge productId={ProductId.id} />
+      <ReviewsDiloge productId={ProductId.id} />
     </section>
   );
 }

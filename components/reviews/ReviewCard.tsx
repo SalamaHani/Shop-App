@@ -3,10 +3,12 @@ import Image from "next/image";
 import Rating from "./Rating";
 import Comment from "./Comment";
 import imgUser from "../../public/imges/user-profile-icon-flat-style-member-avatar-vector-illustration-isolated-background-human-permission-sign-business-concept_157943-15752.avif";
+import { Calendar } from "lucide-react";
 type ReviewCardProps = {
   reviewInfo: {
     comment: string;
     rating: number;
+    createdAt: Date;
     authorName: string;
   };
   children?: React.ReactNode;
@@ -29,6 +31,12 @@ function ReviewCard({ reviewInfo, children }: ReviewCardProps) {
               {reviewInfo.authorName}
             </h3>
             <Rating rating={reviewInfo.rating} />
+            <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
+              <span className=" flex  mt-1 items-center gap-1">
+                <Calendar className="h-3 w-3" />
+                {reviewInfo.createdAt.toUTCString()}
+              </span>
+            </div>
           </div>
         </div>
       </CardHeader>
