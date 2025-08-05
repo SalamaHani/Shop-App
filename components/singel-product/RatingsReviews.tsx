@@ -71,9 +71,9 @@ export default function RatingsReviews({
   }, [overallRating, ratingBreakdown]);
 
   return (
-    <div className={cn("border  rounded-lg shadow-sm  p-3", className)}>
+    <div className={cn("border bg-card rounded-lg shadow-sm  p-3", className)}>
       {/* Header */}
-      <div className="flex items-center justify-between mb-2"></div>
+      {/* <div className="flex items-center justify-between mb-2"></div> */}
       {/* Overall Rating */}
       <div className="flex-col items-center gap-1 mb-3">
         <div className="flex items-center gap-1">
@@ -92,7 +92,7 @@ export default function RatingsReviews({
       <div className="space-y-1">
         {ratingBreakdown.map((rating, index) => (
           <div key={rating.stars} className="flex items-center gap-3">
-            <span className="text-sm  w-2">{rating.stars}</span>
+            <span className="text-sm font-medium  w-2">{rating.stars}</span>
             <div className="flex-1 relative">
               <Progress
                 value={animatedPercentages[index]}

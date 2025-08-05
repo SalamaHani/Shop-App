@@ -37,6 +37,7 @@ import {
 import { toast } from "sonner";
 import { deleteImage, uploadImage } from "./supabase";
 import { console } from "inspector";
+
 export const customFetch = axios.create({
   baseURL: productionUrl,
 });
@@ -656,6 +657,7 @@ export const fetchProductReviewsByUser = async () => {
       rating: true,
       comment: true,
       authorName: true,
+      createdAt: true,
       product: {
         select: {
           image: true,
@@ -1250,4 +1252,74 @@ export const filtarOrderStatusAction = async (
       const selectedStatus = filterOptions ?? "all";
       return { orders, selectedStatus, cont };
   }
+};
+///User Actions
+//updateUserRole
+export const updateUserRole = async ({
+  userId,
+  newRole,
+}: {
+  userId: string;
+  newRole: string;
+}) => {
+  try {
+    await db.users.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        role: newRole,
+      },
+    });
+    revalidatePath("/users");
+    return { success: true, message: `User role updated to ${newRole}` };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (error) {
+    return { success: false, message: `Failed to update user role${newRole}` };
+  }
+};
+
+//Action deleteUser
+export const deleteUser = async (prevState: { userId: string }) => {
+  const { userId } = prevState;
+  try {
+    await db.users.delete({
+      where: {
+        id: userId,
+      },
+    });
+    revalidatePath("/users");
+    return { success: true, message: `Delete User is ` };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (error) {
+    return { success: false, message: "Failed to delete User" };
+  }
+};
+///Action fetsh usews
+export const fetshUserAdmin = async ({
+  Page = 1,
+  limit = 10,
+}: {
+  Page?: number;
+  limit?: number;
+}) => {
+  const gnoer = (Page - 1) * limit;
+  const Users = await db.users.findMany({
+    take: limit,
+    skip: gnoer,
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  const total = await db.users.count({});
+  const metadata = { totalPage: Math.ceil(total / limit), total };
+  return { Users, metadata };
+};
+///action user
+export const fetchAdminUserDetail = async (userId: string) => {
+  const user = await db.users.findUnique({
+    where: { id: userId },
+  });
+  if (!user) redirect("dashbord");
+  return user;
 };

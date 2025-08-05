@@ -39,6 +39,7 @@ async function SingleProductPage({ params }: { params: { id: string } }) {
             <div className="flex items-center gap-x-2">
               <FavoriteToggleButton productId={params.id} />
               <ShareButton name={name} productId={params.id} />
+              <ReviewDiloge productId={ProductId.id} />
             </div>
           </div>
           <ProductRating productId={params.id} />
@@ -51,7 +52,6 @@ async function SingleProductPage({ params }: { params: { id: string } }) {
         </div>
       </div>
       <ProductReviews productId={ProductId.id} />
-      <ReviewDiloge productId={ProductId.id} />
       <ReviewsDiloge productId={ProductId.id} />
     </section>
   );

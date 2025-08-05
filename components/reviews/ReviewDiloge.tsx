@@ -18,6 +18,7 @@ import { SubmitButton } from "../form/Buttons";
 import { getUserFromSession } from "@/lib/auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { MessageCircle } from "lucide-react";
 
 export async function ReviewDiloge({ productId }: { productId: string }) {
   const user = await getUserFromSession(await cookies());
@@ -25,11 +26,8 @@ export async function ReviewDiloge({ productId }: { productId: string }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          className="bg-black text-black dark:text-white  flex w-[20%] items-center dark:bg-gray-400 justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-        >
-          Write a Customer review
+        <Button variant="outline" size="icon" className="p-2">
+          <MessageCircle />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[725px]">

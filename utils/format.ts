@@ -16,3 +16,10 @@ export const formatDate = (date: Date) => {
 export const setstring = (Username: string) => {
   return Username.toUpperCase().slice(0, 1);
 };
+export const getInitials = (name: string) => {
+  return name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase();
+};

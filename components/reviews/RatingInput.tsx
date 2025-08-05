@@ -20,7 +20,7 @@ function RatingInput({
   }).reverse();
   return (
     <div className="mb-2 max-w-xs">
-      <Label htmlFor={name} className="capitalize">
+      <Label htmlFor={name} className="capitalize mb-2">
         {labelText || name}
       </Label>
       <Select defaultValue={numbers[0]} name={name} required>

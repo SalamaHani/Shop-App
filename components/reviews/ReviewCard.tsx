@@ -16,7 +16,7 @@ type ReviewCardProps = {
 
 function ReviewCard({ reviewInfo, children }: ReviewCardProps) {
   return (
-    <Card className="relative">
+    <Card className="relative  ">
       <CardHeader>
         <div className="flex items-center">
           <Image
@@ -34,7 +34,7 @@ function ReviewCard({ reviewInfo, children }: ReviewCardProps) {
             <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
               <span className=" flex  mt-1 items-center gap-1">
                 <Calendar className="h-3 w-3" />
-                {reviewInfo.createdAt.toUTCString()}
+                {reviewInfo.createdAt.toISOString()}
               </span>
             </div>
           </div>

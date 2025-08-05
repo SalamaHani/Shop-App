@@ -5,9 +5,15 @@ import { useInView } from "react-intersection-observer";
 import ReviewCard from "./ReviewCard";
 import { fetchReivewsReadMore } from "@/utils/actions";
 import LodingReadMore from "./Lodingmor";
-let Page = 1;
-function ProductReviewReadMore({ productId }: { productId: string }) {
-  const [data, setData] = useState<Review[]>([]);
+let Page = 2;
+function ProductReviewReadMore({
+  productId,
+  reviews,
+}: {
+  productId: string;
+  reviews: Review[];
+}) {
+  const [data, setData] = useState<Review[]>(reviews);
   const { ref, inView } = useInView();
   const [hasNext, setHasNext] = useState(true);
   const loadReviews = async () => {
@@ -15,18 +21,8 @@ function ProductReviewReadMore({ productId }: { productId: string }) {
     const reviews = await fetchReivewsReadMore({ productId, Page });
     setData([...data, ...reviews]);
     Page++;
-    console.log(reviews.length);
-    setHasNext(reviews.length != 0);
+    setHasNext(reviews.length != 0 && hasNext);
   };
-  //   useEffect(() => {
-  //     const lode = async () => {
-
-  //       if (inView && hasNext) {
-  //         setData([...data, ...reviews]);
-  //       }
-  //     };
-  //     lode();
-  //   }, [inView, Page]);
   useEffect(() => {
     if (inView && hasNext) {
       loadReviews();

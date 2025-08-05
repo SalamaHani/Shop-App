@@ -45,11 +45,10 @@ import {
   Eye,
 } from "lucide-react";
 
-import { formatDate } from "@/utils/format";
+import { formatDate, getInitials } from "@/utils/format";
 import Deletorder from "./Deletorder";
 import Emptyorder from "./Emptyorder";
 import OrderStatusDropdown from "./StatusOrders";
-
 
 import { CompactOrderFilter } from "./FilteringOrder";
 import { Order } from "@prisma/client";
@@ -89,18 +88,7 @@ const status = [
 const getStatusConfig = (statusName: string) => {
   return status.find((s) => s.states === statusName) || status[3];
 };
-export async function OrdersTable({
-  orders,
-}: {
-  orders: Order [];
-}) {
-  const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase();
-  };
+export async function OrdersTable({ orders }: { orders: Order[] }) {
   return (
     <Card className="w-full">
       <CardHeader>
