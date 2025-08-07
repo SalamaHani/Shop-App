@@ -341,6 +341,7 @@ export interface UserData {
   country?: string;
   streetAddress?: number;
   createdAt?: string;
+  role?: string;
 }
 export interface ChangPass {
   password: string;
@@ -382,6 +383,11 @@ export interface Stuts {
   icon?: string;
   description?: string;
 }
+export interface Role {
+  id?: number;
+  value: string;
+  color?: string;
+}
 export interface ActionChangSutst {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   funactuon?: any;
@@ -390,6 +396,16 @@ export interface ActionChangSutst {
   message: string;
   errors?: {
     [K in keyof Stuts]?: string[];
+  };
+}
+export interface ActionChangRole {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  funactuon?: any;
+  Data?: Role;
+  success: boolean;
+  message: string;
+  errors?: {
+    [K in keyof Role]?: string[];
   };
 }
 export interface ActionResponsUpdeat {
@@ -431,5 +447,15 @@ export interface ActionUpdeatproduct {
   message?: string;
   errors?: {
     [K in keyof producte]?: string[];
+  };
+}
+export interface ActionCearetUser {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  funactuon?: any;
+  Data?: UserData;
+  success?: boolean;
+  message?: string;
+  errors?: {
+    [K in keyof UserData]?: string[];
   };
 }

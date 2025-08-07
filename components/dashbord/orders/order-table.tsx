@@ -42,7 +42,6 @@ import {
   Target,
   Globe,
   Send,
-  Eye,
 } from "lucide-react";
 
 import { formatDate, getInitials } from "@/utils/format";
@@ -270,13 +269,6 @@ export async function OrdersTable({ orders }: { orders: Order[] }) {
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-center gap-1">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 w-8 p-0 hover:scale-110 transition-transform"
-                        >
-                          <Eye className="h-4 w-4" />
-                        </Button>
                         <Deletorder orderId={order.id} />
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>

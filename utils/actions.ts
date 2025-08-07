@@ -12,6 +12,7 @@ import {
   changePasswordSchema,
   updateProductSchema,
   updateProductSchemaoning,
+  ewnUserSchema,
 } from "./schema";
 import {
   createSession,
@@ -25,7 +26,9 @@ const productionUrl = "https://shop.motorscloud.net/api";
 import { cookies } from "next/headers";
 import { Cart } from "@prisma/client";
 import {
+  ActionCearetUser,
   ActionChangePass,
+  ActionChangRole,
   ActionChangSutst,
   ActionResponRegester,
   ActionResponse,
@@ -1255,27 +1258,53 @@ export const filtarOrderStatusAction = async (
 };
 ///User Actions
 //updateUserRole
-export const updateUserRole = async ({
-  userId,
-  newRole,
-}: {
-  userId: string;
-  newRole: string;
-}) => {
+// export const updateUserRole = async ({
+//   userId,
+//   newRole,
+// }: {
+//   userId: string;
+//   newRole: string;
+// }) => {
+//   try {
+//     await db.users.update({
+//       where: {
+//         id: userId,
+//       },
+//       data: {
+//         role: newRole,
+//       },
+//     });
+//     revalidatePath("/users");
+//     return { success: true, message: `User role updated to ${newRole}` };
+//     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+//   } catch (error) {
+//     return { success: false, message: `Failed to update user role${newRole}` };
+//   }
+// };
+export const ActionRoleChange = async (
+  userId: string,
+  role: string
+): Promise<ActionChangRole> => {
   try {
     await db.users.update({
       where: {
         id: userId,
       },
       data: {
-        role: newRole,
+        role: role,
       },
     });
-    revalidatePath("/users");
-    return { success: true, message: `User role updated to ${newRole}` };
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    return {
+      success: true,
+      Data: { value: role },
+      message: "Successfuly Change Status Order",
+    };
   } catch (error) {
-    return { success: false, message: `Failed to update user role${newRole}` };
+    console.log(error);
+    return {
+      success: false,
+      message: `not change stuts order erorr`,
+    };
   }
 };
 
@@ -1310,11 +1339,15 @@ export const fetshUserAdmin = async ({
     orderBy: {
       createdAt: "desc",
     },
+    include: {
+      orders: true,
+    },
   });
   const total = await db.users.count({});
   const metadata = { totalPage: Math.ceil(total / limit), total };
   return { Users, metadata };
 };
+// 
 ///action user
 export const fetchAdminUserDetail = async (userId: string) => {
   const user = await db.users.findUnique({
@@ -1322,4 +1355,109 @@ export const fetchAdminUserDetail = async (userId: string) => {
   });
   if (!user) redirect("dashbord");
   return user;
+};
+//cearatNewUser
+export const cearatNewUser = async (
+  prevState: ActionCearetUser | null,
+  formData: FormData
+): Promise<ActionCearetUser> => {
+  {
+    try {
+      const UserData = {
+        name: formData.get("name") as string,
+        email: formData.get("email") as string,
+        phone: Number(formData.get("phone")),
+        bio: formData.get("bio") as string,
+        role: formData.get("role") as string,
+      };
+      const vlidetion = ewnUserSchema.safeParse(UserData);
+      if (!vlidetion.success) {
+        return {
+          success: false,
+          Data: {
+            name: UserData.name,
+            email: UserData.email,
+            phone: UserData.phone,
+            bio: UserData.bio,
+            role: UserData.role,
+          },
+          message: "Please fix the errors in the form",
+          errors: vlidetion.error.flatten().fieldErrors,
+        };
+      }
+      const Token = await encrypt({ email: UserData.email });
+      await db.users.create({
+        data: {
+          email: UserData.email,
+          name: UserData.name,
+          phone: UserData.phone,
+          bio: UserData.bio,
+          role: UserData.role,
+          password: "nunownpass",
+          salt: "nunownpass",
+          token: Token,
+        },
+      });
+      revalidatePath("dashbord/users");
+      return {
+        success: true,
+        message: "Updeat Product successfully!",
+      };
+    } catch (error) {
+      return renderError(error);
+    }
+  }
+};
+export const ActionUpdaetUser = async (
+  prevState: ActionCearetUser | null,
+  formData: FormData
+): Promise<ActionCearetUser> => {
+  {
+    try {
+      const UserData = {
+        id: formData.get("id") as string,
+        name: formData.get("name") as string,
+        email: formData.get("email") as string,
+        phone: Number(formData.get("phone")),
+        bio: formData.get("bio") as string,
+        role: formData.get("role") as string,
+      };
+      const vlidetion = ewnUserSchema.safeParse(UserData);
+      if (!vlidetion.success) {
+        return {
+          success: false,
+          Data: {
+            name: UserData.name,
+            email: UserData.email,
+            phone: UserData.phone,
+            bio: UserData.bio,
+            role: UserData.role,
+          },
+          message: "Please fix the errors in the form",
+          errors: vlidetion.error.flatten().fieldErrors,
+        };
+      }
+
+      await db.users.update({
+        where: {
+          id: UserData.id,
+        },
+        data: {
+          email: UserData.email,
+          name: UserData.name,
+          phone: UserData.phone,
+          bio: UserData.bio,
+          role: UserData.role,
+        },
+      });
+      // redirect("dashbord/users");
+      // revalidatePath("dashbord/users");
+      return {
+        success: true,
+        message: "Updeat Product successfully!",
+      };
+    } catch (error) {
+      return renderError(error);
+    }
+  }
 };

@@ -24,7 +24,7 @@ function Inputformch({ state }: { state: ActionResponse }) {
           <div className="flex gap-4">
             <div className="w-[50%]">
               <Label className="mb-2" htmlFor="FirstName">
-                First Name*
+                First Name<span className="text-red-500">*</span>
               </Label>
               <Input
                 name="FirstName"
@@ -39,7 +39,7 @@ function Inputformch({ state }: { state: ActionResponse }) {
             </div>
             <div className="w-[50%]">
               <Label className="mb-2" htmlFor="FirstName">
-                Last Name *
+                Last Name <span className="text-red-500">*</span>
               </Label>
               <Input
                 name="LastName"
@@ -54,13 +54,15 @@ function Inputformch({ state }: { state: ActionResponse }) {
             </div>
           </div>
           <div>
-            <Label className="mb-2">Country / Region *</Label>
+            <Label className="mb-2">
+              Country / Region <span className="text-red-500">*</span>
+            </Label>
             <Selectcuntery Arr={Cuanters} />
           </div>
           <div className="flex gap-4">
             <div className="w-[50%]">
               <Label className="mb-2" htmlFor="StreetAddress ">
-                Street Address *
+                Street Address <span className="text-red-500">*</span>
               </Label>
               <Input
                 name="StreetAddress"
@@ -77,7 +79,7 @@ function Inputformch({ state }: { state: ActionResponse }) {
             </div>
             <div className="w-[50%]">
               <Label className="mb-2" htmlFor="Town">
-                Town / City *
+                Town / City <span className="text-red-500">*</span>
               </Label>
               <Input
                 name="Town"
@@ -93,7 +95,7 @@ function Inputformch({ state }: { state: ActionResponse }) {
           </div>
           <div>
             <Label className="mb-2" htmlFor="ZIPCode">
-              ZIP Code *
+              ZIP Code <span className="text-red-500">*</span>
             </Label>
             <Input
               name="ZIPCode"
@@ -109,7 +111,7 @@ function Inputformch({ state }: { state: ActionResponse }) {
           <div className="flex gap-4">
             <div className="w-[50%]">
               <Label className="mb-2" htmlFor="email">
-                Email *
+                Email <span className="text-red-500">*</span>
               </Label>
               <Input
                 name="email"
@@ -124,7 +126,7 @@ function Inputformch({ state }: { state: ActionResponse }) {
             </div>
             <div className="w-[50%]">
               <Label className="mb-2" htmlFor="Phone">
-                Phone *
+                Phone <span className="text-red-500">*</span>
               </Label>
               <Input
                 name="Phone"

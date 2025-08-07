@@ -27,17 +27,18 @@ model Users {
   id       String   @id @default(uuid())
   email    String   @unique
   name     String?
-  password String
+  password String?
   image       String?
   phone BigInt?
   city String?
   bio String?
   country String?
   streetAddress BigInt?
-  token String @unique
-  salt String
+  token String? @unique
+  salt String?
   role String 
   createdAt DateTime @default(now())
+  orders Order []
 }
 
 model Favorite {
@@ -94,6 +95,7 @@ model Order {
   orderNumbar String
   name String
   products BigInt  @default(0)
+  Users   Users  @relation(fields: [userId], references: [id], onDelete: Cascade)
   orderTotal BigInt @default(0)
   tax BigInt @default(0)
   shipping Int @default(0)

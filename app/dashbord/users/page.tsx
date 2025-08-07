@@ -9,6 +9,7 @@ type Props = {
 async function page({ searchParams }: Props) {
   const Page = parseInt(searchParams?.Page || "1");
   const { Users, metadata } = await fetshUserAdmin({ Page });
+  // console.log(Users.map((u)=>{console.log(u.o)}))
   return (
     <div className="min-h-screen  ">
       {/* <EcommerceHeader /> */}

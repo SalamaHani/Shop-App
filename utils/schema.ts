@@ -47,6 +47,13 @@ export const loginSchema = z.object({
     })
     .trim(),
 });
+export const ewnUserSchema = z.object({
+  name: z
+    .string()
+    .min(2, { message: "Name must be at least 2 characters long." })
+    .trim(),
+  email: z.string().email({ message: "Please enter a valid email." }).trim(),
+});
 export const changePasswordSchema = z
   .object({
     password: z
@@ -134,7 +141,6 @@ export const updateProductSchemaoning = z.object({
     .positive("Price must be greater than zero"),
   company: z.string().min(1, "Company is required").max(100),
 });
-
 
 // Optional: used internally (e.g. returning user data)
 export const userSchema = z.object({

@@ -1,7 +1,14 @@
 "use client";
-import { DialogTrigger } from "@/components/ui/dialog";
-import { useState } from "react";
-import { Shield, Plus, BarChart3, UsersRound } from "lucide-react";
+// import { DialogTrigger } from "@/components/ui/dialog";
+import { startTransition, useActionState } from "react";
+import {
+  Plus,
+  BarChart3,
+  UsersRound,
+  RefreshCw,
+  Settings,
+  MoreHorizontal,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -13,175 +20,79 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-// import {
-//   DropdownMenu,
-//   DropdownMenuContent,
-//   DropdownMenuItem,
-//   DropdownMenuLabel,
-//   DropdownMenuSeparator,
-//   DropdownMenuTrigger,
-// } from "@/components/ui/dropdown-menu";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Users } from "@prisma/client";
 import { getInitials } from "@/utils/format";
 import DeleteUser from "./DeletUser";
-import { RoleChangeForm } from "./ChangeRole";
+// import { RoleChangeForm } from "./ChangeRole";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { IconButton } from "@/components/form/Buttons";
 import Link from "next/link";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+// import { useRouter } from "next/navigation";
+import { ActionChangRole } from "@/utils/Type";
+import { ActionRoleChange } from "@/utils/actions";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const roleColors = {
   admin:
     "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300",
   manager: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
-  user: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+  custamar: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
 };
-
-// function CreateUserForm({ onSuccess }: { onSuccess: () => void }) {
-//   const [state, formAction, isPending] = useActionState(async (prevState: any, formData: FormData) => {
-//     const result = await createUser(formData)
-//     if (result.success) {
-//       onSuccess()
-//     }
-//     return result
-//   }, null)
-
-//   return (
-//     <form action={formAction} className="space-y-4">
-//       <div className="grid grid-cols-2 gap-4">
-//         <div>
-//           <Label htmlFor="name">Name *</Label>
-//           <Input id="name" name="name" required />
-//         </div>
-//         <div>
-//           <Label htmlFor="email">Email *</Label>
-//           <Input id="email" name="email" type="email" required />
-//         </div>
-//       </div>
-//       <div className="grid grid-cols-2 gap-4">
-//         <div>
-//           <Label htmlFor="role">Role *</Label>
-//           <Select name="role" required>
-//             <SelectTrigger>
-//               <SelectValue placeholder="Select role" />
-//             </SelectTrigger>
-//             <SelectContent>
-//               <SelectItem value="admin">Admin</SelectItem>
-//               <SelectItem value="manager">Manager</SelectItem>
-//               <SelectItem value="user">User</SelectItem>
-//               <SelectItem value="guest">Guest</SelectItem>
-//             </SelectContent>
-//           </Select>
-//         </div>
-//         <div>
-//           <Label htmlFor="department">Department</Label>
-//           <Input id="department" name="department" />
-//         </div>
-//       </div>
-//       <div className="grid grid-cols-2 gap-4">
-//         <div>
-//           <Label htmlFor="phone">Phone</Label>
-//           <Input id="phone" name="phone" />
-//         </div>
-//         <div>
-//           <Label htmlFor="location">Location</Label>
-//           <Input id="location" name="location" />
-//         </div>
-//       </div>
-//       {state?.message && (
-//         <p className={`text-sm ${state.success ? "text-green-600" : "text-red-600"}`}>{state.message}</p>
-//       )}
-//       <Button type="submit" disabled={isPending} className="w-full">
-//         {isPending ? "Creating..." : "Create User"}
-//       </Button>
-//     </form>
-//   )
-// }
-
-// function EditUserForm({ user, onSuccess }: { user: User; onSuccess: () => void }) {
-//   const [state, formAction, isPending] = useActionState(async (prevState: any, formData: FormData) => {
-//     const result = await updateUser(user.id, formData)
-//     if (result.success) {
-//       onSuccess()
-//     }
-//     return result
-//   }, null)
-
-//   return (
-//     <form action={formAction} className="space-y-4">
-//       <div className="grid grid-cols-2 gap-4">
-//         <div>
-//           <Label htmlFor="name">Name *</Label>
-//           <Input id="name" name="name" defaultValue={user.name} required />
-//         </div>
-//         <div>
-//           <Label htmlFor="email">Email *</Label>
-//           <Input id="email" name="email" type="email" defaultValue={user.email} required />
-//         </div>
-//       </div>
-//       <div className="grid grid-cols-2 gap-4">
-//         <div>
-//           <Label htmlFor="role">Role *</Label>
-//           <Select name="role" defaultValue={user.role} required>
-//             <SelectTrigger>
-//               <SelectValue />
-//             </SelectTrigger>
-//             <SelectContent>
-//               <SelectItem value="admin">Admin</SelectItem>
-//               <SelectItem value="manager">Manager</SelectItem>
-//               <SelectItem value="user">User</SelectItem>
-//               <SelectItem value="guest">Guest</SelectItem>
-//             </SelectContent>
-//           </Select>
-//         </div>
-//         <div>
-//           <Label htmlFor="department">Department</Label>
-//           <Input id="department" name="department" defaultValue={user.department || ""} />
-//         </div>
-//       </div>
-//       <div className="grid grid-cols-2 gap-4">
-//         <div>
-//           <Label htmlFor="phone">Phone</Label>
-//           <Input id="phone" name="phone" defaultValue={user.phone || ""} />
-//         </div>
-//         <div>
-//           <Label htmlFor="location">Location</Label>
-//           <Input id="location" name="location" defaultValue={user.location || ""} />
-//         </div>
-//       </div>
-//       {state?.message && (
-//         <p className={`text-sm ${state.success ? "text-green-600" : "text-red-600"}`}>{state.message}</p>
-//       )}
-//       <Button type="submit" disabled={isPending} className="w-full">
-//         {isPending ? "Updating..." : "Update User"}
-//       </Button>
-//     </form>
-//   )
-// }
+const role = [
+  {
+    id: 1,
+    value: "admin",
+    color:
+      "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300",
+  },
+  {
+    id: 2,
+    value: "manager",
+    color: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
+  },
+  {
+    id: 3,
+    value: "custamar",
+    color: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+  },
+];
 
 export default function UsersTable({ Users }: { Users: Users[] }) {
-  const [dialogOpen, setDialogOpen] = useState(false);
-  console.log(dialogOpen);
-  //   const filteredUsers = mockUsers.filter((user) => {
-  //     const matchesSearch =
-  //       user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //       user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //       user.department?.toLowerCase().includes(searchTerm.toLowerCase())
-  //     const matchesRole = roleFilter === "all" || user.role === roleFilter
-
-  //     return matchesSearch && matchesRole
-  //   })
-
-  const closeDialog = () => {
-    setDialogOpen(false);
+  const initialState: ActionChangRole = {
+    success: false,
+    message: "",
   };
+  const [state, action] = useActionState(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async (prevState: any, formData: FormData) => {
+      const role = formData.get("role") as string;
+      const userId = formData.get("userId") as string;
+      return await ActionRoleChange(userId, role);
+    },
+    initialState
+  );
+  const router = useRouter();
+  const handleClick = (role: string, userId: string) => {
+    const formData = new FormData();
+    formData.append("userId", userId);
+    formData.append("role", role);
+    startTransition(() => {
+      action(formData);
+    });
+    router.refresh();
+    toast(state.message);
+  };
+  console.log(state);
 
   return (
     <Card className="w-full">
@@ -198,7 +109,7 @@ export default function UsersTable({ Users }: { Users: Users[] }) {
           <div className="flex items-center gap-2">
             <Button size="sm" className="flex items-center gap-2  ">
               <Plus className="h-4 w-4" />
-              <Link href="/dashbord/users/cerat" className="capitalize w-full">
+              <Link href="/dashbord/users/create" className="capitalize w-full">
                 Create Users
               </Link>
             </Button>
@@ -213,8 +124,8 @@ export default function UsersTable({ Users }: { Users: Users[] }) {
               <TableHead>Role</TableHead>
               <TableHead>Department</TableHead>
               <TableHead>Join Date</TableHead>
+              <TableHead>City</TableHead>
               <TableHead>Orders</TableHead>
-              <TableHead>Total Spent</TableHead>
               <TableHead className="w-12">Action</TableHead>
             </TableRow>
           </TableHeader>
@@ -235,10 +146,10 @@ export default function UsersTable({ Users }: { Users: Users[] }) {
                       <Avatar className="h-8 w-8">
                         <AvatarImage
                           src={user.image || "/placeholder.svg"}
-                          alt={user.name}
+                          alt={"cvrv"}
                         />
                         <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs">
-                          {getInitials(user.name)}
+                          {getInitials(user?.name + "")}
                         </AvatarFallback>
                       </Avatar>
                       <div>
@@ -259,15 +170,57 @@ export default function UsersTable({ Users }: { Users: Users[] }) {
                   </TableCell>
                   <TableCell>{user.bio || "-"}</TableCell>
                   <TableCell>{user.createdAt.toLocaleDateString()}</TableCell>
-                  <TableCell>{user.phone}</TableCell>
-                  <TableCell>${user.city}</TableCell>
+                  <TableCell>{user.city}</TableCell>
+                  <TableCell>${user.}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex items-center justify-center gap-1">
                       <Link href={`/dashbord/users/${user.id}/edit`}>
                         <IconButton actionType="edit" />
                       </Link>
-                      <DeleteUser userId={user.id} />
-                      <Dialog>
+                      <DeleteUser userId={user.id} />{" "}
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            className="h-8 w-8 p-0 hover:scale-110 transition-transform"
+                          >
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuLabel className="flex items-center gap-2">
+                            <Settings className="h-4 w-4" />
+                            Actions
+                          </DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuSeparator />
+                          <DropdownMenuLabel className="flex items-center gap-2">
+                            <RefreshCw className="h-4 w-4" />
+                            Change Status
+                          </DropdownMenuLabel>
+                          {/* <OrderStatusDropdown
+                              orderId={order.id}
+                              sttus={order.status}
+                            /> */}
+                          <DropdownMenuSeparator />
+                          {role.map((s) => {
+                            return (
+                              <div key={s.id}>
+                                <DropdownMenuItem
+                                  disabled={user.role === s.value}
+                                  onClick={() => handleClick(s.value, user.id)}
+                                >
+                                  {/* <StatusIcon className="mr-2 h-4 w-4" /> */}
+                                  {s.value.charAt(0).toUpperCase() +
+                                    s.value.slice(1)}
+                                </DropdownMenuItem>
+                              </div>
+                            );
+                          })}
+                          <DropdownMenuSeparator />
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                      {/* <Dialog>
                         <DialogTrigger asChild>
                           <Button
                             size="icon"
@@ -286,7 +239,7 @@ export default function UsersTable({ Users }: { Users: Users[] }) {
                           </DialogHeader>
                           <RoleChangeForm user={user} onSuccess={closeDialog} />
                         </DialogContent>
-                      </Dialog>
+                      </Dialog> */}
                     </div>
                   </TableCell>
                 </TableRow>
