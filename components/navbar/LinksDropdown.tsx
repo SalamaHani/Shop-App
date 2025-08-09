@@ -13,11 +13,11 @@ import { LuAlignLeft } from "react-icons/lu";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { DashbordLink, links } from "@/utils/links";
-import LoginBouttn from "./LoginBouttn";
-import LogoutBoutton from "./LogoutBoutton";
 import UserIcon from "./UserIcon";
 import { getUserFromSession } from "@/lib/auth";
 import { cookies } from "next/headers";
+import LoginBouttn from "./LoginBouttn";
+import LogoutBoutton from "./LogoutBoutton";
 export async function LinksDropdown() {
   const user = await getUserFromSession(await cookies());
   const roles = user?.role;
