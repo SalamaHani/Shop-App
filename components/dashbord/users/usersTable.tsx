@@ -20,7 +20,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Users } from "@prisma/client";
+import { Order } from "@prisma/client";
 import { getInitials } from "@/utils/format";
 import DeleteUser from "./DeletUser";
 // import { RoleChangeForm } from "./ChangeRole";
@@ -41,7 +41,20 @@ import { ActionChangRole } from "@/utils/Type";
 import { ActionRoleChange } from "@/utils/actions";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-
+type UserWithOrders = {
+  id?: string;
+  email: string;
+  name: string;
+  image?: string;
+  phone?: number;
+  city?: string;
+  bio?: string;
+  country?: string;
+  streetAddress?: number;
+  createdAt?: string;
+  role?: string;
+  orders: Order[];
+};
 const roleColors = {
   admin:
     "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300",
@@ -67,7 +80,7 @@ const role = [
   },
 ];
 
-export default function UsersTable({ Users }: { Users: Users[] }) {
+export default function UsersTable({ Users }: { Users: UserWithOrders[] }) {
   const initialState: ActionChangRole = {
     success: false,
     message: "",
@@ -171,7 +184,7 @@ export default function UsersTable({ Users }: { Users: Users[] }) {
                   <TableCell>{user.bio || "-"}</TableCell>
                   <TableCell>{user.createdAt.toLocaleDateString()}</TableCell>
                   <TableCell>{user.city}</TableCell>
-                  <TableCell>${user.}</TableCell>
+                  <TableCell>{user.orders.length}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex items-center justify-center gap-1">
                       <Link href={`/dashbord/users/${user.id}/edit`}>
@@ -189,19 +202,9 @@ export default function UsersTable({ Users }: { Users: Users[] }) {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel className="flex items-center gap-2">
-                            <Settings className="h-4 w-4" />
-                            Actions
-                          </DropdownMenuLabel>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuSeparator />
-                          <DropdownMenuLabel className="flex items-center gap-2">
                             <RefreshCw className="h-4 w-4" />
                             Change Status
                           </DropdownMenuLabel>
-                          {/* <OrderStatusDropdown
-                              orderId={order.id}
-                              sttus={order.status}
-                            /> */}
                           <DropdownMenuSeparator />
                           {role.map((s) => {
                             return (
@@ -217,29 +220,8 @@ export default function UsersTable({ Users }: { Users: Users[] }) {
                               </div>
                             );
                           })}
-                          <DropdownMenuSeparator />
                         </DropdownMenuContent>
                       </DropdownMenu>
-                      {/* <Dialog>
-                        <DialogTrigger asChild>
-                          <Button
-                            size="icon"
-                            variant="link"
-                            className="p-2 cursor-pointer"
-                          >
-                            <Shield className="mr-2 h-4 w-4" />
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>Change User Role</DialogTitle>
-                            <DialogDescription>
-                              Update the role for {user.name}.
-                            </DialogDescription>
-                          </DialogHeader>
-                          <RoleChangeForm user={user} onSuccess={closeDialog} />
-                        </DialogContent>
-                      </Dialog> */}
                     </div>
                   </TableCell>
                 </TableRow>

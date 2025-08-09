@@ -3,6 +3,7 @@ import { Input } from "../ui/input";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 import { useState, useEffect } from "react";
+import { Search } from "lucide-react";
 
 function NavSearch() {
   const searchParams = useSearchParams();
@@ -28,16 +29,19 @@ function NavSearch() {
   }, [searchParams.get("Parmes")]);
 
   return (
-    <Input
-      type="search"
-      placeholder="search product..."
-      className="max-w-xs dark:bg-muted md:block hidden"
-      onChange={(e) => {
-        setParmes(e.target.value);
-        handleSearch(e.target.value);
-      }}
-      value={Parmes}
-    />
+    <div className="relative md:block hidden">
+      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-white" />
+      <Input
+        type="search"
+        placeholder="Search Product..."
+        onChange={(e) => {
+          setParmes(e.target.value);
+          handleSearch(e.target.value);
+        }}
+        value={Parmes}
+        className="pl-10 bg-gray-50 w-sm text-base dark:placeholder:text-white placeholder:text-gray-500"
+      />
+    </div>
   );
 }
 export default NavSearch;

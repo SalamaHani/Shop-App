@@ -105,7 +105,7 @@ function TableProduct({ products }: { products: Products[] }) {
               return (
                 <TableRow
                   key={product.id}
-                  className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors animate-in fade-in duration-300"
+                  className=" transition-colors animate-in fade-in duration-300"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <TableCell className="font-medium">

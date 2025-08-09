@@ -1256,31 +1256,6 @@ export const filtarOrderStatusAction = async (
       return { orders, selectedStatus, cont };
   }
 };
-///User Actions
-//updateUserRole
-// export const updateUserRole = async ({
-//   userId,
-//   newRole,
-// }: {
-//   userId: string;
-//   newRole: string;
-// }) => {
-//   try {
-//     await db.users.update({
-//       where: {
-//         id: userId,
-//       },
-//       data: {
-//         role: newRole,
-//       },
-//     });
-//     revalidatePath("/users");
-//     return { success: true, message: `User role updated to ${newRole}` };
-//     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-//   } catch (error) {
-//     return { success: false, message: `Failed to update user role${newRole}` };
-//   }
-// };
 export const ActionRoleChange = async (
   userId: string,
   role: string
@@ -1347,7 +1322,7 @@ export const fetshUserAdmin = async ({
   const metadata = { totalPage: Math.ceil(total / limit), total };
   return { Users, metadata };
 };
-// 
+//
 ///action user
 export const fetchAdminUserDetail = async (userId: string) => {
   const user = await db.users.findUnique({
@@ -1367,6 +1342,7 @@ export const cearatNewUser = async (
         name: formData.get("name") as string,
         email: formData.get("email") as string,
         phone: Number(formData.get("phone")),
+        city: formData.get("city") as string,
         bio: formData.get("bio") as string,
         role: formData.get("role") as string,
       };
@@ -1391,6 +1367,7 @@ export const cearatNewUser = async (
           email: UserData.email,
           name: UserData.name,
           phone: UserData.phone,
+          city: UserData.city,
           bio: UserData.bio,
           role: UserData.role,
           password: "nunownpass",

@@ -92,7 +92,6 @@ export default function OrderStatusDropdown({
           </div>
         );
       })}
-      <DropdownMenuSeparator />
     </>
   );
 }

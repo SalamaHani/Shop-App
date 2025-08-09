@@ -52,7 +52,6 @@ export async function LinksDropdown() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-40" align="start" sideOffset={10}>
-        <DropdownMenuSeparator />
         {links.map((link) => {
           if (link.label === "dashbord" && roles == "custamar") return null;
           return (

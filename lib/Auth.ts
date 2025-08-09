@@ -1,7 +1,7 @@
 import "server-only";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+// import { redirect } from "next/navigation";
 import { cache } from "react";
 const secretKey = "secret";
 import db from "@/utils/db";
@@ -73,13 +73,13 @@ export function getUserFromSession(cookies: Pick<Cookies, "get">) {
   return decrypt(sessionId);
 }
 
-export const verifySession = async () => {
-  const session = await getSession();
-  if (!session?.userId) {
-    redirect("/login");
-  }
-  return { isAuth: true, userId: session.userId };
-};
+// export const verifySession = async () => {
+//   const session = await getSession();
+//   if (!session?.userId) {
+//     redirect("/login");
+//   }
+//   return { isAuth: true, userId: session.userId };
+// };
 //get User Data varfiy session
 export const getUser = cache(async () => {
   const session = await getSession();

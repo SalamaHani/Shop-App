@@ -14,7 +14,7 @@ export const links: NavLink[] = [
   { href: "/dashbord", label: "dashbord" },
 ];
 export const DashbordLink: NavLink[] = [
-  { href: "dashbord/products", label: "products" },
-  { href: "dashbord/orders", label: "orders" },
-  { href: "dashbord/users", label: "users" },
+  { href: "/dashbord/products", label: "products" },
+  { href: "/dashbord/orders", label: "orders" },
+  { href: "/dashbord/users", label: "users" },
 ];

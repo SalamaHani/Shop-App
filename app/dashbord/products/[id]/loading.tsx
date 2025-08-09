@@ -3,9 +3,9 @@ import React from "react";
 
 function loading() {
   return (
-    <section>
+    <section className="mb-10">
       <Skeleton className="w-40 h-3 rounded" />
-      <div>
+      <div className="mb-10">
         <div className="col-span-12 h-full lg:col-span-8 border p-4 rounded-lg mt-16">
           <div className="h-full">
             <div className="space-y-4">
