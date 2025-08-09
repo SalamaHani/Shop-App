@@ -1,40 +1,15 @@
-"use client";
-import axios from "axios";
-import { useSearchParams } from "next/navigation";
-import React, { useCallback } from "react";
-import { loadStripe } from "@stripe/stripe-js";
-import {
-  EmbeddedCheckoutProvider,
-  EmbeddedCheckout,
-} from "@stripe/react-stripe-js";
+import PaymentClient from "./PaymentClient";
 
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
-);
+type paymentPageProps = {
+  searchParams: Promise<{
+    orderId?: string;
+    cartId?: string;
+  }>;
+};
+export default async function PaymentPage({ searchParams }: paymentPageProps) {
+  const parmes = await searchParams;
+  const orderId = parmes.orderId || "";
+  const cartId = parmes.cartId || "";
 
-function PaymentPage() {
-  const searchParams = useSearchParams();
-
-  const orderId = searchParams.get("orderId");
-  const cartId = searchParams.get("cartId");
-
-  const fetchClientSecret = useCallback(async () => {
-    const response = await axios.post("/api/payment", {
-      orderId,
-      cartId,
-    });
-    return response.data.clientSecret;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const options = { fetchClientSecret };
-
-  return (
-    <div id="checkout">
-      <EmbeddedCheckoutProvider stripe={stripePromise} options={options}>
-        <EmbeddedCheckout />
-      </EmbeddedCheckoutProvider>
-    </div>
-  );
+  return <PaymentClient orderId={orderId} cartId={cartId} />;
 }
-export default PaymentPage;
