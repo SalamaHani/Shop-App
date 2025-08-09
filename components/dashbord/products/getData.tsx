@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useActionState } from "react";
-import { ActionUpdeatproduct, product } from "@/utils/Type";
+import { ActionUpdeatproduct, producte } from "@/utils/Type";
 import { updateProductAction } from "@/utils/actions";
 import Editprodcut from "./editprodut";
 import { SubmitButton } from "@/components/form/Buttons";
@@ -9,7 +9,7 @@ const initialState: ActionUpdeatproduct = {
   success: false,
   message: "",
 };
-function Dataget({ Product, id }: { Product: product; id: string }) {
+function Dataget({ Product, id }: { Product: producte; id: string }) {
   const [state, action] = useActionState(updateProductAction, initialState);
   return (
     <form className="" action={action}>

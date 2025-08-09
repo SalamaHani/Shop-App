@@ -27,6 +27,7 @@ function ProductReviewReadMore({
     if (inView && hasNext) {
       loadReviews();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView, hasNext]);
   return (
     <div className="grid md:grid-cols-1 gap-4 mt-2">

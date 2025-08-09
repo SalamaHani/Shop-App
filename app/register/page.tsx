@@ -23,7 +23,7 @@ function Registerpage() {
       <form className="" action={action}>
         {state?.message && (
           <Alert
-            className="mb-5"
+            className="mb-5 mt-20"
             variant={state.success ? "default" : "destructive"}
           >
             {state.success ? <CheckCircle2 className="h-4 w-4" /> : <Ban />}

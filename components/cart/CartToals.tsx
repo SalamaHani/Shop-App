@@ -26,10 +26,6 @@ function CartToals({ cart }: { cart: Cart }) {
           </Link>
         </Button>
       </Card>
-
-      {/* <FormContainer action={createOrderAction}>
-        <SubmitButton text="Place Order" className="w-full mt-8" />
-      </FormContainer> */}
     </div>
   );
 }

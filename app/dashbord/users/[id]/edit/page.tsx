@@ -2,9 +2,13 @@ import FormUserE from "@/components/dashbord/users/FormUserE";
 import TitelSection from "@/components/global/TitelSection";
 import { fetchAdminUserDetail } from "@/utils/actions";
 import React from "react";
-
-async function EdietUsers({ params }: { params: { id: string } }) {
-  const { id } = params;
+type UserEditPageProps = {
+  params: Promise<{
+    id: string;
+  }>;
+};
+async function EdietUsers({ params }: UserEditPageProps) {
+  const { id } = await params;
   const user = await fetchAdminUserDetail(id);
   return (
     <div>

@@ -57,7 +57,7 @@ function ModeEditP() {
                 </h5>
                 <div
                   className={
-                    state.errors?.image
+                    state?.errors?.image
                       ? `border-red-500  dark:hover:border-brand-500 w-full rounded-xl border border-dashed  bg-gray-50 p-7 lg:p-10 dark:border-gray-700  dz-clickable`
                       : ` hover:border-green-500 dark:hover:border-brand-500 w-full rounded-xl border border-dashed border-gray-300 bg-gray-50 p-7 lg:p-10 dark:border-gray-700  dz-clickable`
                   }
@@ -91,12 +91,12 @@ function ModeEditP() {
                       id="image"
                       name="image"
                       accept="image/*"
-                      defaultValue={state.Data?.image}
+                      defaultValue={state?.Data?.image ?? ""}
                     />
                   </div>
                 </div>
                 {state.errors?.image && (
-                  <p className="text-red-500 text-xs">{state.errors?.image}</p>
+                  <p className="text-red-500 text-xs">{state.errors?.image} </p>
                 )}
               </div>
               <div className="mt-7">
@@ -116,7 +116,7 @@ function ModeEditP() {
                     />
                     {state.errors?.name && (
                       <p className="text-red-500 text-xs">
-                        {state.errors?.name}
+                        {state.errors?.name ?? ""}
                       </p>
                     )}
                   </div>

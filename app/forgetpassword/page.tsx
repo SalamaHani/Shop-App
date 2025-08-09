@@ -5,11 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
 import { SubmitButton } from "@/components/form/Buttons";
 import { loginUser } from "@/utils/actions";
-import Link from "next/link";
 import { ActionResponseere } from "@/utils/Type";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { CheckCircle2, Ban } from "lucide-react";
-
 const initialState: ActionResponseere = {
   success: false,
   message: "",
@@ -37,13 +35,13 @@ function Page() {
             className="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
           >
             <div data-slot="card-title" className="font-semibold text-2xl">
-              Log in
+              Forget Password
             </div>
             <div
               data-slot="card-description"
               className="text-muted-foreground text-sm"
             >
-              Enter your email
+              Enter your email to reset password
             </div>
           </div>
           <div data-slot="card-content" className="px-6 flex flex-col gap-4">
@@ -69,37 +67,12 @@ function Page() {
                 <p className="text-red-500 text-xs">{state.errors.email}</p>
               )}
             </div>
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="email">Your Password</Label>
-              <Input
-                defaultValue={state.Data?.password}
-                name="password"
-                type="password"
-              />
-              {state.errors?.password && (
-                <p className="text-red-500 text-xs">{state.errors.password}</p>
-              )}
-            </div>
-            <Link href="forgetpassword" className="capitalize mt-3 text-xs ">
-              <span className=" font-bold text-smt underline">
-                Forget password
-              </span>
-            </Link>
           </div>
           <div
             data-slot="card-footer"
             className="flex items-center justify-between px-6 [.border-t]:pt-6"
           >
-            <SubmitButton text="Log in" className="mt-8" />
-          </div>
-          <div
-            data-slot="card-footer"
-            className="flex items-center justify-between px-6"
-          >
-            <Link href="register" className="capitalize mt-3 text-xs ">
-              <span>Don`t have an account?</span>
-              <span className=" font-bold text-smt">Register</span>
-            </Link>
+            <SubmitButton text="Send" className="mt-8" />
           </div>
         </div>
       </form>

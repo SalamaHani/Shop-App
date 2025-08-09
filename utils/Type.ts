@@ -330,18 +330,31 @@ export interface RatingBreakdown {
   count: number;
   percentage: number;
 }
-export interface UserData {
+export type UserData = {
   id?: string;
   email: string;
-  name: string;
-  image?: string;
-  phone?: number;
-  city?: string;
-  bio?: string;
-  country?: string;
-  streetAddress?: number;
-  createdAt?: string;
-  role?: string;
+  name: string | null;
+  image?: string | null;
+  phone?: bigint | null;
+  city?: string | null;
+  bio?: string | null;
+  country?: string | null;
+  streetAddress?: bigint | null;
+  createdAt?: Date | null;
+  role?: string | null;
+} | null;
+export interface UserDatae {
+  id?: string;
+  email: string;
+  name: string | null;
+  image?: string | null;
+  phone?: number | undefined;
+  city?: string | null;
+  bio?: string | null;
+  country?: string | null;
+  streetAddress?: number | undefined;
+  createdAt?: Date | null;
+  role?: string | null;
 }
 export interface ChangPass {
   password: string;
@@ -411,11 +424,11 @@ export interface ActionChangRole {
 export interface ActionResponsUpdeat {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   funactuon?: any;
-  Data?: UserData;
+  Data?: UserDatae;
   success?: boolean;
   message?: string;
   errors?: {
-    [K in keyof UserData]?: string[] | number[];
+    [K in keyof UserDatae]?: string[];
   };
 }
 export interface ActionResponRegester {

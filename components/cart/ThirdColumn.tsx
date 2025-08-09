@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { SubmitButton } from "../form/Buttons";
-import { useToast } from "../ui/use-tosat";
 import SelectProductAmount, { Mode } from "../singel-product/SeleactAmount";
 import FormContainer from "../form/FormContener";
 import { removeCartItemAction, updateCartItemAction } from "@/utils/actions";
@@ -10,17 +9,15 @@ function ThirdColumn({ quantity, id }: { quantity: number; id: string }) {
   const [amount, setAmount] = useState(quantity);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
 
   const handleAmountChange = async (value: number) => {
     setIsLoading(true);
-    toast({ description: "Calculating..." });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const result = await updateCartItemAction({
       amount: value,
       cartItemId: id,
     });
     setAmount(value);
-    toast({ description: result.message });
     setIsLoading(false);
   };
 

@@ -11,11 +11,11 @@ const initialState = {
 };
 
 function FormContainer({
-  className = "",
+  className = "some-class",
   action,
   children,
 }: {
-  className: string;
+  className?: string;
   action: actionFunction;
   children: React.ReactNode;
 }) {

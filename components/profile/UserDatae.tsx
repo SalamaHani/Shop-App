@@ -5,7 +5,8 @@ import Image from "next/image";
 import { UserData } from "@/utils/Type";
 import { setstring } from "@/utils/format";
 async function UserDatae() {
-  const userData: UserData = await getUserData();
+  const userData: UserData | null = await getUserData();
+  if (userData === null) return <h1>no data</h1>;
   const { name, image, bio, city } = userData;
   return (
     <>
@@ -22,7 +23,7 @@ async function UserDatae() {
               />
             ) : (
               <div className="w-20 h-20 flex items-center justify-center  overflow-hidden  bg-gray-600 border-gray-200 rounded-full ">
-                {setstring(name)}
+                {setstring(name || "A")}
               </div>
             )}
             <div className="order-3 xl:order-2">

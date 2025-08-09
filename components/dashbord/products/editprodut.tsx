@@ -5,7 +5,7 @@ import TextAreaInput from "@/components/form/TextAreaInput";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ActionUpdeatproduct, product } from "@/utils/Type";
+import { ActionUpdeatproduct, producte } from "@/utils/Type";
 import { Ban, CheckCircle2 } from "lucide-react";
 
 function Editprodcut({
@@ -13,7 +13,7 @@ function Editprodcut({
   Product,
 }: {
   state: ActionUpdeatproduct;
-  Product: product;
+  Product: producte;
 }) {
   const { name, image, company, description, featured, price } = Product;
   return (

@@ -1341,7 +1341,7 @@ export const cearatNewUser = async (
       const UserData = {
         name: formData.get("name") as string,
         email: formData.get("email") as string,
-        phone: Number(formData.get("phone")),
+        phone: formData.get("phone") as bigint | null,
         city: formData.get("city") as string,
         bio: formData.get("bio") as string,
         role: formData.get("role") as string,
@@ -1395,7 +1395,7 @@ export const ActionUpdaetUser = async (
         id: formData.get("id") as string,
         name: formData.get("name") as string,
         email: formData.get("email") as string,
-        phone: Number(formData.get("phone")),
+        phone: formData.get("phone") as bigint | null,
         bio: formData.get("bio") as string,
         role: formData.get("role") as string,
       };

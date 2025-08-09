@@ -3,11 +3,14 @@ import Compelxpagination from "@/components/global/Compelxpagination";
 import { fetshUserAdmin } from "@/utils/actions";
 import React from "react";
 
-type Props = {
-  searchParams?: { Page?: string };
+type UserPageProps = {
+  searchParams: Promise<{
+    Page?: string;
+  }>;
 };
-async function page({ searchParams }: Props) {
-  const Page = parseInt(searchParams?.Page || "1");
+async function page({ searchParams }: UserPageProps) {
+  const parmes = await searchParams;
+  const Page = parseInt(parmes?.Page || "1");
   const { Users, metadata } = await fetshUserAdmin({ Page });
   // console.log(Users.map((u)=>{console.log(u.o)}))
   return (

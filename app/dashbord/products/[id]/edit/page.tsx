@@ -1,8 +1,12 @@
 import { fetchAdminProductDetails } from "@/utils/actions";
 import Dataget from "@/components/dashbord/products/getData";
-
-async function EditProductPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+type ProductEditPageProps = {
+  params: Promise<{
+    id: string;
+  }>;
+};
+async function EditProductPage({ params }: ProductEditPageProps) {
+  const { id } = await params;
   const product = await fetchAdminProductDetails(id);
   return (
     <section>

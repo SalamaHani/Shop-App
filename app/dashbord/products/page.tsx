@@ -1,11 +1,14 @@
 import TableProduct from "@/components/dashbord/products/TableProduct";
 import Compelxpagination from "@/components/global/Compelxpagination";
 import { fetchAdminProducts } from "@/utils/actions";
-type Props = {
-  searchParams?: { Page?: string };
+type ProductsPageProps = {
+  searchParams: Promise<{
+    Page?: string;
+  }>;
 };
-async function AdminProductsPage({ searchParams }: Props) {
-  const Page = parseInt(searchParams?.Page || "1");
+async function AdminProductsPage({ searchParams }: ProductsPageProps) {
+  const params = await searchParams;
+  const Page = parseInt(params?.Page || "1");
   const { products, metadata } = await fetchAdminProducts({ Page });
   console.log(Page);
   return (

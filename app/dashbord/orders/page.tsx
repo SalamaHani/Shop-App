@@ -1,15 +1,17 @@
 import { OrdersTable } from "@/components/dashbord/orders/Order-table";
 import Compelxpagination from "@/components/global/Compelxpagination";
 import { fetchAdminOrders } from "@/utils/actions";
-
-// import { EcommerceHeader } from "@/components/ecommerce-header"
-type Props = {
-  searchParams?: { Page?: string; Status?: string };
+type OrderPageProps = {
+  searchParams: Promise<{
+    Status?: string;
+    Page?: string;
+  }>;
 };
-export default async function OrdersPage({ searchParams }: Props) {
-  const Page = parseInt(searchParams?.Page || "1");
-  const Status = searchParams?.Status || "all";
-  const { orders, metadata } = await fetchAdminOrders({Page,Status});
+async function Page({ searchParams }: OrderPageProps) {
+  const parmes = await searchParams;
+  const Page = parseInt(parmes.Page || "1");
+  const Status = parmes.Status || "all";
+  const { orders, metadata } = await fetchAdminOrders({ Page, Status });
   console.log(Status);
   return (
     <div className="min-h-screen  ">
@@ -34,3 +36,4 @@ export default async function OrdersPage({ searchParams }: Props) {
     </div>
   );
 }
+export default Page;

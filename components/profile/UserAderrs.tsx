@@ -4,7 +4,8 @@ import ModeEditP from "./ModeEditP";
 import { UserData } from "@/utils/Type";
 
 async function UserAderrs() {
-  const userData:UserData = await getUserData();
+   const userData: UserData | null = await getUserData();
+  if(userData === null) return <h1>no data</h1>
   const { city, streetAddress, country } = userData;
   return (
     <>

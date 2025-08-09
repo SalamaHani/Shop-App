@@ -5,7 +5,8 @@ import { UserData } from "@/utils/Type";
 import ModeChangpass from "./ModeChangpass";
 
 async function UserPersonal() {
-  const userData: UserData = await getUserData();
+  const userData: UserData | null = await getUserData();
+  if (userData === null) return <h1>no data</h1>;
   const { name, email, phone } = userData;
   return (
     <div className="p-5 mb-6 border rounded-2xl  lg:p-6">

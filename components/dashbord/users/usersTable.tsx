@@ -6,7 +6,6 @@ import {
   BarChart3,
   UsersRound,
   RefreshCw,
-  Settings,
   MoreHorizontal,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -44,15 +43,15 @@ import { useRouter } from "next/navigation";
 type UserWithOrders = {
   id?: string;
   email: string;
-  name: string;
-  image?: string;
-  phone?: number;
-  city?: string;
-  bio?: string;
-  country?: string;
-  streetAddress?: number;
-  createdAt?: string;
-  role?: string;
+  name: string | null;
+  image?: string | null;
+  phone?: bigint | null;
+  city?: string | null;
+  bio?: string | null;
+  country?: string | null;
+  streetAddress?: bigint | null;
+  createdAt?: Date;
+  role?: string | null;
   orders: Order[];
 };
 const roleColors = {
@@ -106,7 +105,6 @@ export default function UsersTable({ Users }: { Users: UserWithOrders[] }) {
     toast(state.message);
   };
   console.log(state);
-
   return (
     <Card className="w-full">
       <CardHeader>
@@ -176,13 +174,19 @@ export default function UsersTable({ Users }: { Users: UserWithOrders[] }) {
                   <TableCell>
                     <Badge
                       variant="secondary"
-                      className={roleColors[user.role]}
+                      className={
+                        roleColors.admin == user.role
+                          ? "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300"
+                          : roleColors.custamar == user.role
+                          ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
+                          : "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                      }
                     >
                       {user.role}
                     </Badge>
                   </TableCell>
                   <TableCell>{user.bio || "-"}</TableCell>
-                  <TableCell>{user.createdAt.toLocaleDateString()}</TableCell>
+                  <TableCell>{user?.createdAt?.toLocaleDateString()}</TableCell>
                   <TableCell>{user.city}</TableCell>
                   <TableCell>{user.orders.length}</TableCell>
                   <TableCell className="text-right">
@@ -190,7 +194,7 @@ export default function UsersTable({ Users }: { Users: UserWithOrders[] }) {
                       <Link href={`/dashbord/users/${user.id}/edit`}>
                         <IconButton actionType="edit" />
                       </Link>
-                      <DeleteUser userId={user.id} />{" "}
+                      <DeleteUser userId={user?.id ?? ""} />
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button
@@ -211,9 +215,10 @@ export default function UsersTable({ Users }: { Users: UserWithOrders[] }) {
                               <div key={s.id}>
                                 <DropdownMenuItem
                                   disabled={user.role === s.value}
-                                  onClick={() => handleClick(s.value, user.id)}
+                                  onClick={() =>
+                                    handleClick(s.value, user?.id ?? "")
+                                  }
                                 >
-                                  {/* <StatusIcon className="mr-2 h-4 w-4" /> */}
                                   {s.value.charAt(0).toUpperCase() +
                                     s.value.slice(1)}
                                 </DropdownMenuItem>
