@@ -5,6 +5,7 @@ import { getUserFromSession } from "@/lib/auth";
 import { DropdownMenuItem } from "../ui/dropdown-menu";
 import { cookies } from "next/headers";
 async function LogoutBoutton() {
+  //coments
   const user = await getUserFromSession(await cookies());
   if (user == null) return null;
   return (
