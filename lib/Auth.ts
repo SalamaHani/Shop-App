@@ -14,6 +14,7 @@ const COOKIE_SESSION_KEY = "session-id";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function encrypt(payload: any) {
   const safeData = JSON.parse(
+    ///coment
     JSON.stringify(payload, (_, value) =>
       typeof value === "bigint" ? value.toString() : value
     )
