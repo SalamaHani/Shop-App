@@ -113,4 +113,29 @@ export async function updateUserSessionExpiration(
   if (sessionId == null) return null;
   setCookie(sessionId, cookies);
 }
+///token to code
+export function generateToken(length = 6): string {
+  const min = Math.pow(10, length - 1);
+  const max = Math.pow(10, length) - 1;
+  return Math.floor(min + Math.random() * (max - min + 1)).toString();
+}
+// utils/tokenStore.ts
+type TokenData = { email: string; expires: number };
+const tokens = new Map<string, TokenData>();
+export function storeToken(email: string, token: string, ttlSeconds = 30) {
+  tokens.set(token, {
+    email,
+    expires: Date.now() + ttlSeconds * 1000,
+  });
+}
+export function verifyToken(token: string) {
+  const data = tokens.get(token);
+  if (!data) return null;
+  if (Date.now() > data.expires) {
+    tokens.delete(token);
+    return null;
+  }
+  return data.email;
+}
+
 ///

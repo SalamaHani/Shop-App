@@ -38,6 +38,8 @@ model Users {
   salt String?
   role String 
   createdAt DateTime @default(now())
+  resetPasswordToken String? @unique
+  resetPasswordTokenExpiry DateTime?
   orders Order []
 }
 

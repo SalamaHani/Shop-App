@@ -1,6 +1,7 @@
 "use server";
 import axios from "axios";
 import db from "./db";
+import { Resend } from "resend";
 import { comparePasswords, generateSalt, hashPassword } from "@/lib/hash";
 import {
   validateWithZodSchema,
@@ -17,8 +18,10 @@ import {
 import {
   createSession,
   encrypt,
+  generateToken,
   getUserFromSession,
   removeUserFromSession,
+  storeToken,
 } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -34,12 +37,15 @@ import {
   ActionResponse,
   ActionResponseere,
   ActionResponsUpdeat,
+  ActionRsendEmail,
   ActionUpdeatproduct,
   UserFormData,
 } from "./Type";
 import { toast } from "sonner";
 import { deleteImage, uploadImage } from "./supabase";
 import { console } from "inspector";
+import VerifyEmail from "@/components/email/email";
+import React from "react";
 
 export const customFetch = axios.create({
   baseURL: productionUrl,
@@ -119,13 +125,6 @@ const includeProductClause = {
     },
   },
 };
-// const includproductreviw = {
-//   review: {
-//     include: {
-//       product: true,
-//     },
-//   },
-// };
 export const fetchOrCreateCart = async ({
   userID,
   errorOnFailure = false,
@@ -1431,5 +1430,39 @@ export const ActionUpdaetUser = async (
     } catch (error) {
       return renderError(error);
     }
+  }
+};
+///RESNDE EMAIL
+const resend = new Resend(process.env.RESEND_API_KEY);
+export const sendEamilAction = async (
+  prevState: ActionRsendEmail | null,
+  formData: FormData
+): Promise<ActionRsendEmail> => {
+  const email = formData.get("email") as string;
+  try {
+    const existingUser = await db.users.findUnique({
+      where: { email: email },
+    });
+    if (!existingUser) {
+      return {
+        success: false,
+        Data: {
+          email: email,
+        },
+        message: "User already exists",
+      };
+    }
+    const token = generateToken();
+    storeToken(email, token, 30);
+    await resend.emails.send({
+      from: "onboarding@resend.dev", // Free plan domain
+      to: email,
+      subject: "Welcome to Astorefront",
+      react: VerifyEmail({ verificationCode: token }) as React.ReactElement,
+    });
+    return { success: true, message: "Email sent!" };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    return { success: false, message: error.message };
   }
 };

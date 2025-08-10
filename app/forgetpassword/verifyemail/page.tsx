@@ -1,19 +1,19 @@
 "use client";
 import React from "react";
 import { useActionState } from "react";
-import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
 import { SubmitButton } from "@/components/form/Buttons";
 import { sendEamilAction } from "@/utils/actions";
 import { ActionResponseere } from "@/utils/Type";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { CheckCircle2, Ban } from "lucide-react";
+import { OTPInput } from "@/components/global/otpinput";
 const initialState: ActionResponseere = {
   success: false,
   message: "",
 };
-
-function Page() {
+export default function VerifyEmailPage() {
+  const [code, setCode] = React.useState("");
   const [state, action] = useActionState(sendEamilAction, initialState);
   return (
     <div>
@@ -36,13 +36,13 @@ function Page() {
             className="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
           >
             <div data-slot="card-title" className="font-semibold text-2xl">
-              Forget Password
+              Confirm it’s you
             </div>
             <div
               data-slot="card-description"
               className="text-muted-foreground text-sm"
             >
-              Enter your email to reset password
+              Enter the 6-digit code sent to your email to verify your account.
             </div>
           </div>
           <div data-slot="card-content" className="px-6 flex flex-col gap-4">
@@ -57,13 +57,17 @@ function Page() {
               </div>
             </div>
             <div className="flex flex-col gap-3">
-              <Label htmlFor="email">Your email address</Label>
-              <Input
-                defaultValue={state.Data?.email}
-                name="email"
-                placeholder="m@example.com"
-                type="email"
-              />
+              <div className="grid gap-3">
+                <Label htmlFor="code">Enter 6-digit code</Label>
+                <OTPInput
+                  value={code}
+                  onChange={setCode}
+                  length={6}
+                  autoFocus
+                  className="justify-center"
+                />
+                <input type="hidden" name="code" value={code} />
+              </div>
               {state.errors?.email && (
                 <p className="text-red-500 text-xs">{state.errors.email}</p>
               )}
@@ -71,14 +75,17 @@ function Page() {
           </div>
           <div
             data-slot="card-footer"
-            className="flex items-center  justify-between px-6 [.border-t]:pt-6"
+            className="flex items-center w-full justify-between px-6 [.border-t]:pt-6"
           >
-            <SubmitButton text="Send Email" className="mt-8 " />
+            <SubmitButton
+              text="Verifying"
+              size="lg"
+              disabled={code.length !== 6}
+              className="mt-8 w-full"
+            />
           </div>
         </div>
       </form>
     </div>
   );
 }
-
-export default Page;

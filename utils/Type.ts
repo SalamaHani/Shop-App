@@ -316,6 +316,9 @@ export interface LoginData {
   email: string;
   password: string;
 }
+export interface ResendEmail {
+  email: string;
+}
 export interface RegesterData {
   name: string;
   email: string;
@@ -387,6 +390,16 @@ export interface ActionResponseere {
   message: string;
   errors?: {
     [K in keyof LoginData]?: string[];
+  };
+}
+export interface ActionRsendEmail {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  funactuon?: any;
+  Data?: ResendEmail;
+  success: boolean;
+  message: string;
+  errors?: {
+    [K in keyof ResendEmail]?: string[];
   };
 }
 export interface Stuts {
