@@ -6,11 +6,9 @@ import RatingInput from "./RatingInput";
 import TextAreaInput from "../form/TextAreaInput";
 import { getUserFromSession } from "@/lib/auth";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 async function SubmitReview({ productId }: { productId: string }) {
   const user = await getUserFromSession(await cookies());
-  if (user == null) return redirect("/login");
   return (
     <div>
       <Card className="p-8 mt-8">

@@ -17,12 +17,10 @@ import TextAreaInput from "../form/TextAreaInput";
 import { SubmitButton } from "../form/Buttons";
 import { getUserFromSession } from "@/lib/auth";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { MessageCircle } from "lucide-react";
 
 export async function ReviewDiloge({ productId }: { productId: string }) {
   const user = await getUserFromSession(await cookies());
-  if (user == null) return redirect("/login");
   return (
     <Dialog>
       <DialogTrigger asChild>

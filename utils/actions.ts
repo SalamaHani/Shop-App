@@ -225,7 +225,6 @@ export const addToCartAction = async (
   formData: FormData
 ) => {
   const user = await getUserFromSession(await cookies());
-  if (user == null) return redirect("login");
   const productId = formData.get("productId") as string;
   const amount = Number(formData.get("amount"));
   const pathname = formData.get("pathname") as string;
@@ -458,8 +457,6 @@ export const toggleFavoriteAction = async (prevState: {
 }) => {
   const user = await getUserFromSession(await cookies());
   const { productId, favoriteId, pathname } = prevState;
-
-  if (user == null) return redirect("/login");
   try {
     if (favoriteId) {
       await db.favorite.delete({
@@ -1427,8 +1424,6 @@ export const ActionUpdaetUser = async (
           role: UserData.role,
         },
       });
-      // redirect("dashbord/users");
-      // revalidatePath("dashbord/users");
       return {
         success: true,
         message: "Updeat Product successfully!",
