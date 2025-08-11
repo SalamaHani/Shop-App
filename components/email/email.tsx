@@ -85,6 +85,7 @@ export const DropboxResetPasswordEmail = ({
   resetPasswordLink,
 }: DropboxResetPasswordEmailProps) => {
   const href = `https://astorefront-git-main-salamahanis-projects.vercel.app/resetpassword?token=${resetPasswordLink}&email=${email}`;
+  ///link routs app
   return (
     <Html>
       <Head />
