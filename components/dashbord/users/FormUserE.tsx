@@ -100,7 +100,10 @@ function FormUserE({ user }: { user: Users }) {
         </Label>
         <Select name="role" required>
           <SelectTrigger>
-            <SelectValue defaultValue={user.role} placeholder="Select a role" />
+            <SelectValue
+              defaultValue={user?.role ?? ""}
+              placeholder="Select a role"
+            />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="admin">
