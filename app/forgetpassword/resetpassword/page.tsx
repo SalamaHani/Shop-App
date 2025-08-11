@@ -1,6 +1,6 @@
 import ResetPass from "@/components/email/resetpass";
 import prisma from "@/utils/db";
-import { toast } from "sonner";
+import { redirect } from "next/navigation";
 
 interface ResetPss {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -14,7 +14,7 @@ const ResetPassword = async ({ searchParams }: ResetPss) => {
       },
     });
     if (!user) {
-      return toast("Invaild token!");
+      redirect("/login");
     }
     return <ResetPass email={user.email} />;
   }

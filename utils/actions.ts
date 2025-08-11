@@ -45,6 +45,7 @@ import { deleteImage, uploadImage } from "./supabase";
 import { console } from "inspector";
 import { DropboxResetPasswordEmail } from "@/components/email/email";
 import React from "react";
+import { KoalaWelcomeEmail } from "@/components/email/welcaom";
 
 export const customFetch = axios.create({
   baseURL: productionUrl,
@@ -56,6 +57,7 @@ const renderError = (error: unknown): { message: string } => {
     message: error instanceof Error ? error.message : "an error occurred",
   };
 };
+const resend = new Resend(process.env.RESEND_API_KEY);
 //fetching product//
 //fetch Singel peoduct
 export const fetchSingleProduct = async (productId: string) => {
@@ -742,6 +744,14 @@ export const RegesterUser = async (
       salt: salt,
       token: Token,
     },
+  });
+  await resend.emails.send({
+    from: "onboarding@resend.dev", // Free plan domain
+    to: UserData.email,
+    subject: "Welcome to Astorefront",
+    react: KoalaWelcomeEmail({
+      userFirstname: UserData.name,
+    }) as React.ReactElement,
   });
   await createSession(user, await cookies());
   return (
@@ -1432,7 +1442,7 @@ export const ActionUpdaetUser = async (
   }
 };
 ///RESNDE EMAIL
-const resend = new Resend(process.env.RESEND_API_KEY);
+
 export const sendEamilAction = async (
   prevState: ActionRsendEmail | null,
   formData: FormData
@@ -1468,7 +1478,7 @@ export const sendEamilAction = async (
     await resend.emails.send({
       from: "onboarding@resend.dev", // Free plan domain
       to: email,
-      subject: "Welcome to Astorefront",
+      subject: "Reset your password",
       react: DropboxResetPasswordEmail({
         email: email,
         resetPasswordLink: token,

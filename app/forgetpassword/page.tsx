@@ -8,6 +8,8 @@ import { sendEamilAction } from "@/utils/actions";
 import { ActionResponseere } from "@/utils/Type";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { CheckCircle2, Ban } from "lucide-react";
+import { redirect } from "next/navigation";
+
 const initialState: ActionResponseere = {
   success: false,
   message: "",
@@ -15,6 +17,7 @@ const initialState: ActionResponseere = {
 
 function Page() {
   const [state, action] = useActionState(sendEamilAction, initialState);
+  if (state.success) redirect("login");
   return (
     <div>
       <form action={action}>

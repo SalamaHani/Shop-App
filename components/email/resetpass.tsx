@@ -64,7 +64,7 @@ function ResetPass({ email }: { email: string }) {
               </div>
             </div>
             <div className="flex flex-col gap-3">
-              <Label>New Password</Label>
+              <Label htmlFor="password">New Password</Label>
               <Input
                 name="password"
                 type="password"
@@ -77,7 +77,7 @@ function ResetPass({ email }: { email: string }) {
               )}
             </div>
             <div className="flex flex-col gap-3">
-              <Label>Confirm password</Label>
+              <Label htmlFor="password_confirmation">Confirm password</Label>
               <Input
                 defaultValue={state.Data?.password_confirmation}
                 name="password_confirmation"

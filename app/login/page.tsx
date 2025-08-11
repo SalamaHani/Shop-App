@@ -82,7 +82,7 @@ function Page() {
             </div>
             <Link href="forgetpassword" className="capitalize mt-3 text-xs ">
               <span className=" font-bold text-smt underline">
-                Forget password
+                Forget password?
               </span>
             </Link>
           </div>

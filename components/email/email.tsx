@@ -16,24 +16,24 @@ interface DropboxResetPasswordEmailProps {
   resetPasswordLink?: string;
 }
 
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "";
+// const baseUrl = process.env.VERCEL_URL
+//   ? `https://${process.env.VERCEL_URL}`
+//   : "";
 
 export const DropboxResetPasswordEmail = ({
   email,
   resetPasswordLink,
 }: DropboxResetPasswordEmailProps) => {
-  const href = `https://astorefront.vercel.app/resetpassword?token=${resetPasswordLink}&email=${email}`;
+  const href = `https://astorefront.vercel.app/forgetpassword/resetpassword?token=${resetPasswordLink}&email=${email}`;
   ///link routs app
   return (
     <Html>
       <Head />
       <Body style={main}>
-        <Preview>Dropbox reset your password</Preview>
+        <Preview>reset your password</Preview>
         <Container style={container}>
           <Img
-            src={`${baseUrl}/static/dropbox-logo.png`}
+            src="/public/imges/Logo_svg_dark2025-05-25 222112.png"
             width="40"
             height="33"
             alt="Dropbox"
@@ -53,7 +53,7 @@ export const DropboxResetPasswordEmail = ({
             </Text>
             <Text style={text}>
               To keep your account secure, please don&apos;t forward this email
-              to anyone. See our Help Center for{" "}
+              to anyone. See our Help Center for
               <Link style={anchor} href={href}>
                 more security tips.
               </Link>
@@ -94,7 +94,7 @@ const text = {
 };
 
 const button = {
-  backgroundColor: "#007ee6",
+  backgroundColor: "#010101",
   borderRadius: "4px",
   color: "#fff",
   fontFamily: "'Open Sans', 'Helvetica Neue', Arial",
