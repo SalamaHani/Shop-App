@@ -3,14 +3,14 @@ import prisma from "@/utils/db";
 import { toast } from "sonner";
 
 interface ResetPss {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
-
 const ResetPassword = async ({ searchParams }: ResetPss) => {
-  if (searchParams.token) {
+  const parmes = await searchParams;
+  if (parmes.token) {
     const user = await prisma.users.findFirst({
       where: {
-        resetPasswordToken: searchParams.token as string,
+        resetPasswordToken: parmes.token as string,
       },
     });
     if (!user) {
