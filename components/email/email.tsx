@@ -60,10 +60,9 @@
 // };
 import {
   Body,
+  Button,
   Container,
   Head,
-  Heading,
-  Hr,
   Html,
   Img,
   Link,
@@ -72,163 +71,100 @@ import {
   Text,
 } from "@react-email/components";
 
-interface VerifyEmailProps {
-  verificationCode?: string;
+interface DropboxResetPasswordEmailProps {
+  email?: string;
+  resetPasswordLink?: string;
 }
 
 const baseUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "";
 
-export default function VerifyEmail({ verificationCode }: VerifyEmailProps) {
+export const DropboxResetPasswordEmail = ({
+  email,
+  resetPasswordLink,
+}: DropboxResetPasswordEmailProps) => {
+  const href = `https://astorefront-git-main-salamahanis-projects.vercel.app/resetpassword?token=${resetPasswordLink}&email=${email}`;
   return (
     <Html>
       <Head />
       <Body style={main}>
-        <Preview>ASF Email Verification</Preview>
+        <Preview>Dropbox reset your password</Preview>
         <Container style={container}>
-          <Section style={coverSection}>
-            <Section style={imageSection}>
-              <Img
-                src={`${baseUrl}/static/ASF-logo.png`}
-                width="75"
-                height="45"
-                alt="ASF's Logo"
-              />
-            </Section>
-            <Section style={upperSection}>
-              <Heading style={h1}>Verify your email address</Heading>
-              <Text style={mainText}>
-                Thanks for starting the new ASF account creation process. We
-                want to make sure its really you. Please enter the following
-                verification code when prompted. If you don&apos;t want to
-                create an account, you can ignore this message.
-              </Text>
-              <Section style={verificationSection}>
-                <Text style={verifyText}>Verification code</Text>
-
-                <Text style={codeText}>{verificationCode}</Text>
-                <Text style={validityText}>
-                  (This code is valid for 10 minutes)
-                </Text>
-              </Section>
-            </Section>
-            <Hr />
-            <Section style={lowerSection}>
-              <Text style={cautionText}>
-                Astorefront Web Services will never email you and ask you to
-                disclose or verify your password, credit card, or banking
-                account number.
-              </Text>
-            </Section>
+          <Img
+            src={`${baseUrl}/static/dropbox-logo.png`}
+            width="40"
+            height="33"
+            alt="Dropbox"
+          />
+          <Section>
+            <Text style={text}>Hi {email},</Text>
+            <Text style={text}>
+              Someone recently requested a password change for your Dropbox
+              account. If this was you, you can set a new password here:
+            </Text>
+            <Button style={button} href={href}>
+              Reset password
+            </Button>
+            <Text style={text}>
+              If you don&apos;t want to change your password or didn&apos;t
+              request this, just ignore and delete this message.
+            </Text>
+            <Text style={text}>
+              To keep your account secure, please don&apos;t forward this email
+              to anyone. See our Help Center for{" "}
+              <Link style={anchor} href={href}>
+                more security tips.
+              </Link>
+            </Text>
+            <Text style={text}>Happy Dropboxing!</Text>
           </Section>
-          <Text style={footerText}>
-            This message was produced and distributed by Astorefront Web
-            Services, Inc., 410 Terry Ave. North, Seattle, WA 98109. © 2022,
-            Astorefront Web Services, Inc.. All rights reserved. ASF is a
-            registered trademark of
-            <Link href="https://Astorefront.com" target="_blank" style={link}>
-              Astorefront.com
-            </Link>
-            , Inc. View our
-            <Link href="https://Astorefront.com" target="_blank" style={link}>
-              privacy policy
-            </Link>
-            .
-          </Text>
         </Container>
       </Body>
     </Html>
   );
-}
+};
 
-VerifyEmail.PreviewProps = {
-  verificationCode: "596853",
-} satisfies VerifyEmailProps;
+DropboxResetPasswordEmail.PreviewProps = {
+  userFirstname: "Alan",
+  resetPasswordLink: "https://www.dropbox.com",
+} as DropboxResetPasswordEmailProps;
+
+export default DropboxResetPasswordEmail;
 
 const main = {
-  backgroundColor: "#fff",
-  color: "#212121",
+  backgroundColor: "#f6f9fc",
+  padding: "10px 0",
 };
 
 const container = {
-  padding: "20px",
-  margin: "0 auto",
-  backgroundColor: "#eee",
-};
-
-const h1 = {
-  color: "#333",
-  fontFamily:
-    "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
-  fontSize: "20px",
-  fontWeight: "bold",
-  marginBottom: "15px",
-};
-
-const link = {
-  color: "#2754C5",
-  fontFamily:
-    "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
-  fontSize: "14px",
-  textDecoration: "underline",
+  backgroundColor: "#ffffff",
+  border: "1px solid #f0f0f0",
+  padding: "45px",
 };
 
 const text = {
-  color: "#333",
+  fontSize: "16px",
   fontFamily:
-    "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
-  fontSize: "14px",
-  margin: "24px 0",
+    "'Open Sans', 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif",
+  fontWeight: "300",
+  color: "#404040",
+  lineHeight: "26px",
 };
 
-const imageSection = {
-  backgroundColor: "#252f3d",
-  display: "flex",
-  padding: "20px 0",
-  alignItems: "center",
-  justifyContent: "center",
-};
-
-const coverSection = { backgroundColor: "#fff" };
-
-const upperSection = { padding: "25px 35px" };
-
-const lowerSection = { padding: "25px 35px" };
-
-const footerText = {
-  ...text,
-  fontSize: "12px",
-  padding: "0 20px",
-};
-
-const verifyText = {
-  ...text,
-  margin: 0,
-  fontWeight: "bold",
+const button = {
+  backgroundColor: "#007ee6",
+  borderRadius: "4px",
+  color: "#fff",
+  fontFamily: "'Open Sans', 'Helvetica Neue', Arial",
+  fontSize: "15px",
+  textDecoration: "none",
   textAlign: "center" as const,
+  display: "block",
+  width: "210px",
+  padding: "14px 7px",
 };
 
-const codeText = {
-  ...text,
-  fontWeight: "bold",
-  fontSize: "36px",
-  margin: "10px 0",
-  textAlign: "center" as const,
+const anchor = {
+  textDecoration: "underline",
 };
-
-const validityText = {
-  ...text,
-  margin: "0px",
-  textAlign: "center" as const,
-};
-
-const verificationSection = {
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-};
-
-const mainText = { ...text, marginBottom: "14px" };
-
-const cautionText = { ...text, margin: "0px" };

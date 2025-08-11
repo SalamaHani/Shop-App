@@ -122,11 +122,12 @@ export function generateToken(length = 6): string {
 // utils/tokenStore.ts
 type TokenData = { email: string; expires: number };
 const tokens = new Map<string, TokenData>();
-export function storeToken(email: string, token: string, ttlSeconds = 30) {
+export function storeToken(email: string, token: string, ttlSeconds = 60) {
   tokens.set(token, {
     email,
     expires: Date.now() + ttlSeconds * 1000,
   });
+  console.log(tokens);
 }
 export function verifyToken(token: string) {
   const data = tokens.get(token);

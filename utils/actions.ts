@@ -2,6 +2,7 @@
 import axios from "axios";
 import db from "./db";
 import { Resend } from "resend";
+import crypto from "crypto";
 import { comparePasswords, generateSalt, hashPassword } from "@/lib/hash";
 import {
   validateWithZodSchema,
@@ -18,10 +19,8 @@ import {
 import {
   createSession,
   encrypt,
-  generateToken,
   getUserFromSession,
   removeUserFromSession,
-  storeToken,
 } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -44,7 +43,7 @@ import {
 import { toast } from "sonner";
 import { deleteImage, uploadImage } from "./supabase";
 import { console } from "inspector";
-import VerifyEmail from "@/components/email/email";
+import { DropboxResetPasswordEmail } from "@/components/email/email";
 import React from "react";
 
 export const customFetch = axios.create({
@@ -899,25 +898,25 @@ export const ChangePasswordAction = async (
   formData: FormData
 ): Promise<ActionChangePass> => {
   const user = await getUserFromSession(await cookies());
-  const UserPss = {
+  const UserPass = {
     password: formData.get("password") as string,
     password_confirmation: formData.get("password_confirmation") as string,
   };
 
-  const valdtionChnagePass = changePasswordSchema.safeParse(UserPss);
+  const valdtionChnagePass = changePasswordSchema.safeParse(UserPass);
   if (!valdtionChnagePass.success) {
     return {
       success: false,
       Data: {
-        password: UserPss.password,
-        password_confirmation: UserPss.password_confirmation,
+        password: UserPass.password,
+        password_confirmation: UserPass.password_confirmation,
       },
       message: "Please fix the errors in the form",
       errors: valdtionChnagePass.error.flatten().fieldErrors,
     };
   }
   const salt = generateSalt();
-  const hashedPassword = await hashPassword(UserPss.password, salt);
+  const hashedPassword = await hashPassword(UserPass.password, salt);
   // const Token = await encrypt({ email: user.email });
   await db.users.update({
     where: { id: user.id },
@@ -1452,17 +1451,101 @@ export const sendEamilAction = async (
         message: "User already exists",
       };
     }
-    const token = generateToken();
-    storeToken(email, token, 30);
+    // const token = generateToken();
+    // storeToken(email, token, 30);
+    const token = crypto.randomBytes(16).toString("hex").normalize();
+    const today = new Date();
+    const expirdData = new Date(today.setDate(today.getDate() + 1));
+    await db.users.update({
+      where: {
+        email,
+      },
+      data: {
+        resetPasswordToken: token,
+        resetPasswordTokenExpiry: expirdData,
+      },
+    });
     await resend.emails.send({
       from: "onboarding@resend.dev", // Free plan domain
       to: email,
       subject: "Welcome to Astorefront",
-      react: VerifyEmail({ verificationCode: token }) as React.ReactElement,
+      react: DropboxResetPasswordEmail({
+        email: email,
+        resetPasswordLink: token,
+      }) as React.ReactElement,
     });
     return { success: true, message: "Email sent!" };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return { success: false, message: error.message };
   }
+};
+///vrfr
+export const verifyEmailAction = async (
+  prevState: ActionRsendEmail | null,
+  formData: FormData
+): Promise<ActionRsendEmail> => {
+  const code = formData.get("code") as string;
+  try {
+    const VerfyToken = await db.users.findUnique({
+      where: {
+        resetPasswordToken: code,
+      },
+    });
+    if (!VerfyToken) {
+      return {
+        success: false,
+        message: "Token did no Match, please try varccd again?",
+      };
+    }
+    return {
+      success: true,
+      message: "Email sent!",
+    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
+  } catch (error: any) {
+    return {
+      success: false,
+      message: "Token did no Match, please try varccd again?",
+    };
+  }
+};
+///
+export const resetPasswordAction = async (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  prevState: any,
+  formData: FormData
+): Promise<ActionChangePass> => {
+  const UserPass = {
+    password: formData.get("password") as string,
+    email: formData.get("email") as string,
+    password_confirmation: formData.get("password_confirmation") as string,
+  };
+  const valdtionChnagePass = changePasswordSchema.safeParse(UserPass);
+  if (!valdtionChnagePass.success) {
+    return {
+      success: false,
+      Data: {
+        password: UserPass.password,
+        password_confirmation: UserPass.password_confirmation,
+      },
+      message: "Please fix the errors in the form",
+      errors: valdtionChnagePass.error.flatten().fieldErrors,
+    };
+  }
+  const salt = generateSalt();
+  const hashedPassword = await hashPassword(UserPass.password, salt);
+  // const Token = await encrypt({ email: user.email });
+  await db.users.update({
+    where: { email: UserPass.email },
+    data: {
+      password: hashedPassword,
+      salt: salt,
+    },
+  });
+  revalidatePath("/profile");
+  return {
+    success: true,
+    message: "Updeat Password successfully!",
+  };
 };
