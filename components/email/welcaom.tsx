@@ -38,7 +38,7 @@ export const KoalaWelcomeEmail = ({
         />
         <Text style={paragraph}>Hi {userFirstname},</Text>
         <Text style={paragraph}>
-          Welcome to Koala, the sales intelligence platform that helps you
+          Welcome to Astorefront, the sales intelligence platform that helps you
           uncover qualified leads and close deals faster.
         </Text>
         <Section style={btnContainer}>
