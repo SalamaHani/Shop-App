@@ -30,7 +30,7 @@ export const KoalaWelcomeEmail = ({
       </Preview>
       <Container style={container}>
         <Img
-          src={`${baseUrl}/public/imges/Logo_svg_dark2025-05-25 222112.png`}
+          src={`${baseUrl}/imges/logo.png`}
           width="170"
           height="50"
           alt="Koala"
@@ -42,7 +42,7 @@ export const KoalaWelcomeEmail = ({
           uncover qualified leads and close deals faster.
         </Text>
         <Section style={btnContainer}>
-          <Button style={button} href="https://astorefront.vercel.app">
+          <Button style={button} href="https://astorefront.shop">
             Get started
           </Button>
         </Section>

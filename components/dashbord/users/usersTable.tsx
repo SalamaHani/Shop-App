@@ -40,6 +40,7 @@ import { ActionChangRole } from "@/utils/Type";
 import { ActionRoleChange } from "@/utils/actions";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+export type UserRole = "admin" | "manager" | "custamar";
 type UserWithOrders = {
   id?: string;
   email: string;
@@ -51,16 +52,33 @@ type UserWithOrders = {
   country?: string | null;
   streetAddress?: bigint | null;
   createdAt?: Date;
-  role?: string | null;
+  role?: UserRole | string | null;
   orders: Order[];
 };
-const roleColors = {
-  admin:
-    "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300",
-  manager: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
-  custamar: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+export interface RoleConfig {
+  id: number;
+  value: string;
+  color: string;
+}
+export const rolecomfig: Record<UserRole, RoleConfig> = {
+  admin: {
+    id: 1,
+    value: "admin",
+    color:
+      "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300",
+  },
+  manager: {
+    id: 2,
+    value: "manager",
+    color: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
+  },
+  custamar: {
+    id: 3,
+    value: "custamar",
+    color: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+  },
 };
-const role = [
+export const role = [
   {
     id: 1,
     value: "admin",
@@ -79,6 +97,10 @@ const role = [
   },
 ];
 
+function getRoleColors(role: UserRole): string {
+  const config = rolecomfig[role];
+  return `${config.color}`;
+}
 export default function UsersTable({ Users }: { Users: UserWithOrders[] }) {
   const initialState: ActionChangRole = {
     success: false,
@@ -174,13 +196,7 @@ export default function UsersTable({ Users }: { Users: UserWithOrders[] }) {
                   <TableCell>
                     <Badge
                       variant="secondary"
-                      className={
-                        roleColors.admin == user.role
-                          ? "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300"
-                          : roleColors.custamar == user.role
-                            ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
-                            : "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
-                      }
+                      className={`${getRoleColors(user?.role as UserRole)}`}
                     >
                       {user.role}
                     </Badge>

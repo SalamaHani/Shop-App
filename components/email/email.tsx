@@ -33,7 +33,7 @@ export const DropboxResetPasswordEmail = ({
         <Preview>reset your password</Preview>
         <Container style={container}>
           <Img
-            src={`${baseUrl}/public/imges/Logo_svg_dark2025-05-25 222112.png`}
+            src={`${baseUrl}/imges/logo.png`}
             width="40"
             height="33"
             alt="Dropbox"
@@ -68,7 +68,7 @@ export const DropboxResetPasswordEmail = ({
 
 DropboxResetPasswordEmail.PreviewProps = {
   userFirstname: "Alan",
-  resetPasswordLink: "https://www.dropbox.com",
+  resetPasswordLink: "https://www.astorefront.shop",
 } as DropboxResetPasswordEmailProps;
 
 export default DropboxResetPasswordEmail;

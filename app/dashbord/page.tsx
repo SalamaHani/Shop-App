@@ -47,9 +47,7 @@ export default async function DashboardPage() {
             <div className="lg:col-span-2">
               {/* <DashboardQuickActions /> */}
             </div>
-            {/* Upcoming Tasks */}
           </div>
-          {/* System Status */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
