@@ -15,10 +15,6 @@ interface KoalaWelcomeEmailProps {
   userFirstname: string;
 }
 
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "";
-
 export const KoalaWelcomeEmail = ({
   userFirstname,
 }: KoalaWelcomeEmailProps) => (
@@ -30,7 +26,7 @@ export const KoalaWelcomeEmail = ({
       </Preview>
       <Container style={container}>
         <Img
-          src={`${baseUrl}/imges/logo.png`}
+          src={`https://astorefront.shop/imges/logo.png`}
           width="170"
           height="50"
           alt="Koala"

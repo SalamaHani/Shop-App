@@ -16,9 +16,7 @@ interface DropboxResetPasswordEmailProps {
   resetPasswordLink?: string;
 }
 
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "";
+
 
 export const DropboxResetPasswordEmail = ({
   email,
@@ -33,7 +31,7 @@ export const DropboxResetPasswordEmail = ({
         <Preview>reset your password</Preview>
         <Container style={container}>
           <Img
-            src={`${baseUrl}/imges/logo.png`}
+            src={`https://astorefront.shop/imges/logo.png`}
             width="40"
             height="33"
             alt="Dropbox"
