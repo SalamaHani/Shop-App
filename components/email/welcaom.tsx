@@ -14,7 +14,6 @@ import {
 interface KoalaWelcomeEmailProps {
   userFirstname: string;
 }
-
 export const KoalaWelcomeEmail = ({
   userFirstname,
 }: KoalaWelcomeEmailProps) => (
