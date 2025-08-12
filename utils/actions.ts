@@ -45,7 +45,7 @@ import { deleteImage, uploadImage } from "./supabase";
 import { console } from "inspector";
 import { DropboxResetPasswordEmail } from "@/components/email/email";
 import React from "react";
-import { KoalaWelcomeEmail } from "@/components/email/welcaom";
+import AstorefrontWelcomeEmail from "@/components/email/welcaom";
 
 export const customFetch = axios.create({
   baseURL: productionUrl,
@@ -748,7 +748,7 @@ export const RegesterUser = async (
     from: "Admin<admin@astorefront.shop>",
     to: UserData.email,
     subject: "Welcome to Astorefront",
-    react: KoalaWelcomeEmail({
+    react: AstorefrontWelcomeEmail({
       userFirstname: UserData.name,
     }) as React.ReactElement,
   });

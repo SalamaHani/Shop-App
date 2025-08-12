@@ -11,12 +11,12 @@ import {
   Text,
 } from "@react-email/components";
 
-interface KoalaWelcomeEmailProps {
+interface astorefrontWelcomeEmailProps {
   userFirstname: string;
 }
-export const KoalaWelcomeEmail = ({
+export const AstorefrontWelcomeEmail = ({
   userFirstname,
-}: KoalaWelcomeEmailProps) => (
+}: astorefrontWelcomeEmailProps) => (
   <Html>
     <Head />
     <Body style={main}>
@@ -26,9 +26,9 @@ export const KoalaWelcomeEmail = ({
       <Container style={container}>
         <Img
           src={`https://astorefront.shop/imges/logo.png`}
-          width="170"
-          height="50"
-          alt="astorefront"
+          width="150px"
+          height="33px"
+          alt="Astorefront"
           style={logo}
         />
         <Text style={paragraph}>Hi {userFirstname},</Text>
@@ -44,7 +44,7 @@ export const KoalaWelcomeEmail = ({
         <Text style={paragraph}>
           Best,
           <br />
-          The Koala team
+          The Astorefront team
         </Text>
         <Hr style={hr} />
         <Text style={footer}>
@@ -55,11 +55,11 @@ export const KoalaWelcomeEmail = ({
   </Html>
 );
 
-KoalaWelcomeEmail.PreviewProps = {
+AstorefrontWelcomeEmail.PreviewProps = {
   userFirstname: "Alan",
-} as KoalaWelcomeEmailProps;
+} as astorefrontWelcomeEmailProps;
 
-export default KoalaWelcomeEmail;
+export default AstorefrontWelcomeEmail;
 
 const main = {
   backgroundColor: "#ffffff",

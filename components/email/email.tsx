@@ -21,7 +21,6 @@ export const DropboxResetPasswordEmail = ({
   resetPasswordLink,
 }: DropboxResetPasswordEmailProps) => {
   const href = `https://astorefront.shop/forgetpassword/resetpassword?token=${resetPasswordLink}&email=${email}`;
-  ///link routs app
   return (
     <Html>
       <Head />
