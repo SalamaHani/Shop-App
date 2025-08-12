@@ -24,7 +24,7 @@ export const DropboxResetPasswordEmail = ({
   email,
   resetPasswordLink,
 }: DropboxResetPasswordEmailProps) => {
-  const href = `https://astorefront.vercel.app/forgetpassword/resetpassword?token=${resetPasswordLink}&email=${email}`;
+  const href = `https://astorefront.shop/forgetpassword/resetpassword?token=${resetPasswordLink}&email=${email}`;
   ///link routs app
   return (
     <Html>
@@ -41,7 +41,7 @@ export const DropboxResetPasswordEmail = ({
           <Section>
             <Text style={text}>Hi {email},</Text>
             <Text style={text}>
-              Someone recently requested a password change for your Dropbox
+              Someone recently requested a password change for your Astorefront
               account. If this was you, you can set a new password here:
             </Text>
             <Button style={button} href={href}>
@@ -58,7 +58,7 @@ export const DropboxResetPasswordEmail = ({
                 more security tips.
               </Link>
             </Text>
-            <Text style={text}>Happy Dropboxing!</Text>
+            <Text style={text}>Happy Astorefront!</Text>
           </Section>
         </Container>
       </Body>

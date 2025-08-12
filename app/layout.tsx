@@ -34,6 +34,13 @@ export default function RootLayout({
                       gtag('config', 'G-TCGCG33TF2');
           `}
         </Script>
+        <Script
+          id="Cookiebot"
+          src="https://consent.cookiebot.com/uc.js"
+          data-cbid="b935172a-2298-4a82-ba90-6c62dc4b4ea1"
+          type="text/javascript"
+          async
+        ></Script>
       </head>
       <body>
         <Providers>
