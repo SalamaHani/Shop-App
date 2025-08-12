@@ -746,7 +746,7 @@ export const RegesterUser = async (
     },
   });
   await resend.emails.send({
-    from: "onboarding@resend.dev", // Free plan domain
+    from: "Admin<admin@astorefront.shop>",
     to: UserData.email,
     subject: "Welcome to Astorefront",
     react: KoalaWelcomeEmail({
@@ -1476,7 +1476,7 @@ export const sendEamilAction = async (
       },
     });
     await resend.emails.send({
-      from: "onboarding@resend.dev", // Free plan domain
+      from: "Admin<admin@astorefront.shop>", // Free plan domain
       to: email,
       subject: "Reset your password",
       react: DropboxResetPasswordEmail({
