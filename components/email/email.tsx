@@ -16,8 +16,6 @@ interface DropboxResetPasswordEmailProps {
   resetPasswordLink?: string;
 }
 
-
-
 export const DropboxResetPasswordEmail = ({
   email,
   resetPasswordLink,
@@ -32,9 +30,10 @@ export const DropboxResetPasswordEmail = ({
         <Container style={container}>
           <Img
             src={`https://astorefront.shop/imges/logo.png`}
-            width="40"
-            height="33"
-            alt="Dropbox"
+            width="150px"
+            height="33px"
+            alt="Astorefront"
+            style={logo}
           />
           <Section>
             <Text style={text}>Hi {email},</Text>
@@ -74,6 +73,9 @@ export default DropboxResetPasswordEmail;
 const main = {
   backgroundColor: "#f6f9fc",
   padding: "10px 0",
+};
+const logo = {
+  margin: "0 auto",
 };
 
 const container = {

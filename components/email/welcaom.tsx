@@ -29,7 +29,7 @@ export const KoalaWelcomeEmail = ({
           src={`https://astorefront.shop/imges/logo.png`}
           width="170"
           height="50"
-          alt="Koala"
+          alt="astorefront"
           style={logo}
         />
         <Text style={paragraph}>Hi {userFirstname},</Text>
