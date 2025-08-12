@@ -61,7 +61,6 @@ function setCookie(sessionId: string, cookies: Pick<Cookies, "set">) {
 export async function getSession() {
   const cookieStore = await cookies();
   const sessionId = cookieStore.get(COOKIE_SESSION_KEY)?.value;
-  console.log(sessionId);
   if (sessionId == null) return null;
   return await decrypt(sessionId);
 }
@@ -83,9 +82,8 @@ export const getUser = cache(async () => {
       },
     });
     return data;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    console.log(error);
-    console.log("Failed to fetch user");
     return null;
   }
 });
@@ -127,7 +125,6 @@ export function storeToken(email: string, token: string, ttlSeconds = 60) {
     email,
     expires: Date.now() + ttlSeconds * 1000,
   });
-  console.log(tokens);
 }
 export function verifyToken(token: string) {
   const data = tokens.get(token);

@@ -52,7 +52,7 @@ export const customFetch = axios.create({
 });
 ///handelar error re rednder react js and next js
 const renderError = (error: unknown): { message: string } => {
-  // console.log(error);
+
   return {
     message: error instanceof Error ? error.message : "an error occurred",
   };
@@ -76,7 +76,6 @@ export const fetchallproductsdb = async ({
   Parmes: string;
   Page: number;
 }) => {
-  console.log(Parmes);
   const limet = 6;
   const gnoer = (Page - 1) * limet;
   const total = await db.product.count();
@@ -168,7 +167,7 @@ const updateOrCreateCartItem = async ({
       cartId,
     },
   });
-  console.log(cartItem);
+
   if (cartItem != null) {
     cartItem = await db.cartItem.update({
       where: {
@@ -229,15 +228,14 @@ export const addToCartAction = async (
   const amount = Number(formData.get("amount"));
   const pathname = formData.get("pathname") as string;
   try {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const products = await fetchProduct(productId);
-    console.log(products);
     const cart = await fetchOrCreateCart({ userID: user.id });
     await updateOrCreateCartItem({ productId, cartId: cart.id, amount });
     await updateCart(cart);
     revalidatePath(pathname);
     return { message: "added to cart" };
   } catch (error) {
-    console.log(error);
     return renderError(error);
   }
 };
@@ -389,8 +387,8 @@ export const createOrderAction = async (UserData: UserFormData) => {
       },
     });
     orderId = order.id;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    console.log(error);
     return { success: false, message: "Please fix the errors in the form" };
   }
   redirect(`/payment?orderId=${orderId}&cartId=${cartId}`);
@@ -615,7 +613,6 @@ export const createReviewAction = async (
   const user = await getUserFromSession(await cookies());
   try {
     const rawData = Object.fromEntries(formData);
-    console.log(rawData);
     const validatedFields = validateWithZodSchema(reviewSchema, rawData);
     await db.review.create({
       data: {
@@ -625,8 +622,8 @@ export const createReviewAction = async (
     });
     revalidatePath(`/products/${validatedFields.productId}`);
     return { message: "review submitted successfully" };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    console.log(error);
     return { message: "review submitted Error!!" };
   }
 };
@@ -999,7 +996,6 @@ export const updateProductAction = async (
     try {
       const priductID = formData.get("id") as string;
       const file = formData.get("image") as File;
-      console.log(file.size);
       const url = formData.get("url") as string;
       const ProductData = {
         name: formData.get("name") as string,
@@ -1204,8 +1200,8 @@ export const handleStatusChange = async (
       Data: { states: newStatus },
       message: "Successfuly Change Status Order",
     };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    console.log(error);
     return {
       success: false,
       message: `not change stuts order erorr`,
@@ -1279,8 +1275,8 @@ export const ActionRoleChange = async (
       Data: { value: role },
       message: "Successfuly Change Status Order",
     };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    console.log(error);
     return {
       success: false,
       message: `not change stuts order erorr`,

@@ -30,8 +30,8 @@ export const GET = async (req: NextRequest) => {
         id: cartId,
       },
     });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    console.log(error);
     return Response.json(null, {
       status: 500,
       statusText: "Internal Server Error",

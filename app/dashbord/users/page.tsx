@@ -12,7 +12,6 @@ async function page({ searchParams }: UserPageProps) {
   const parmes = await searchParams;
   const Page = parseInt(parmes?.Page || "1");
   const { Users, metadata } = await fetshUserAdmin({ Page });
-  // console.log(Users.map((u)=>{console.log(u.o)}))
   return (
     <div className="min-h-screen  ">
       {/* <EcommerceHeader /> */}

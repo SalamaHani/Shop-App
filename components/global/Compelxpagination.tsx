@@ -12,10 +12,10 @@ export default function Compelxpagination({
   Page: number;
   metadata: metaData;
 }) {
-  console.log(Page);
   const searchParams = useSearchParams();
   const { replace } = useRouter();
   const { total, totalPage } = metadata;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [page, setPage] = useState(searchParams.get("Page")?.toString() || "");
   const handleSearch = useDebouncedCallback((value: string) => {
     const params = new URLSearchParams(searchParams);
@@ -26,7 +26,6 @@ export default function Compelxpagination({
     }
     replace(`/${pathe}?${params.toString()}`);
   }, 0);
-  console.log(page);
   useEffect(() => {
     if (!searchParams.get("Page")) {
       setPage("");

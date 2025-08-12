@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Continer from "@/components/global/Continer";
 import Navbar from "@/components/navbar/Navbar";
-
+import Script from "next/script";
 import Providers from "./Providers";
 export const metadata: Metadata = {
   title: "Astorefront",
@@ -21,6 +21,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-TCGCG33TF2"
+        ></Script>
+        <Script id="google-analytics">
+          {`
+                window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                      gtag('js', new Date());
+                      gtag('config', 'G-TCGCG33TF2');
+          `}
+        </Script>
+      </head>
       <body>
         <Providers>
           <Navbar />

@@ -57,8 +57,8 @@ export const POST = async (req: NextRequest) => {
       return_url: `${origin}/api/confirm?session_id={CHECKOUT_SESSION_ID}`,
     });
     return Response.json({ clientSecret: session.client_secret });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    console.log(error);
     return Response.json(null, {
       status: 500,
       statusText: "Internal Server Error",

@@ -55,6 +55,7 @@ export default function OrderStatusDropdown({
     success: false,
     message: "",
   };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [state, action] = useActionState(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async (prevState: any, formData: FormData) => {
@@ -74,7 +75,6 @@ export default function OrderStatusDropdown({
     });
     router.refresh();
   };
-  console.log(state);
   return (
     <>
       <DropdownMenuSeparator />

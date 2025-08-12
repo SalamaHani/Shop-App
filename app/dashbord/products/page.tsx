@@ -10,7 +10,6 @@ async function AdminProductsPage({ searchParams }: ProductsPageProps) {
   const params = await searchParams;
   const Page = parseInt(params?.Page || "1");
   const { products, metadata } = await fetchAdminProducts({ Page });
-  console.log(Page);
   return (
     <div className="min-h-screen  ">
       {/* <EcommerceHeader /> */}

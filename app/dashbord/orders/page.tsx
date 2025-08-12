@@ -12,7 +12,6 @@ async function Page({ searchParams }: OrderPageProps) {
   const Page = parseInt(parmes.Page || "1");
   const Status = parmes.Status || "all";
   const { orders, metadata } = await fetchAdminOrders({ Page, Status });
-  console.log(Status);
   return (
     <div className="min-h-screen  ">
       {/* <EcommerceHeader /> */}
