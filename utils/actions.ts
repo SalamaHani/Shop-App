@@ -52,7 +52,6 @@ export const customFetch = axios.create({
 });
 ///handelar error re rednder react js and next js
 const renderError = (error: unknown): { message: string } => {
-
   return {
     message: error instanceof Error ? error.message : "an error occurred",
   };
@@ -224,6 +223,7 @@ export const addToCartAction = async (
   formData: FormData
 ) => {
   const user = await getUserFromSession(await cookies());
+  if (!user) return redirect("/login");
   const productId = formData.get("productId") as string;
   const amount = Number(formData.get("amount"));
   const pathname = formData.get("pathname") as string;
@@ -387,7 +387,7 @@ export const createOrderAction = async (UserData: UserFormData) => {
       },
     });
     orderId = order.id;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     return { success: false, message: "Please fix the errors in the form" };
   }
@@ -454,6 +454,7 @@ export const toggleFavoriteAction = async (prevState: {
   pathname: string;
 }) => {
   const user = await getUserFromSession(await cookies());
+  if (!user) redirect("/login");
   const { productId, favoriteId, pathname } = prevState;
   try {
     if (favoriteId) {
@@ -611,6 +612,7 @@ export const createReviewAction = async (
   formData: FormData
 ) => {
   const user = await getUserFromSession(await cookies());
+  if (!user) redirect("/login");
   try {
     const rawData = Object.fromEntries(formData);
     const validatedFields = validateWithZodSchema(reviewSchema, rawData);
@@ -622,7 +624,7 @@ export const createReviewAction = async (
     });
     revalidatePath(`/products/${validatedFields.productId}`);
     return { message: "review submitted successfully" };
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     return { message: "review submitted Error!!" };
   }
@@ -1200,7 +1202,7 @@ export const handleStatusChange = async (
       Data: { states: newStatus },
       message: "Successfuly Change Status Order",
     };
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     return {
       success: false,
@@ -1275,7 +1277,7 @@ export const ActionRoleChange = async (
       Data: { value: role },
       message: "Successfuly Change Status Order",
     };
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     return {
       success: false,

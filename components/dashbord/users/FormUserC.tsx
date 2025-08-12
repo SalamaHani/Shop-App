@@ -12,6 +12,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { cearatNewUser } from "@/utils/actions";
 import { ActionCearetUser } from "@/utils/Type";
+import { redirect } from "next/navigation";
 import { useActionState } from "react";
 const initialState: ActionCearetUser = {
   success: false,
@@ -19,6 +20,7 @@ const initialState: ActionCearetUser = {
 };
 function FormUserC() {
   const [state, action] = useActionState(cearatNewUser, initialState);
+  if (state.success) redirect("/dashbord/users");
   return (
     <form action={action} className="space-y-6 mt-10">
       {state?.message && (

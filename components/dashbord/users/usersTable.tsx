@@ -104,7 +104,7 @@ export default function UsersTable({ Users }: { Users: UserWithOrders[] }) {
     router.refresh();
     toast(state.message);
   };
-  console.log(state);
+  if (state.success) router.forward();
   return (
     <Card className="w-full">
       <CardHeader>
@@ -178,8 +178,8 @@ export default function UsersTable({ Users }: { Users: UserWithOrders[] }) {
                         roleColors.admin == user.role
                           ? "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300"
                           : roleColors.custamar == user.role
-                          ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
-                          : "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                            ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
+                            : "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
                       }
                     >
                       {user.role}

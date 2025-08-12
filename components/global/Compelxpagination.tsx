@@ -45,8 +45,8 @@ export default function Compelxpagination({
         onClick={() => {
           handleSearch(pageNumber.toString());
         }}
-        className={`'flex items-center justify-center pointer-coarse px-4 h-10 leading-tight text-gray-500  border border-gray-300 hover:bg-gray-100 dark:bg-neutral-900  dark:text-gray-100 dark:border-neutral-800 dark:hover:bg-neutral-800 dark:hover:text-white  dark:hover:text-white' ${
-          activeClass ? "bg-black  dark:bg-slate-400 " : ""
+        className={`'flex items-center justify-center pointer-coarse px-4 h-10 leading-tight text-gray-500  border border-gray-300 hover:bg-gray-100   dark:text-gray-100 dark:border-neutral-800 dark:hover:bg-neutral-800 dark:hover:text-white  dark:hover:text-white' ${
+          activeClass ? "bg-black  dark:bg-neutral-800" : ""
         }`}
       >
         {pageNumber}
@@ -79,7 +79,7 @@ export default function Compelxpagination({
     if (Page < totalPage - 1) {
       pageButtons.push(
         <button
-          className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 pointer-coarse  border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-neutral-900 dark:text-gray-100 dark:border-neutral-800 dark:hover:bg-neutral-800 dark:hover:text-white"
+          className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 pointer-coarse  border border-gray-300 hover:bg-gray-100 hover:text-gray-700  dark:text-gray-100 dark:border-neutral-800 dark:hover:bg-neutral-800 dark:hover:text-white"
           key="dots-2"
         >
           ...
@@ -112,7 +112,7 @@ export default function Compelxpagination({
               if (prevpage < 1) prevpage = totalPage;
               handleSearch(prevpage.toString());
             }}
-            className="flex items-center justify-center px-4 h-10 ms-0 pointer-coarse leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-neutral-900  dark:text-gray-100 dark:border-neutral-800 dark:hover:bg-neutral-800 dark:hover:text-white"
+            className="flex items-center justify-center px-4 h-10 ms-0 pointer-coarse leading-tight text-gray-500  border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700   dark:text-gray-100 dark:border-neutral-800 dark:hover:bg-neutral-800 dark:hover:text-white"
           >
             Prev
           </button>
@@ -124,7 +124,7 @@ export default function Compelxpagination({
 
               handleSearch(nextpage.toString());
             }}
-            className="flex items-center justify-center px-4 h-10 pointer-coarse leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-neutral-900  dark:text-gray-100 dark:border-neutral-800 dark:hover:bg-neutral-800 dark:hover:text-white"
+            className="flex items-center justify-center px-4 h-10 pointer-coarse leading-tight text-gray-500  border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700   dark:text-gray-100 dark:border-neutral-800 dark:hover:bg-neutral-800 dark:hover:text-white"
           >
             Next
           </button>

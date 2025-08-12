@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ActionUpdaetUser } from "@/utils/actions";
 import { ActionCearetUser } from "@/utils/Type";
 import { Users } from "@prisma/client";
+import { redirect } from "next/navigation";
 import { useActionState } from "react";
 const initialState: ActionCearetUser = {
   success: false,
@@ -20,6 +21,7 @@ const initialState: ActionCearetUser = {
 };
 function FormUserE({ user }: { user: Users }) {
   const [state, action] = useActionState(ActionUpdaetUser, initialState);
+  if (state.success) redirect("/dashbord/users");
   return (
     <form action={action} className="space-y-6 mt-10">
       {state?.message && (
@@ -105,7 +107,7 @@ function FormUserE({ user }: { user: Users }) {
               placeholder="Select a role"
             />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent defaultValue={user?.role ?? ""}>
             <SelectItem value="admin">
               <div className="flex flex-col">
                 <span className="font-medium">Admin</span>

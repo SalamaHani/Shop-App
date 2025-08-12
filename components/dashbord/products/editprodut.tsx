@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ActionUpdeatproduct, producte } from "@/utils/Type";
 import { Ban, CheckCircle2 } from "lucide-react";
+import { redirect } from "next/navigation";
 
 function Editprodcut({
   state,
@@ -16,6 +17,7 @@ function Editprodcut({
   Product: producte;
 }) {
   const { name, image, company, description, featured, price } = Product;
+  if (state.success) redirect("/dashbord/products");
   return (
     <>
       {state?.message && (

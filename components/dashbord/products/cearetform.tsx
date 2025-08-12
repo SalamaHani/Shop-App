@@ -6,8 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ActionUpdeatproduct } from "@/utils/Type";
 import { Ban, CheckCircle2 } from "lucide-react";
+import { redirect } from "next/navigation";
 
 function Cearetprodcut({ state }: { state: ActionUpdeatproduct }) {
+  if (state.success) redirect("/dashbord/products");
   return (
     <>
       {state?.message && (

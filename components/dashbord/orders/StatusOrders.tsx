@@ -11,7 +11,6 @@ import { ActionChangSutst } from "@/utils/Type";
 import { startTransition, useActionState } from "react";
 import { handleStatusChange } from "@/utils/actions";
 import { useRouter } from "next/navigation";
-
 export default function OrderStatusDropdown({
   orderId,
   sttus,
@@ -55,7 +54,6 @@ export default function OrderStatusDropdown({
     success: false,
     message: "",
   };
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [state, action] = useActionState(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async (prevState: any, formData: FormData) => {
@@ -75,6 +73,7 @@ export default function OrderStatusDropdown({
     });
     router.refresh();
   };
+  if (state.success) router.refresh();
   return (
     <>
       <DropdownMenuSeparator />
