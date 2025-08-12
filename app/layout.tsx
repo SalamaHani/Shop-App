@@ -4,13 +4,58 @@ import Continer from "@/components/global/Continer";
 import Navbar from "@/components/navbar/Navbar";
 import Script from "next/script";
 import Providers from "./Providers";
+// export const metadata: Metadata = {
+//   title: "Astorefront",
+//   description: "A nifty Astorefonte Shope Abagor Laump Lumps cotigers built with Next.js ",
+//   keywords: ["Lumps", "online Lumps cotigers", "Table", "sout"],
+//   authors: [{ name: "Astorefront" }],
+//   icons: {
+//     icon: ["/favicon.ico"],
+//   },
+// };
 export const metadata: Metadata = {
-  title: "Astorefront",
-  description: "A nifty Astorefonte Shope Abagor Laump  built with Next.js",
-  keywords: ["Lumps", "online Lumps cotigers", "Table", "sout"],
-  authors: [{ name: "Astorefront" }],
+  title: "Astorefonte Shop | Furniture, Lamps, Tables & More",
   icons: {
-    icon: ["/favicon.ico"],
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
+  description:
+    "Astorefonte Shop offers premium furniture and home decor. Shop modern lamps, elegant tables, cozy sofas, and stylish accessories. Free shipping & easy returns.",
+  keywords: [
+    "Astorefonte Shop",
+    "furniture online store",
+    "modern lamps",
+    "wooden tables",
+    "sofas",
+    "home decor",
+    "luxury furniture",
+    "lighting",
+    "interior design",
+  ],
+  openGraph: {
+    title: "Astorefonte Shop | Furniture, Lamps, Tables & More",
+    description:
+      "Discover high-quality furniture, lamps, tables, and home decor at Astorefonte Shop. Perfect for your home or office.",
+    url: "https://astorefonte.shop",
+    siteName: "Astorefonte Shop",
+    images: [
+      {
+        url: "https://astorefront.shop/imges/logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Astorefonte Shop furniture and lighting collection",
+      },
+    ],
+    locale: "en_US ",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Astorefonte Shop | Furniture, Lamps, Tables & More",
+    description:
+      "Shop stylish furniture and lighting at Astorefonte Shop. Find modern lamps, tables, sofas, and more.",
+    images: ["https://astorefront.shop/imges/logo.png"],
   },
 };
 
