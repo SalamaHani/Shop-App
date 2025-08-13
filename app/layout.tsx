@@ -4,15 +4,6 @@ import Continer from "@/components/global/Continer";
 import Navbar from "@/components/navbar/Navbar";
 import Script from "next/script";
 import Providers from "./Providers";
-// export const metadata: Metadata = {
-//   title: "Astorefront",
-//   description: "A nifty Astorefonte Shope Abagor Laump Lumps cotigers built with Next.js ",
-//   keywords: ["Lumps", "online Lumps cotigers", "Table", "sout"],
-//   authors: [{ name: "Astorefront" }],
-//   icons: {
-//     icon: ["/favicon.ico"],
-//   },
-// };
 export const metadata: Metadata = {
   title: "Astorefonte Shop | Furniture, Lamps, Tables & More",
   icons: {

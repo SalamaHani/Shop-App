@@ -761,6 +761,10 @@ export const RegesterUser = async (
     }
   );
 };
+///regester goole
+// export const oAurhRegesterGoole(provider:)=>{
+
+// }
 
 //log in user funcrion auth
 export const loginUser = async (

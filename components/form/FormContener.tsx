@@ -22,7 +22,13 @@ function FormContainer({
   const [state, formAction] = useActionState(action, initialState);
   useEffect(() => {
     if (state.message) {
-      toast.success("", { description: state.message });
+      toast.success(`Successfully ${state.message}`, {
+        description: "Astorefonte Shop online",
+        action: {
+          label: "Undo",
+          onClick: () => console.log("Undo"),
+        },
+      });
     }
   }, [state]);
   return (

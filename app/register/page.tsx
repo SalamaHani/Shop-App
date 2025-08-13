@@ -8,10 +8,6 @@ import { RegesterUser } from "@/utils/actions";
 import { ActionResponRegester } from "@/utils/Type";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Ban, CheckCircle2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Github } from "lucide-react";
-import { RiGoogleLine } from "react-icons/ri";
-
 const initialState: ActionResponRegester = {
   success: false,
   message: "",
@@ -61,16 +57,6 @@ function Registerpage() {
               className="text-muted-foreground text-sm"
             >
               Enter your email below to create your account
-            </div>
-            <div className="flex justify-evenly ">
-              <Button>
-                <RiGoogleLine />
-                Sign in with Google
-              </Button>
-              <Button>
-                <Github />
-                Sign in with Git Hub
-              </Button>
             </div>
           </div>
           <div data-slot="card-content" className="px-6 flex flex-col gap-4">
