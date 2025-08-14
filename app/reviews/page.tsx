@@ -1,6 +1,7 @@
 import { IconButton } from "@/components/form/Buttons";
 import FormContainer from "@/components/form/FormContener";
 import TitelSection from "@/components/global/TitelSection";
+import { MotionDiv } from "@/components/MotionDiv";
 import ReviewCard from "@/components/reviews/ReviewCard";
 import { deleteReview, fetchProductReviewsByUser } from "@/utils/actions";
 import React from "react";
@@ -12,14 +13,23 @@ async function page() {
   return (
     <>
       <TitelSection text="Your Reviews" />
-      <section className="grid md:grid-cols-2 gap-8 mt-4">
+      <section className="grid md:grid-cols-2 gap-8 pt-12">
         {reviews.map((review) => {
           const { comment, rating, authorName, createdAt } = review;
           const reviewInfo = { comment, rating, authorName, createdAt };
           return (
-            <ReviewCard key={review.id} reviewInfo={reviewInfo}>
-              <DeleteReview reviewId={review.id} />
-            </ReviewCard>
+            <MotionDiv
+              key={review.id}
+              layout
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <ReviewCard reviewInfo={reviewInfo}>
+                <DeleteReview reviewId={review.id} />
+              </ReviewCard>
+            </MotionDiv>
           );
         })}
       </section>

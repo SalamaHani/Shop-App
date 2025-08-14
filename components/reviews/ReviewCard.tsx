@@ -13,7 +13,6 @@ type ReviewCardProps = {
   };
   children?: React.ReactNode;
 };
-
 function ReviewCard({ reviewInfo, children }: ReviewCardProps) {
   return (
     <Card className="relative">

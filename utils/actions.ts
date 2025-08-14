@@ -404,7 +404,7 @@ export const getdataformAction = async (
     LastName: formData.get("LastName") as string,
     StreetAddress: Number(formData.get("StreetAddress")),
     Town: formData.get("Town") as string,
-    country :formData.get('country') as string,
+    country: formData.get("country") as string,
     ZIPCode: Number(formData.get("ZIPCode")),
     email: formData.get("email") as string,
     Phone: Number(formData.get("Phone")),
@@ -431,7 +431,7 @@ export const getdataformAction = async (
   return (
     (await createOrderAction(UserData)) || {
       success: true,
-      message: "saved successfully!",
+      message: "saved !",
     }
   );
 };
@@ -625,7 +625,7 @@ export const createReviewAction = async (
       },
     });
     revalidatePath(`/products/${validatedFields.productId}`);
-    return { message: "review submitted successfully" };
+    return { message: "review submitted " };
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     return { message: "review submitted Error!!" };
@@ -684,7 +684,7 @@ export const deleteReview = async (
       },
     });
     revalidatePath("/reviews");
-    return { message: "review deleted successfully" };
+    return { message: "review deleted " };
   } catch (error) {
     return renderError(error);
   }
@@ -757,16 +757,12 @@ export const RegesterUser = async (
   await createSession(user, await cookies());
   return (
     redirect("/") ||
-    toast.success("Regester successfully!") || {
+    toast.success("Regester !") || {
       success: true,
-      message: "Login successfully!",
+      message: "Login !",
     }
   );
 };
-///regester goole
-// export const oAurhRegesterGoole(provider:)=>{
-
-// }
 
 //log in user funcrion auth
 export const loginUser = async (
@@ -813,10 +809,10 @@ export const loginUser = async (
   await createSession(user, await cookies());
   return (
     redirect("/") ||
-    toast.success("Login successfully!") || {
+    toast.success("Login !") || {
       Data: { email: "", password: "" },
       success: true,
-      message: "Login successfully!",
+      message: "Login !",
     }
   );
 };
@@ -899,7 +895,7 @@ export const UpdeatUserDataAction = async (
     revalidatePath("/profile");
     return {
       success: true,
-      message: "Updeat User Data successfully!",
+      message: "Updeat User Data !",
     };
   } catch (error) {
     return renderError(error);
@@ -943,7 +939,7 @@ export const ChangePasswordAction = async (
   revalidatePath("/profile");
   return {
     success: true,
-    message: "Updeat Password successfully!",
+    message: "Updeat Password !",
   };
 };
 
@@ -1046,7 +1042,7 @@ export const updateProductAction = async (
         revalidatePath("/dashbord");
         return {
           success: true,
-          message: "Updeat Password successfully!",
+          message: "Updeat Password !",
         };
       }
       const vlidetion = updateProductSchemaoning.safeParse(ProductData);
@@ -1078,7 +1074,7 @@ export const updateProductAction = async (
       revalidatePath("dashbord");
       return {
         success: true,
-        message: "Updeat Product successfully!",
+        message: "Updeat Product !",
       };
     } catch (error) {
       return renderError(error);
@@ -1131,7 +1127,7 @@ export const cerateProductAction = async (
       revalidatePath("/dashbord");
       return {
         success: true,
-        message: "Updeat Password successfully!",
+        message: "Updeat Password !",
       };
     } catch (error) {
       return renderError(error);
@@ -1387,7 +1383,7 @@ export const cearatNewUser = async (
       revalidatePath("dashbord/users");
       return {
         success: true,
-        message: "Updeat Product successfully!",
+        message: "Updeat Product !",
       };
     } catch (error) {
       return renderError(error);
@@ -1438,7 +1434,7 @@ export const ActionUpdaetUser = async (
       });
       return {
         success: true,
-        message: "Updeat Product successfully!",
+        message: "Updeat Product !",
       };
     } catch (error) {
       return renderError(error);
@@ -1560,6 +1556,6 @@ export const resetPasswordAction = async (
   revalidatePath("/profile");
   return {
     success: true,
-    message: "Updeat Password successfully!",
+    message: "Updeat Password !",
   };
 };

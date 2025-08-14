@@ -5,6 +5,7 @@ import { Image } from "@imagekit/next";
 import { Product } from "@prisma/client";
 
 import FavoriteToggleButton from "./FavaretToggel";
+import { MotionDiv } from "../MotionDiv";
 function ProductsGrid({ products }: { products: Product[] }) {
   return (
     <div className="pt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -13,34 +14,43 @@ function ProductsGrid({ products }: { products: Product[] }) {
         const productId = producte.id;
         const dollarsAmount = formatCurrency(price);
         return (
-          <article key={productId} className="group relative">
-            <Link href={`/products/${productId}`}>
-              <Card className="transform group-hover:shadow-xl transition-shadow duration-500">
-                <CardContent className="p-4">
-                  <div className="relative h-64 md:h-48 rounded overflow-hidden ">
-                    <Image
-                      urlEndpoint={process.env.ImagekitIDURL}
-                      src={image}
-                      alt={name}
-                      fill
-                      sizes="(max-width:768px) 100vw,(max-width:1200px) 50vw, 33vw "
-                      className="rounded w-full object-cover transform group-hover:scale-110 transition-transform duration-500"
-                      loading="lazy" // Use "eager" to load immediately. `lazy` is the default value
-                    />
-                  </div>
-                  <div className="mt-4 text-center">
-                    <h2 className="text-lg capitalize">{name}</h2>
-                    <p className="text-muted-foreground mt-2">
-                      {dollarsAmount}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
-            <div className="absolute top-13 right-7 z-5">
-              <FavoriteToggleButton productId={productId} />
-            </div>
-          </article>
+          <MotionDiv
+            key={producte.id}
+            layout
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <article key={productId} className="group relative">
+              <Link href={`/products/${productId}`}>
+                <Card className="transform group-hover:shadow-xl transition-shadow duration-500">
+                  <CardContent className="p-4">
+                    <div className="relative h-64 md:h-48 rounded overflow-hidden ">
+                      <Image
+                        urlEndpoint={process.env.ImagekitIDURL}
+                        src={image}
+                        alt={name}
+                        fill
+                        sizes="(max-width:768px) 100vw,(max-width:1200px) 50vw, 33vw "
+                        className="rounded w-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                        loading="lazy" // Use "eager" to load immediately. `lazy` is the default value
+                      />
+                    </div>
+                    <div className="mt-4 text-center">
+                      <h2 className="text-lg capitalize">{name}</h2>
+                      <p className="text-muted-foreground mt-2">
+                        {dollarsAmount}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+              <div className="absolute top-13 right-7 z-5">
+                <FavoriteToggleButton productId={productId} />
+              </div>
+            </article>
+          </MotionDiv>
         );
       })}
     </div>
