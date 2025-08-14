@@ -254,7 +254,7 @@ export async function OrdersTable({ orders }: { orders: Order[] }) {
                           </div>
                           <div className="text-xs text-gray-500 dark:text-gray-400 truncate flex items-center gap-1">
                             <Globe className="h-3 w-3" />
-                            {order.city}, {order.streetAddress} {order.tax}
+                            {order.country}, {order.streetAddress} {order.tax}
                           </div>
                         </div>
                       </div>

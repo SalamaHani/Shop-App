@@ -103,6 +103,7 @@ model Order {
   shipping Int @default(0)
   email String
   phone BigInt
+  country String?
   city String
   status String
   streetAddress BigInt

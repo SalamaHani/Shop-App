@@ -308,6 +308,7 @@ export interface UserFormData {
   LastName: string;
   StreetAddress: number;
   Town: string;
+  country: string;
   ZIPCode: number;
   email: string;
   Phone: number;
