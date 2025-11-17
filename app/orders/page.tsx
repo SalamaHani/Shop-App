@@ -11,7 +11,6 @@ import {
 import { fetchOrderUser } from "@/utils/actions";
 import { formatCurrency, formatDate } from "@/utils/format";
 import { Calendar, CheckCircle, Clock, Package, Truck } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import React from "react";
 const getStatusConfig = (statusName: string) => {
   return statuse.find((s) => s.states === statusName) || statuse[3];
@@ -80,6 +79,7 @@ async function page() {
 
             const statusConfig = getStatusConfig(status);
             const StatusIcon = statusConfig.icon;
+            console.log(StatusIcon);
             return (
               <TableRow key={order.id}>
                 <TableCell className="font-medium">{products}</TableCell>
@@ -93,8 +93,7 @@ async function page() {
                   {formatCurrency(shipping)}
                 </TableCell>
                 <TableCell className="font-medium">{city}</TableCell>
-                <TableCell>
-                </TableCell>
+                <TableCell></TableCell>
                 <TableCell>
                   <div className="flex items-center gap-1">
                     <Calendar className="h-3 w-3 text-gray-400" />
