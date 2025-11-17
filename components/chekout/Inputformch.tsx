@@ -125,7 +125,7 @@ function Inputformch({ state }: { state: ActionResponse }) {
               )}
             </div>
             <div className="w-[50%]">
-              <Label className="mb-2" htmlFor="Phone">
+              <Label className="mb-2" htmlFor="Phone">e
                 Phone <span className="text-red-500">*</span>
               </Label>
               <Input

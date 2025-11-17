@@ -10,9 +10,10 @@ function Hero() {
           We are changing the way people shop
         </h1>
         <p className="mt-8 max-w-xl text-lg leading-8 text-muted-foreground">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus
-          maxime laboriosam, deserunt velit qui quia? Dolor dolores esse
-          corporis. Dolores.
+          Welcome to Astorefonte, where you will always find affordable
+          furniture, stylish home décor and innovative modern home solutions, as
+          well as design inspiration and unique home ideas! If you are online
+          furniture shopping or if you are visiting a local Astorefonte
         </p>
         <Button asChild size="lg" className="mt-10">
           <Link href="/products">Our Products</Link>

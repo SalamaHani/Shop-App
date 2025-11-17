@@ -94,12 +94,6 @@ async function page() {
                 </TableCell>
                 <TableCell className="font-medium">{city}</TableCell>
                 <TableCell>
-                  <Badge
-                    className={`${statusConfig.color} flex items-center gap-1 w-fit`}
-                  >
-                    <StatusIcon className="h-3 w-3" />
-                    {status.charAt(0).toUpperCase() + status.slice(1)}
-                  </Badge>
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center gap-1">
