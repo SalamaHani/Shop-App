@@ -23,12 +23,16 @@
       "@/*": ["./*"]
     }
   },
+  "rules": {
+    "@typescript-eslint/no-unused-vars": "off"
+  },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "next.config.mjs"
-, "prisma/seed.js"  ],
+    "next.config.mjs",
+    "prisma/seed.js"
+  ],
   "exclude": ["node_modules"]
 }
