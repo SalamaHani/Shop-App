@@ -28,6 +28,7 @@
     "@stripe/react-stripe-js": "^3.7.0",
     "@stripe/stripe-js": "^7.4.0",
     "@supabase/supabase-js": "^2.50.3",
+    "@t3-oss/env-nextjs": "^0.13.8",
     "@upstash/redis": "^1.35.0",
     "axios": "^1.10.0",
     "bcryptjs": "^3.0.2",
